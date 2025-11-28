@@ -24,11 +24,11 @@ public class QuadMeshResource {
         vao.bind();
         vbo.bind();
         ebo.bind();
-        vbo.setVertices(vertices);
+        vbo.setData(vertices);
         vbo.loadGpu(GL_STATIC_DRAW);
         ebo.setIndices(indices);
         ebo.loadGpu(GL_STATIC_DRAW);
-        vao.linkAttribute(vbo, 0, 3, GL_FLOAT, false, 3*Float.BYTES, 0);
+        vao.linkAttribute(vbo, 0, 3, GL_FLOAT, false, 3*Float.BYTES, 0,0);
         vao.unbind();
         vbo.unbind();
     }
