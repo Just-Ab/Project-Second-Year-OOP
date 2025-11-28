@@ -1,12 +1,13 @@
 package Game.Core;
 
 
+import Rendering.RenderInstance;
 import Rendering.RenderingServer;
 import Rendering.SpriteRenderInstance;
 
 public class Sprite2D extends Node2D{
     Texture2D texture=null;
-    SpriteRenderInstance instance=null;
+    RenderInstance instance=null;
 
     boolean visiblity=true;
 
@@ -24,7 +25,7 @@ public class Sprite2D extends Node2D{
             texture.loadTexture(_path);
         }
         if(isInTree&&(instance!=null)){
-            instance.setTexture(texture.getRenderingResource());
+            instance.setTextureResource(texture.getRenderingResource());
         }
     }
 
@@ -57,7 +58,7 @@ public class Sprite2D extends Node2D{
         instance.setVisibility(visiblity);
         instance.setPosition(getGlobalPosition());
         if (texture!=null){
-            instance.setTexture(texture.getRenderingResource());
+            instance.setTextureResource(texture.getRenderingResource());
         }
     }
 }

@@ -32,6 +32,10 @@ public class TestSprite2DInh extends Sprite2D {
         addChild(raycast);
         raycast.setLocalPosition(new Vector3f(-1.5000001f,-2.0f,0.0f));
         raycast.setLength(2.0f);
+        ColorRect2D rect = new ColorRect2D("name");
+        rect.setColor(new Vector3f(0.0f,0.0f,1.0f));
+        rect.setLocalPosition(new Vector3f(1.0f,0.0f,0.0f));
+        addChild(rect);
     }
 
     public void _update(float _delta){

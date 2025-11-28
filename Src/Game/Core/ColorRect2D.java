@@ -2,12 +2,13 @@ package Game.Core;
 
 
 import Rendering.RenderingServer;
-import Rendering.ColorRectInstance;
+import Rendering.RenderInstance;
+
 import org.joml.*;
 
 public class ColorRect2D extends Node2D{
     Vector3f color=new Vector3f(1.0f,0.0f,0.0f);
-    ColorRectInstance instance=null;
+    RenderInstance instance=null;
 
     
     public ColorRect2D(String _name){
