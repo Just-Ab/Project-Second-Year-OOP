@@ -8,7 +8,7 @@ in vec4 fraguv;
 uniform sampler2D sample;
 
 void main(){
-    vec4 finaltexel = fraguv.xy + fragtexel*fraguv.zw;
+    vec2 finaltexel = fraguv.xy + fragtexel*fraguv.zw;
     FragColor = texture(sample,finaltexel);
 }
 

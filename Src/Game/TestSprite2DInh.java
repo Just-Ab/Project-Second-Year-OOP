@@ -21,7 +21,8 @@ public class TestSprite2DInh extends Sprite2D {
     Raycast2D raycast = new Raycast2D("name");
 
     public void _ready(){       
-        setVisibility(false);
+        setVisibility(true);
+        setTexture("Assets/Textures/Cat.png");
         addChild(rigidbody);
         rigidbody.setAcceleration(new Vector3f(0.0f,-9.8f,0.0f));
         rigidbody.addChild(rigCollision2d);
