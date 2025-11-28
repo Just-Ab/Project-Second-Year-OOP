@@ -5,32 +5,43 @@ import org.joml.*;
 public class RenderInstance {
     private Vector3f position = new Vector3f(0.0f);
     private Vector3f scale = new Vector3f(1.0f);
-    private Vector3f rotation = new Vector3f(0.0f);
+    private float rotation = 0;
     private boolean visible = true;
     private QuadMeshResource resource=null;
-    private RenderMaterial renderMaterial = null;
+    private RenderBatch renderBatch = null;
     private Vector4f uv = new Vector4f(0.0f, 0.0f, 1.0f, 1.0f);
     private Vector3f color = new Vector3f(1.0f);
 
-    public RenderInstance(QuadMeshResource _resource, RenderMaterial _renderMaterial) {
+    public RenderInstance(QuadMeshResource _resource, RenderBatch _RenderBatch) {
         resource = _resource;
-        renderMaterial = _renderMaterial;
+        renderBatch = _RenderBatch;
     }
 
-    public void setShaderProgram(ShaderProgram _shaderProgram) { renderMaterial.setShaderProgram(_shaderProgram);; }
-    public ShaderProgram getShaderProgram() { return renderMaterial.getShaderProgram(); }
+    public void setShaderProgram(ShaderProgram _shaderProgram) {
+        RenderingServer.getSingleton().setInstanceShader(this, _shaderProgram);
+    }
+    public ShaderProgram getShaderProgram() {
+        if(!hasRenderBatch()){return null;}
+        return renderBatch.getRenderMaterial().getShaderProgram(); 
+    }
 
-    public void setTextureResource(TextureResource _textureResource) { renderMaterial.setTextureResource(_textureResource); }
-    public TextureResource getTextureResource() { return renderMaterial.getTextureResource(); }
+    public void setTextureResource(TextureResource _textureResource) {
+        RenderingServer.getSingleton().setInstanceTexture(this, _textureResource);
+    }
 
-    public void setPosition(Vector3f _position) { position = _position; }
+    public TextureResource getTextureResource() {
+        if(!hasRenderBatch()){return null;}
+        return renderBatch.getRenderMaterial().getTextureResource(); 
+    }
+
+    public void setPosition(Vector3f _position) { position.set(_position); }
     public Vector3f getPosition() { return position; }
 
-    public void setScale(Vector3f _scale) { scale = _scale; }
+    public void setScale(Vector3f _scale) { scale.set(_scale); }
     public Vector3f getScale() { return scale; }
 
-    public void setRotation(Vector3f _degree) { rotation = _degree; }
-    public Vector3f getRotation() { return rotation; }
+    public void setRotation(float _degree) { rotation = _degree; }
+    public float getRotation() { return rotation; }
 
     public void setVisibility(boolean _visiblity) { visible = _visiblity; }
     public boolean isVisible() { return visible; }
@@ -42,4 +53,10 @@ public class RenderInstance {
     public Vector3f getColor() { return color; }
 
     public QuadMeshResource getResource() { return resource; }
+
+    public void setRenderBatch(RenderBatch _RenderBatch) { renderBatch=_RenderBatch; }
+    public RenderBatch getRenderBatch() { return renderBatch; }
+    public boolean hasRenderBatch() { if(renderBatch!=null){return true;}return false;}
+
+
 }

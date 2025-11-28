@@ -20,7 +20,7 @@ public class TestSprite2DInh extends Sprite2D {
 
     Raycast2D raycast = new Raycast2D("name");
 
-    public void _ready(){       
+    public void _ready(){
         setVisibility(true);
         setTexture("Assets/Textures/Cat.png");
         addChild(rigidbody);
@@ -32,6 +32,7 @@ public class TestSprite2DInh extends Sprite2D {
         addChild(raycast);
         raycast.setLocalPosition(new Vector3f(-1.5000001f,-2.0f,0.0f));
         raycast.setLength(2.0f);
+        raycast.setAngleDeg(45);
         ColorRect2D rect = new ColorRect2D("name");
         rect.setColor(new Vector3f(0.0f,0.0f,1.0f));
         rect.setLocalPosition(new Vector3f(1.0f,0.0f,0.0f));

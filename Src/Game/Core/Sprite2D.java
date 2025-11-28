@@ -3,7 +3,6 @@ package Game.Core;
 
 import Rendering.RenderInstance;
 import Rendering.RenderingServer;
-import Rendering.SpriteRenderInstance;
 
 public class Sprite2D extends Node2D{
     Texture2D texture=null;

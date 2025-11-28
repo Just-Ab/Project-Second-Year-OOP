@@ -16,14 +16,15 @@ public class RenderingServer {
 
     private List<TextureResource> textureResources=new ArrayList<>();
     private List<ShaderProgram> shaderPrograms=new ArrayList<>();
+    
     private List<CameraRender2D> cameras=new ArrayList<>();
     private CameraRender2D currentCamera2D;
 
     private QuadMeshResource quadMeshResource;
-    private List<RenderInstance> colorRectInstances=new ArrayList<>();
 
-    private List<RenderInstance> spriteInstances=new ArrayList<>();
-
+    private List<RenderMaterial> renderMaterials = new ArrayList<>();
+    private List<RenderBatch> renderBatches = new ArrayList<>();
+    private List<RenderInstance> renderInstances=new ArrayList<>();
     private List<LineResource> lineResources=new ArrayList<>();
     private List<LineInstance> lineInstances=new ArrayList<>();
 
@@ -63,30 +64,109 @@ public class RenderingServer {
 
     public RenderInstance createColorRect(){
         ShaderProgram newShaderProgram = createShaderProgram("Assets/Shaders/ColorRect.vert","Assets/Shaders/ColorRect.frag");
-        RenderMaterial newMaterial = new RenderMaterial(newShaderProgram);
-        colorRectInstances.addLast(new RenderInstance(quadMeshResource,newMaterial));
-        return colorRectInstances.getLast();
+        RenderInstance newRenderInstance = createRenderInstance();
+        setInstanceShader(newRenderInstance, newShaderProgram);
+        return newRenderInstance;
     }
 
     public RenderInstance createColorRect(ShaderProgram shaderProgram){
-        RenderMaterial newMaterial = new RenderMaterial(shaderProgram);
-        colorRectInstances.addLast(new RenderInstance(quadMeshResource,newMaterial));
-        return colorRectInstances.getLast();
+        RenderInstance newRenderInstance = createRenderInstance();
+        setInstanceShader(newRenderInstance, shaderProgram);
+        return newRenderInstance;
     }
 
     public RenderInstance createSprite(){
         ShaderProgram newShaderProgram = createShaderProgram("Assets/Shaders/Sprite.vert","Assets/Shaders/Sprite.frag");
-        RenderMaterial newMaterial = new RenderMaterial(newShaderProgram);
-        spriteInstances.addLast(new RenderInstance(quadMeshResource,newMaterial));
-        return spriteInstances.getLast();
+        RenderInstance newRenderInstance = createRenderInstance();
+        setInstanceShader(newRenderInstance, newShaderProgram);
+        return newRenderInstance;
     }
 
     public RenderInstance createSprite(ShaderProgram shaderProgram){
-        RenderMaterial newMaterial = new RenderMaterial(shaderProgram);
-        spriteInstances.addLast(new RenderInstance(quadMeshResource,newMaterial));
-        return spriteInstances.getLast();
+        RenderInstance newRenderInstance = createRenderInstance();
+        setInstanceShader(newRenderInstance, shaderProgram);
+        return newRenderInstance;
     }
 
+    public RenderMaterial createRenderMaterial(ShaderProgram _ShaderProgram){
+        for (RenderMaterial renderMaterial : renderMaterials) {
+            if(renderMaterial.getShaderProgram()==_ShaderProgram && renderMaterial.getTextureResource()==null){
+                return renderMaterial;
+            }
+        }
+        renderMaterials.addLast(new RenderMaterial(_ShaderProgram));
+        return renderMaterials.getLast();
+    }
+
+    public RenderMaterial createRenderMaterial(ShaderProgram _ShaderProgram,TextureResource _TextureResource){
+        for (RenderMaterial renderMaterial : renderMaterials) {
+            if(renderMaterial.getShaderProgram()==_ShaderProgram && renderMaterial.getTextureResource()==_TextureResource){
+                return renderMaterial;
+            }
+        }
+        renderMaterials.addLast(new RenderMaterial(_ShaderProgram,_TextureResource));
+        return renderMaterials.getLast();
+    }
+
+    public RenderInstance createRenderInstance(){
+        renderInstances.addLast(new RenderInstance(quadMeshResource, null));
+        return renderInstances.getLast();
+    }
+
+    public RenderBatch createRenderBatch(RenderMaterial _RenderMaterial){
+        renderBatches.addLast(new RenderBatch(_RenderMaterial));
+        return renderBatches.getLast();
+    }
+
+    public void setInstanceShader(RenderInstance _RenderInstance,ShaderProgram _ShaderProgram){
+        TextureResource instanceTexture = _RenderInstance.getTextureResource();
+        for (RenderMaterial renderMaterial : renderMaterials) {
+            if( renderMaterial.getTextureResource() != instanceTexture ||
+                renderMaterial.getShaderProgram() != _ShaderProgram){
+                continue;
+            }
+            setInstanceMaterial(_RenderInstance,renderMaterial);
+            return;
+        }
+        RenderMaterial newMaterial = createRenderMaterial(_ShaderProgram,instanceTexture);
+        setInstanceMaterial(_RenderInstance, newMaterial);
+    }
+
+    public void setInstanceTexture(RenderInstance _RenderInstance,TextureResource _textureResource){
+        ShaderProgram instanceShader = _RenderInstance.getShaderProgram();
+        for (RenderMaterial renderMaterial : renderMaterials) {
+            if( renderMaterial.getTextureResource() !=_textureResource ||
+                renderMaterial.getShaderProgram() != instanceShader){
+                continue;
+            }
+            setInstanceMaterial(_RenderInstance,renderMaterial);
+            return;
+        }
+        RenderMaterial newMaterial = createRenderMaterial(instanceShader,_textureResource);
+        setInstanceMaterial(_RenderInstance, newMaterial);
+    }
+
+    public void setInstanceMaterial(RenderInstance _RenderInstance,RenderMaterial _RenderMaterial){
+        if(_RenderInstance.hasRenderBatch()) { 
+            _RenderInstance.getRenderBatch().removeInstance(_RenderInstance);
+            _RenderInstance.setRenderBatch(null);
+        }
+
+        for (RenderBatch renderBatch : renderBatches) {
+            RenderMaterial renderMaterial = renderBatch.getRenderMaterial();
+            if( renderMaterial.getShaderProgram()!=_RenderMaterial.getShaderProgram()||
+                renderMaterial.getTextureResource()!=_RenderMaterial.getTextureResource()){
+                    continue;
+            }
+            _RenderInstance.setRenderBatch(renderBatch);
+            renderBatch.addInstance(_RenderInstance);
+            return;
+        }
+        RenderBatch newRenderBatch = createRenderBatch(_RenderMaterial);
+        _RenderInstance.setRenderBatch(newRenderBatch);
+        newRenderBatch.addInstance(_RenderInstance);
+        return;
+    }
 
     public LineInstance createLine(float[] _vertices){
         lineResources.addLast(new LineResource());
@@ -124,11 +204,8 @@ public class RenderingServer {
 
     public void remove(Object object){
         
-        if (object instanceof ColorRectInstance){
-            colorRectInstances.remove(object);
-        }
-        else if (object instanceof SpriteRenderInstance){
-            spriteInstances.remove(object);
+        if (object instanceof RenderInstance){
+            renderInstances.remove(object);
         }
         else if (object instanceof LineInstance){
             lineInstances.remove(object);
@@ -161,59 +238,29 @@ public class RenderingServer {
      public void drawFrame(){
         currentCamera2D.update();
         quadMeshResource.bind();
-        for (RenderInstance colorRectInstance : colorRectInstances) {
-            if (!colorRectInstance.isVisible()) {
-                continue;
+        for (RenderBatch renderBatch : renderBatches) {
+            RenderMaterial renderMaterial = renderBatch.getRenderMaterial();
+
+            TextureResource textureResource = renderMaterial.getTextureResource();
+            ShaderProgram shaderProgram = renderMaterial.getShaderProgram();
+
+            shaderProgram.bind();
+            if(textureResource!=null){
+                textureResource.bind();
             }
-            colorRectInstance.getShaderProgram().bind();
 
-            Matrix4f model = new Matrix4f();
-
-            model.translate(colorRectInstance.getPosition());
-            
-            model.rotate(colorRectInstance.getRotation().x, 1.0f,0.0f,0.0f);
-            model.rotate(colorRectInstance.getRotation().y, 0.0f,1.0f,0.0f);
-            model.rotate(colorRectInstance.getRotation().z, 0.0f,0.0f,1.0f);
-
-            model.scale(colorRectInstance.getScale());
-            
+            shaderProgram.setMat4("projection", currentCamera2D.getProjection());
+            shaderProgram.setMat4("view", currentCamera2D.getView());
 
 
-            colorRectInstance.getShaderProgram().setMat4("model", model);
-            colorRectInstance.getShaderProgram().setMat4("projection", currentCamera2D.getProjection());
-            colorRectInstance.getShaderProgram().setMat4("view", currentCamera2D.getView());
-
-            colorRectInstance.getShaderProgram().setVec3("color", colorRectInstance.getColor());
-            glDrawElements(GL_TRIANGLES,colorRectInstance.getResource().getIndices().length,GL_UNSIGNED_INT,0);
-            colorRectInstance.getShaderProgram().unbind();
-        
-        }
-        for (RenderInstance spriteInstance : spriteInstances) {
-            if (!spriteInstance.isVisible()) {
-                continue;
+            for (RenderInstance renderInstance : renderBatch.getInstances()) {
+                Matrix4f model = new Matrix4f().translate(renderInstance.getPosition());
+                model.rotate(renderInstance.getRotation(),new Vector3f(0.0f,0.0f,1.0f));
+                shaderProgram.setMat4("model", model);
+                shaderProgram.setVec3("color", renderInstance.getColor());
+                shaderProgram.setVec4("uv", renderInstance.getUV());
+                glDrawElements(GL_TRIANGLES, quadMeshResource.getIndices().length,GL_UNSIGNED_INT,0);
             }
-            spriteInstance.getShaderProgram().bind();
-
-            Matrix4f model = new Matrix4f();
-
-            model.translate(spriteInstance.getPosition());
-            
-            model.rotate(spriteInstance.getRotation().x, 1.0f,0.0f,0.0f);
-            model.rotate(spriteInstance.getRotation().y, 0.0f,1.0f,0.0f);
-            model.rotate(spriteInstance.getRotation().z, 0.0f,0.0f,1.0f);
-
-            model.scale(spriteInstance.getScale());
-            
-            spriteInstance.getShaderProgram().setVec4("uv", spriteInstance.getUV());
-            spriteInstance.getShaderProgram().setMat4("model", model);
-            spriteInstance.getShaderProgram().setMat4("projection", currentCamera2D.getProjection());
-            spriteInstance.getShaderProgram().setMat4("view", currentCamera2D.getView());
-
-            spriteInstance.getTextureResource().bind();
-            spriteInstance.getShaderProgram().setInt("textureUnit", spriteInstance.getTextureResource().getTextureUnitNormal());
-            glDrawElements(GL_TRIANGLES,spriteInstance.getResource().getIndices().length,GL_UNSIGNED_INT,0);
-            spriteInstance.getShaderProgram().unbind();
-            spriteInstance.getTextureResource().unbind();        
         }
 
         for (LineInstance lineInstance : lineInstances) {
