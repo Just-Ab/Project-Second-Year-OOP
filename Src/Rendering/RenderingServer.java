@@ -62,22 +62,28 @@ public class RenderingServer {
     }
 
     public RenderInstance createColorRect(){
-        colorRectInstances.addLast(new RenderInstance(quadMeshResource,createShaderProgram("Assets/Shaders/ColorRect.vert","Assets/Shaders/ColorRect.frag")));
+        ShaderProgram newShaderProgram = createShaderProgram("Assets/Shaders/ColorRect.vert","Assets/Shaders/ColorRect.frag");
+        RenderMaterial newMaterial = new RenderMaterial(newShaderProgram);
+        colorRectInstances.addLast(new RenderInstance(quadMeshResource,newMaterial));
         return colorRectInstances.getLast();
     }
 
     public RenderInstance createColorRect(ShaderProgram shaderProgram){
-        colorRectInstances.addLast(new RenderInstance(quadMeshResource,shaderProgram));
+        RenderMaterial newMaterial = new RenderMaterial(shaderProgram);
+        colorRectInstances.addLast(new RenderInstance(quadMeshResource,newMaterial));
         return colorRectInstances.getLast();
     }
 
     public RenderInstance createSprite(){
-        spriteInstances.addLast(new RenderInstance(quadMeshResource,createShaderProgram("Assets/Shaders/Sprite.vert","Assets/Shaders/Sprite.frag")));
+        ShaderProgram newShaderProgram = createShaderProgram("Assets/Shaders/Sprite.vert","Assets/Shaders/Sprite.frag");
+        RenderMaterial newMaterial = new RenderMaterial(newShaderProgram);
+        spriteInstances.addLast(new RenderInstance(quadMeshResource,newMaterial));
         return spriteInstances.getLast();
     }
 
     public RenderInstance createSprite(ShaderProgram shaderProgram){
-        spriteInstances.addLast(new RenderInstance(quadMeshResource,shaderProgram));
+        RenderMaterial newMaterial = new RenderMaterial(shaderProgram);
+        spriteInstances.addLast(new RenderInstance(quadMeshResource,newMaterial));
         return spriteInstances.getLast();
     }
 
