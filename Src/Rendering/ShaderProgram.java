@@ -9,6 +9,7 @@ import java.io.*;
 
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
+import org.joml.Vector4f;
 
 public class ShaderProgram {
     String vertexSource,fragmentSource;
@@ -73,6 +74,13 @@ public class ShaderProgram {
         int uniformCode = glGetUniformLocation(programId,uniformName);
         if (uniformCode>=0){
             glUniform3f(uniformCode,vec3.x, vec3.y, vec3.z);
+        }
+    }
+
+    public void setVec4(String uniformName,Vector4f vec4){
+        int uniformCode = glGetUniformLocation(programId,uniformName);
+        if (uniformCode>=0){
+            glUniform4f(uniformCode,vec4.x, vec4.y, vec4.z,vec4.w);
         }
     }
 

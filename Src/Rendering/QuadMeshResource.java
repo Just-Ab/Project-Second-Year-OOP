@@ -5,7 +5,7 @@ import static org.lwjgl.opengl.GL11.GL_FLOAT;
 import static org.lwjgl.opengl.GL15.GL_STATIC_DRAW;
 
 
-public class ColorRectResource {
+public class QuadMeshResource {
     VAO vao=new VAO();VBO vbo= new VBO();EBO ebo=new EBO();
 
     private static final float[] vertices = {
@@ -20,7 +20,7 @@ public class ColorRectResource {
         1, 2, 3
     };
 
-    public ColorRectResource(){
+    public QuadMeshResource(){
         vao.bind();
         vbo.bind();
         ebo.bind();

@@ -8,10 +8,11 @@ public class SpriteRenderInstance {
     private Vector3f angle = new Vector3f(0.0f);
     private boolean visiblity = true;
     private TextureResource textureResource = new TextureResource();
-    private SpriteRenderResource resource;
+    private QuadMeshResource resource;
+    private Vector4f uv = new Vector4f(0.0f,0.0f,1.0f,1.0f);
     private ShaderProgram shaderProgram;
 
-    SpriteRenderInstance(SpriteRenderResource _resource,ShaderProgram _shaderProgram){
+    SpriteRenderInstance(QuadMeshResource _resource,ShaderProgram _shaderProgram){
         resource = _resource;
         shaderProgram = _shaderProgram;
     }
@@ -48,6 +49,14 @@ public class SpriteRenderInstance {
         return angle;
     }
 
+    public void setUV(Vector4f _uv){
+        uv = _uv;
+    }
+
+    public Vector4f getUV(){
+        return uv;
+    }
+
     public void setTexture(TextureResource _textureResource){
         textureResource = _textureResource;
     }
@@ -57,7 +66,7 @@ public class SpriteRenderInstance {
         return textureResource;
     }
 
-    public SpriteRenderResource getResource(){
+    public QuadMeshResource getResource(){
         return resource;
     }
 

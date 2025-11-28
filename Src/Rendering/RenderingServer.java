@@ -19,10 +19,9 @@ public class RenderingServer {
     private List<CameraRender2D> cameras=new ArrayList<>();
     private CameraRender2D currentCamera2D;
 
-    private ColorRectResource colorRectResource;
+    private QuadMeshResource quadMeshResource;
     private List<ColorRectInstance> colorRectInstances=new ArrayList<>();
 
-    private SpriteRenderResource spriteResource;
     private List<SpriteRenderInstance> spriteInstances=new ArrayList<>();
 
     private List<LineResource> lineResources=new ArrayList<>();
@@ -57,29 +56,28 @@ public class RenderingServer {
         currentCamera2D = cameras.getFirst();
     }
     private void initializeNativeResources(){
-        server.colorRectResource = new ColorRectResource();
-        server.spriteResource = new SpriteRenderResource();
+        server.quadMeshResource = new QuadMeshResource();
         server.cameras.addLast(new CameraRender2D(new Vector3f(0.0f,0.0f,0.0f),5.0f,5.0f));
         server.currentCamera2D = cameras.getFirst();
     }
 
     public ColorRectInstance createColorRect(){
-        colorRectInstances.addLast(new ColorRectInstance(colorRectResource,createShaderProgram("Assets/Shaders/ColorRect.vert","Assets/Shaders/ColorRect.frag")));
+        colorRectInstances.addLast(new ColorRectInstance(quadMeshResource,createShaderProgram("Assets/Shaders/ColorRect.vert","Assets/Shaders/ColorRect.frag")));
         return colorRectInstances.getLast();
     }
 
     public ColorRectInstance createColorRect(ShaderProgram shaderProgram){
-        colorRectInstances.addLast(new ColorRectInstance(colorRectResource,shaderProgram));
+        colorRectInstances.addLast(new ColorRectInstance(quadMeshResource,shaderProgram));
         return colorRectInstances.getLast();
     }
 
     public SpriteRenderInstance createSprite(){
-        spriteInstances.addLast(new SpriteRenderInstance(spriteResource,createShaderProgram("Assets/Shaders/Sprite.vert","Assets/Shaders/Sprite.frag")));
+        spriteInstances.addLast(new SpriteRenderInstance(quadMeshResource,createShaderProgram("Assets/Shaders/Sprite.vert","Assets/Shaders/Sprite.frag")));
         return spriteInstances.getLast();
     }
 
     public SpriteRenderInstance createSprite(ShaderProgram shaderProgram){
-        spriteInstances.addLast(new SpriteRenderInstance(spriteResource,shaderProgram));
+        spriteInstances.addLast(new SpriteRenderInstance(quadMeshResource,shaderProgram));
         return spriteInstances.getLast();
     }
 
@@ -156,7 +154,7 @@ public class RenderingServer {
 
      public void drawFrame(){
         currentCamera2D.update();
-        colorRectResource.bind();
+        quadMeshResource.bind();
         for (ColorRectInstance colorRectInstance : colorRectInstances) {
             if (!colorRectInstance.isVisible()) {
                 continue;
@@ -184,7 +182,6 @@ public class RenderingServer {
             colorRectInstance.getShaderProgram().unbind();
         
         }
-        spriteResource.bind();
         for (SpriteRenderInstance spriteInstance : spriteInstances) {
             if (!spriteInstance.isVisible()) {
                 continue;
@@ -201,7 +198,7 @@ public class RenderingServer {
 
             model.scale(spriteInstance.getScale());
             
-
+            spriteInstance.getShaderProgram().setVec4("uv", spriteInstance.getUV());
             spriteInstance.getShaderProgram().setMat4("model", model);
             spriteInstance.getShaderProgram().setMat4("projection", currentCamera2D.getProjection());
             spriteInstance.getShaderProgram().setMat4("view", currentCamera2D.getView());

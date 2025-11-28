@@ -8,10 +8,10 @@ public class ColorRectInstance {
     private Vector3f color = new Vector3f(1.0f);
     private Vector3f angle = new Vector3f(0.0f);
     private boolean visiblity = true;
-    private ColorRectResource resource;
+    private QuadMeshResource resource;
     private ShaderProgram shaderProgram;
 
-    ColorRectInstance(ColorRectResource _resource,ShaderProgram _shaderProgram){
+    ColorRectInstance(QuadMeshResource _resource,ShaderProgram _shaderProgram){
         resource = _resource;
         shaderProgram = _shaderProgram;
     }
@@ -60,7 +60,7 @@ public class ColorRectInstance {
         return color;
     }
 
-    public ColorRectResource getResource(){
+    public QuadMeshResource getResource(){
         return resource;
     }
 
