@@ -51,4 +51,6 @@ public class QuadMeshResource {
         vao.unbind();
     }
 
+    public VAO getVAO(){return vao;}
+
 }

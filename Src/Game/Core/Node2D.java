@@ -4,9 +4,9 @@ import org.joml.*;
 import org.joml.Math;
 
 public class Node2D extends Node{
-    Vector3f position = new Vector3f();
-    Vector3f scale = new Vector3f(1.0f);
-    float rotation = 0.0f;
+    protected Vector3f position = new Vector3f();
+    protected Vector3f scale = new Vector3f(1.0f);
+    protected float rotation = 0.0f;
 
 
     public Node2D(String _name){

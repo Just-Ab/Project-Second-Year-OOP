@@ -5,6 +5,8 @@ import java.util.List;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL33.*;
+
 import org.joml.*;
 import org.lwjgl.opengl.GL;
 
@@ -19,8 +21,6 @@ public class RenderingServer {
     
     private List<CameraRender2D> cameras=new ArrayList<>();
     private CameraRender2D currentCamera2D;
-
-    private QuadMeshResource quadMeshResource;
 
     private List<RenderMaterial> renderMaterials = new ArrayList<>();
     private List<RenderBatch> renderBatches = new ArrayList<>();
@@ -53,11 +53,12 @@ public class RenderingServer {
     public void makeCamera2DCurrent(CameraRender2D _camera){
         currentCamera2D = _camera;
     }
+
     public void makeDefaultCamera2DCurrent(){
         currentCamera2D = cameras.getFirst();
     }
+    
     private void initializeNativeResources(){
-        server.quadMeshResource = new QuadMeshResource();
         server.cameras.addLast(new CameraRender2D(new Vector3f(0.0f,0.0f,0.0f),5.0f,5.0f));
         server.currentCamera2D = cameras.getFirst();
         glfwSwapInterval(1);
@@ -110,12 +111,13 @@ public class RenderingServer {
     }
 
     public RenderInstance createRenderInstance(){
-        renderInstances.addLast(new RenderInstance(quadMeshResource, null));
+        renderInstances.addLast(new RenderInstance(null));
         return renderInstances.getLast();
     }
 
     public RenderBatch createRenderBatch(RenderMaterial _RenderMaterial){
         renderBatches.addLast(new RenderBatch(_RenderMaterial));
+        renderBatches.getLast().registerVBOtoVAO();
         return renderBatches.getLast();
     }
 
@@ -237,10 +239,13 @@ public class RenderingServer {
 
      public void drawFrame(){
         currentCamera2D.update();
-        quadMeshResource.bind();
         for (RenderBatch renderBatch : renderBatches) {
-            RenderMaterial renderMaterial = renderBatch.getRenderMaterial();
+            if(renderBatch.getInstances().size()<=0){continue;}
 
+            renderBatch.getResource().bind();
+            renderBatch.updateInstanceVBO();
+            
+            RenderMaterial renderMaterial = renderBatch.getRenderMaterial();
             TextureResource textureResource = renderMaterial.getTextureResource();
             ShaderProgram shaderProgram = renderMaterial.getShaderProgram();
 
@@ -252,16 +257,7 @@ public class RenderingServer {
             shaderProgram.setMat4("projection", currentCamera2D.getProjection());
             shaderProgram.setMat4("view", currentCamera2D.getView());
 
-
-            for (RenderInstance renderInstance : renderBatch.getInstances()) {
-                if(!renderInstance.isVisible()){continue;}
-                shaderProgram.setVec3("ipos", renderInstance.getPosition());
-                shaderProgram.setVec3("iscale", renderInstance.getScale());
-                shaderProgram.setFloat("irot", renderInstance.getRotation());
-                shaderProgram.setVec3("icolor", renderInstance.getColor());
-                shaderProgram.setVec4("iuv", renderInstance.getUV());
-                glDrawElements(GL_TRIANGLES, quadMeshResource.getIndices().length,GL_UNSIGNED_INT,0);
-            }
+            glDrawElementsInstanced(GL_TRIANGLES, renderBatch.getResource().getIndices().length, GL_UNSIGNED_INT,0,renderBatch.getRenderableInstancesCount());
         }
 
         for (LineInstance lineInstance : lineInstances) {

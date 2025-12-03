@@ -2,13 +2,13 @@ package Game.Core;
 
 import Rendering.*;
 
-public class Texture2D extends Resource{
+public class TextureResource2D extends Resource{
 
     private String path="";
     private TextureResource textureResource=null;
 
 
-    public Texture2D(String _path){
+    public TextureResource2D(String _path){
         textureResource = RenderingServer.getSingleton().creaTextureResource(_path);
     }
 

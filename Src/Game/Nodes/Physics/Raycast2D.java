@@ -1,8 +1,9 @@
-package Game.Core;
+package Game.Nodes.Physics;
 
 import org.joml.*;
 import org.joml.Math;
 
+import Game.Core.Node2D;
 import Physics.PhysicsServer;
 import Physics.Raycast;
 import Rendering.LineInstance;

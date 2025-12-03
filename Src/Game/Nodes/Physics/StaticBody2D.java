@@ -1,4 +1,4 @@
-package Game.Core;
+package Game.Nodes.Physics;
 
 import org.joml.Vector3f;
 

@@ -1,7 +1,9 @@
-package Game.Core;
+package Game.Nodes.Physics;
 
 import org.joml.Vector3f;
 
+import Game.Core.Node2D;
+import Game.Nodes.Visuals.ColorRect2D;
 import Physics.PhysicsServer;
 import Physics.RectCollider;
 

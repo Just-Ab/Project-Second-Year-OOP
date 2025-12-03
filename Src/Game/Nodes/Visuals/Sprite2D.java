@@ -1,17 +1,21 @@
-package Game.Core;
+package Game.Nodes.Visuals;
 
 
+import org.joml.Vector3f;
 import org.joml.Vector4f;
 
+import Game.Core.Node2D;
+import Game.Core.TextureResource2D;
 import Rendering.RenderInstance;
 import Rendering.RenderingServer;
 
 public class Sprite2D extends Node2D{
-    Texture2D texture=null;
-    RenderInstance instance=null;
+    protected TextureResource2D texture=null;
+    protected RenderInstance instance=null;
 
-    boolean visiblity=true;
-    Vector4f uv=new Vector4f(0.0f,0.0f,1.0f,1.0f);
+    protected boolean visiblity=true;
+    protected boolean dirty=true;
+    protected Vector4f uv=new Vector4f(0.0f,0.0f,1.0f,1.0f);
 
 
     public Sprite2D(String _name){
@@ -20,7 +24,7 @@ public class Sprite2D extends Node2D{
 
     public void setTexture(String _path){
         if(texture==null){
-            texture = new Texture2D(_path);
+            texture = new TextureResource2D(_path);
         }
         else{
             texture.loadTexture(_path);
@@ -28,7 +32,20 @@ public class Sprite2D extends Node2D{
         if(isInTree&&(instance!=null)){
             instance.setTextureResource(texture.getRenderingResource());
         }
+        dirty=true;
     }
+
+    @Override
+    public void setLocalPosition(Vector3f _position){super.setLocalPosition(_position);dirty=true;}
+
+    @Override
+    public void setLocalScale(Vector3f _scale){super.setLocalScale(_scale);dirty=true;}
+
+    @Override
+    public void setLocalRotationDegrees(float _degrees){super.setLocalRotationDegrees(_degrees);dirty=true;}
+
+    @Override
+    public void setLocalRotationRad(float _rad){super.setLocalRotationRad(_rad);dirty=true;}
 
     public void setUV(Vector4f _uv){
         if(instance!=null){
@@ -37,7 +54,9 @@ public class Sprite2D extends Node2D{
         else{
             uv.set(_uv);
         }
+        dirty=true;
     }
+    
     public Vector4f getUV() {
         if(instance!=null){
             return instance.getUV();
@@ -55,6 +74,7 @@ public class Sprite2D extends Node2D{
             instance.setVisibility(_visiblity);
         }
     }
+    
     public boolean isVisible(){
         if(instance==null){
             return visiblity;
@@ -66,11 +86,12 @@ public class Sprite2D extends Node2D{
 
     @Override
     public void _update(float _delta){
-        if(instance!=null){
+        if(instance!=null && dirty){
             instance.setPosition(getGlobalPosition());
             instance.setRotation(getGlobalRotation());
             instance.setScale(getGlobalScale());
-            System.out.println(getGlobalScale());
+            instance.setUV(uv);
+            dirty=false;
         }
     }
 
@@ -82,6 +103,7 @@ public class Sprite2D extends Node2D{
         instance.setPosition(getGlobalPosition());
         instance.setRotation(getGlobalRotation());
         instance.setScale(getGlobalScale());
+        instance.setUV(uv);
         if (texture!=null){
             instance.setTextureResource(texture.getRenderingResource());
         }

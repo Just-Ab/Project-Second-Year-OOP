@@ -1,4 +1,4 @@
-package Game.Core;
+package Game.Nodes.Visuals;
 
 import org.joml.Vector4f;
 

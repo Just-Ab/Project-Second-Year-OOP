@@ -1,7 +1,8 @@
-package Game.Core;
+package Game.Nodes.Cameras;
 
 import org.joml.*;
 
+import Game.Core.Node2D;
 import Rendering.CameraRender2D;
 import Rendering.RenderingServer;
 

@@ -7,13 +7,11 @@ public class RenderInstance {
     private Vector3f scale = new Vector3f(1.0f);
     private float rotation = 0;
     private boolean visible = true;
-    private QuadMeshResource resource=null;
     private RenderBatch renderBatch = null;
     private Vector4f uv = new Vector4f(0.0f, 0.0f, 1.0f, 1.0f);
     private Vector3f color = new Vector3f(1.0f);
 
-    public RenderInstance(QuadMeshResource _resource, RenderBatch _RenderBatch) {
-        resource = _resource;
+    public RenderInstance(RenderBatch _RenderBatch) {
         renderBatch = _RenderBatch;
     }
 
@@ -51,8 +49,6 @@ public class RenderInstance {
 
     public void setColor(Vector3f _color) { color = _color; }
     public Vector3f getColor() { return color; }
-
-    public QuadMeshResource getResource() { return resource; }
 
     public void setRenderBatch(RenderBatch _RenderBatch) { renderBatch=_RenderBatch; }
     public RenderBatch getRenderBatch() { return renderBatch; }

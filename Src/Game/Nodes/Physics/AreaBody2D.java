@@ -1,4 +1,4 @@
-package Game.Core;
+package Game.Nodes.Physics;
 
 import Physics.AreaBody;
 import Physics.Body;

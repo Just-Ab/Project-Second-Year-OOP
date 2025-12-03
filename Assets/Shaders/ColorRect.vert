@@ -1,13 +1,15 @@
 #version 330 core
 
-layout (location=0) in vec3 apos;
+layout (location = 0) in vec3 apos;
+layout (location = 1) in vec3 ipos;
+layout (location = 2) in vec3 iscale;
+layout (location = 3) in float irot;
+layout (location = 4) in vec4 iuv;
+layout (location = 5) in vec3 icolor;
 
 out vec3 fragColor;
 
-uniform vec3 ipos;
-uniform vec3 iscale;
-uniform float irot;
-uniform vec3 icolor;
+
 
 
 uniform mat4 view;

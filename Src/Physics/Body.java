@@ -2,8 +2,10 @@ package Physics;
 
 import java.util.ArrayList;
 import java.util.List;
-import Game.Core.Body2D;
+
 import org.joml.Vector3f;
+
+import Game.Nodes.Physics.Body2D;
 
 public class Body {
 

@@ -1,5 +1,6 @@
-package Game.Core;
+package Game.Nodes.Physics;
 
+import Game.Core.Node2D;
 import Physics.Body;
 
 public abstract class Body2D extends Node2D{

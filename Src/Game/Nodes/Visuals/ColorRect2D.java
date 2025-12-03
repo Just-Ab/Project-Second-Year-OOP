@@ -1,10 +1,12 @@
-package Game.Core;
+package Game.Nodes.Visuals;
 
 
 import Rendering.RenderingServer;
 import Rendering.RenderInstance;
 
 import org.joml.*;
+
+import Game.Core.Node2D;
 
 public class ColorRect2D extends Node2D{
     Vector3f color=new Vector3f(1.0f,0.0f,0.0f);
