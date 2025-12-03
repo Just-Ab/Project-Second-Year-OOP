@@ -69,13 +69,15 @@ public class RigidBody2D extends PhysicsBody2D{
         }
     }
 
+    @Override
     public void _update(float _delta){
         if(bodyResource!=null){
             position.set(bodyResource.getPosition());
         }
     }
-
-    public void _enterTree(){
+    
+    @Override
+    protected void _enterTree(){
         super._enterTree();
         if (bodyResource==null){
             setBodyResource(PhysicsServer.getSingleton().createRigidBody(mass));

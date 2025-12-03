@@ -1,9 +1,6 @@
 package Game.Core;
 
-import org.joml.Vector2f;
 import org.joml.Vector4f;
-
-import Rendering.RenderingServer;
 
 public class AnimatedSprite2D extends Sprite2D{
     public AnimatedSprite2D(String _name){
@@ -31,6 +28,7 @@ public class AnimatedSprite2D extends Sprite2D{
         currentFrame = startingFrame;
     }
 
+    @Override
     public void _update(float _delta){
         super._update(_delta);
         setUV(new Vector4f(uvColumnUnit*(currentFrame%frameColumns),uvRowUnit*(currentFrame/frameColumns),uvColumnUnit,uvRowUnit));
@@ -45,7 +43,7 @@ public class AnimatedSprite2D extends Sprite2D{
         System.out.println(currentFrame);
     }
 
-
+    @Override
     protected void _enterTree(){
         super._enterTree();
     }

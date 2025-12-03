@@ -54,11 +54,12 @@ public class Collision2D extends Node2D{
 
     public void setVisibility(boolean _visiblity){colorrect.setVisibility(_visiblity);}
 
-
+    @Override
     public void _update(float _delta){
     }
 
-    public void _enterTree(){
+    @Override
+    protected void _enterTree(){
         super._enterTree();
         if(rectCollider==null){
             rectCollider = PhysicsServer.getSingleton().createRectCollider(null, width, height);

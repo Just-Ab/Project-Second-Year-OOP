@@ -11,7 +11,7 @@ public class Sprite2D extends Node2D{
     RenderInstance instance=null;
 
     boolean visiblity=true;
-    Vector4f uv=new Vector4f();
+    Vector4f uv=new Vector4f(0.0f,0.0f,1.0f,1.0f);
 
 
     public Sprite2D(String _name){
@@ -64,17 +64,24 @@ public class Sprite2D extends Node2D{
         }    
     }
 
+    @Override
     public void _update(float _delta){
         if(instance!=null){
             instance.setPosition(getGlobalPosition());
+            instance.setRotation(getGlobalRotation());
+            instance.setScale(getGlobalScale());
+            System.out.println(getGlobalScale());
         }
     }
 
+    @Override
     protected void _enterTree(){
         super._enterTree();
         instance=RenderingServer.getSingleton().createSprite();
         instance.setVisibility(visiblity);
         instance.setPosition(getGlobalPosition());
+        instance.setRotation(getGlobalRotation());
+        instance.setScale(getGlobalScale());
         if (texture!=null){
             instance.setTextureResource(texture.getRenderingResource());
         }

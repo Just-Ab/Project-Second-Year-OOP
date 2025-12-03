@@ -60,6 +60,7 @@ public class RenderingServer {
         server.quadMeshResource = new QuadMeshResource();
         server.cameras.addLast(new CameraRender2D(new Vector3f(0.0f,0.0f,0.0f),5.0f,5.0f));
         server.currentCamera2D = cameras.getFirst();
+        glfwSwapInterval(1);
     }
 
     public RenderInstance createColorRect(){
@@ -230,7 +231,6 @@ public class RenderingServer {
         glClearColor(0.2f, 0.4f, 0.4f, 1.0f);
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        glfwSwapInterval(1);
         glClear(GL_COLOR_BUFFER_BIT);
         glfwPollEvents();
     }
@@ -255,12 +255,11 @@ public class RenderingServer {
 
             for (RenderInstance renderInstance : renderBatch.getInstances()) {
                 if(!renderInstance.isVisible()){continue;}
-                Matrix4f model = new Matrix4f().translate(renderInstance.getPosition());
-                model.rotate(renderInstance.getRotation(),new Vector3f(0.0f,0.0f,1.0f));
-                model.scale(renderInstance.getScale());
-                shaderProgram.setMat4("model", model);
-                shaderProgram.setVec3("color", renderInstance.getColor());
-                shaderProgram.setVec4("uv", renderInstance.getUV());
+                shaderProgram.setVec3("ipos", renderInstance.getPosition());
+                shaderProgram.setVec3("iscale", renderInstance.getScale());
+                shaderProgram.setFloat("irot", renderInstance.getRotation());
+                shaderProgram.setVec3("icolor", renderInstance.getColor());
+                shaderProgram.setVec4("iuv", renderInstance.getUV());
                 glDrawElements(GL_TRIANGLES, quadMeshResource.getIndices().length,GL_UNSIGNED_INT,0);
             }
         }

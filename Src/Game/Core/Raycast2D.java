@@ -12,7 +12,7 @@ public class Raycast2D extends Node2D{
 
     Raycast raycastResource=null;
     LineInstance lineResource=null;
-    float length=0,angle=0;
+    float length=0;
 
     public Raycast2D(String _name){
         super(_name);
@@ -24,21 +24,27 @@ public class Raycast2D extends Node2D{
         setLine();
     }
 
-    public void setAngleRad(float _angle){
-        angle = _angle;
+    @Override
+    public void setLocalRotationRad(float _rotation) {
+        super.setLocalRotationRad(_rotation);
         setLine();
     }
-    public void setAngleDeg(float _angle){
-        angle = _angle*(float)Math.PI/180;;
+
+    @Override
+    public void setLocalRotationDegrees(float _rotation) {
+        super.setLocalRotationDegrees(_rotation);
         setLine();
     }
 
     private void setLine(){
-                lineResource.setPoints(                
-                    new float[]{
-                    getGlobalPosition().x,getGlobalPosition().y,0.0f,
-                    getGlobalPosition().x+length*Math.cos(angle),getGlobalPosition().y+length*Math.sin(angle),0.0f
-                });
+        Vector3f position = getGlobalPosition();
+        float rotation = getGlobalRotation();
+
+        lineResource.setPoints(                
+            new float[]{
+            position.x,position.y,0.0f,
+            position.x+length*Math.cos(rotation),position.y+length*Math.sin(rotation),0.0f
+        });
     }
 
     public Body2D getCollider(){
@@ -69,23 +75,25 @@ public class Raycast2D extends Node2D{
         return -1;
     }
 
+    @Override
     public void _update(float _delta){
         if(raycastResource!=null){
-            raycastResource.setAngleRad(angle);
+            raycastResource.setAngleRad(getGlobalRotation());
             raycastResource.setLength(length);
             raycastResource.setPosition(getGlobalPosition());
         }
     }
 
-    public void _enterTree(){
+    @Override
+    protected void _enterTree(){
         if(raycastResource==null){
-            raycastResource = PhysicsServer.getSingleton().createRaycast(getGlobalPosition(), length, angle);
+            raycastResource = PhysicsServer.getSingleton().createRaycast(getGlobalPosition(), length, getGlobalRotation());
         }
         if(lineResource==null){
             lineResource = RenderingServer.getSingleton().createLine(
                 new float[]{
                     getGlobalPosition().x,getGlobalPosition().y,0.0f,
-                    getGlobalPosition().x+length*Math.cos(angle),getGlobalPosition().y+length*Math.sin(angle),0.0f
+                    getGlobalPosition().x+length*Math.cos(getGlobalRotation()),getGlobalPosition().y+length*Math.sin(getGlobalRotation()),0.0f
                 }
             );
             lineResource.setColor(new Vector3f(0.1f,0.3f,0.4f));

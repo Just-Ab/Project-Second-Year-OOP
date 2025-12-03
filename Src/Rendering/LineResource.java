@@ -2,7 +2,7 @@ package Rendering;
 
 
 import static org.lwjgl.opengl.GL11.GL_FLOAT;
-import static org.lwjgl.opengl.GL15.GL_STATIC_DRAW;
+import static org.lwjgl.opengl.GL15.GL_DYNAMIC_DRAW;
 
 
 public class LineResource {
@@ -19,7 +19,7 @@ public class LineResource {
         vao.bind();
         vbo.bind();
         vbo.setData(_vertices);
-        vbo.loadGpu(GL_STATIC_DRAW);
+        vbo.loadGpu(GL_DYNAMIC_DRAW);
         vao.linkAttribute(vbo, 0, 3, GL_FLOAT, false, 3*Float.BYTES, 0,0);
         vao.unbind();
         vbo.unbind();    

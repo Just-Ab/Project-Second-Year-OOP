@@ -27,12 +27,13 @@ public class StaticBody2D extends PhysicsBody2D{
         }
     }
 
+    @Override
     public Body getBodyResource(){
         return bodyResource;
     }
 
-
-    public void _enterTree(){
+    @Override
+    protected void _enterTree(){
         super._enterTree();
         if (bodyResource==null){
             setBodyResource(PhysicsServer.getSingleton().createStaticBody());

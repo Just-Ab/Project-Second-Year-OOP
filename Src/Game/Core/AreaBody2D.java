@@ -44,13 +44,15 @@ public class AreaBody2D extends Body2D{
         }
     }
 
+    @Override
     public void _update(float _delta){
         if(areaResource!=null){
             resolveCollisions();
         }
     }
 
-    public void _enterTree(){
+    @Override
+    protected void _enterTree(){
         super._enterTree();
 
         if(areaResource==null){

@@ -72,7 +72,7 @@ public class PhysicsServer {
 
         collisionEvents.clear();
 
-        List<RigidBody> rigidBodiesList = new ArrayList<>(rigidbodies);
+        List<RigidBody> rigidBodiesList = rigidbodies;
         for (int i = 0; i < rigidBodiesList.size() - 1; i++) {
             for (int j = i + 1; j < rigidBodiesList.size(); j++) {
                 RigidBody RigidBodyA = rigidBodiesList.get(i);
