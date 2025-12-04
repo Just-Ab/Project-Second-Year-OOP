@@ -1,4 +1,4 @@
-package Game.Nodes.Physics;
+package Game.Physics.Nodes;
 
 import org.joml.*;
 import org.joml.Math;
@@ -15,9 +15,7 @@ public class Raycast2D extends Node2D{
     LineInstance lineResource=null;
     float length=0;
 
-    public Raycast2D(String _name){
-        super(_name);
-    }
+    public Raycast2D(String _name){}
 
 
     public void setLength(float _length){

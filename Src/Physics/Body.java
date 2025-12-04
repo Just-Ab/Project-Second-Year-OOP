@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.joml.Vector3f;
 
-import Game.Nodes.Physics.Body2D;
+import Game.Physics.Nodes.Body2D;
 
 public class Body {
 

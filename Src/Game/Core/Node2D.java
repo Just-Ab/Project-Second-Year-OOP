@@ -9,9 +9,7 @@ public class Node2D extends Node{
     protected float rotation = 0.0f;
 
 
-    public Node2D(String _name){
-        super(_name);
-    }
+    public Node2D(){}
     
     public Vector3f getLocalPosition(){
         return new Vector3f(position);

@@ -1,4 +1,4 @@
-package Game.Nodes.Physics;
+package Game.Physics.Nodes;
 
 import Physics.AreaBody;
 import Physics.Body;
@@ -8,9 +8,7 @@ public class AreaBody2D extends Body2D{
 
     protected AreaBody areaResource=null;
 
-    public AreaBody2D(String name){
-        super(name);
-    }
+    public AreaBody2D(){}
 
 
     public void _bodyEntered(Body2D _body){ 

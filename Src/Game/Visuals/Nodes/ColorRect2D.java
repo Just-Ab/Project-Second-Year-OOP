@@ -1,4 +1,4 @@
-package Game.Nodes.Visuals;
+package Game.Visuals.Nodes;
 
 
 import Rendering.RenderingServer;
@@ -15,8 +15,7 @@ public class ColorRect2D extends Node2D{
 
 
     
-    public ColorRect2D(String _name){
-        super(_name);
+    public ColorRect2D(){
     }
 
 

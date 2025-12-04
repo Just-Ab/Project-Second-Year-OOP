@@ -1,16 +1,16 @@
-package Game.Nodes.Visuals;
+package Game.Visuals.Nodes;
 
 
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
 import Game.Core.Node2D;
-import Game.Core.TextureResource2D;
+import Game.Visuals.Resources.TextureResource;
 import Rendering.RenderInstance;
 import Rendering.RenderingServer;
 
 public class Sprite2D extends Node2D{
-    protected TextureResource2D texture=null;
+    protected TextureResource texture=null;
     protected RenderInstance instance=null;
 
     protected boolean visiblity=true;
@@ -18,19 +18,17 @@ public class Sprite2D extends Node2D{
     protected Vector4f uv=new Vector4f(0.0f,0.0f,1.0f,1.0f);
 
 
-    public Sprite2D(String _name){
-        super(_name);
-    }
+    public Sprite2D(){}
 
     public void setTexture(String _path){
         if(texture==null){
-            texture = new TextureResource2D(_path);
+            texture = new TextureResource(_path);
         }
         else{
             texture.loadTexture(_path);
         }
         if(isInTree&&(instance!=null)){
-            instance.setTextureResource(texture.getRenderingResource());
+            instance.setTextureResource(texture.getTexture());
         }
         dirty=true;
     }
@@ -90,7 +88,6 @@ public class Sprite2D extends Node2D{
             instance.setPosition(getGlobalPosition());
             instance.setRotation(getGlobalRotation());
             instance.setScale(getGlobalScale());
-            instance.setUV(uv);
             dirty=false;
         }
     }
@@ -105,7 +102,7 @@ public class Sprite2D extends Node2D{
         instance.setScale(getGlobalScale());
         instance.setUV(uv);
         if (texture!=null){
-            instance.setTextureResource(texture.getRenderingResource());
+            instance.setTextureResource(texture.getTexture());
         }
     }
 }

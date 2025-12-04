@@ -11,6 +11,9 @@ public class Node {
     protected boolean isInTree = false;
     protected boolean isReady = false;
 
+    public Node(){
+    }
+
     public Node(String _name){
         name = _name;
     }

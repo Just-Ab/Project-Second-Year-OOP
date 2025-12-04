@@ -1,21 +1,21 @@
-package Game.Nodes.Physics;
+package Game.Physics.Nodes;
 
 import org.joml.Vector3f;
 
 import Game.Core.Node2D;
-import Game.Nodes.Visuals.ColorRect2D;
+import Game.Visuals.Nodes.ColorRect2D;
 import Physics.PhysicsServer;
 import Physics.RectCollider;
 
 public class Collision2D extends Node2D{
-    protected ColorRect2D colorrect = new ColorRect2D("Bounds");
+    protected ColorRect2D colorrect = new ColorRect2D();
     protected Vector3f color = new Vector3f(0.2f,0.2f,0.2f);
     protected RectCollider rectCollider = null;
 
     protected float width=1,height=1;
 
     public Collision2D(){
-        super("Collision2D");
+        super();
     }
 
 

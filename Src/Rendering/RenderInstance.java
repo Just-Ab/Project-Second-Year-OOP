@@ -23,11 +23,11 @@ public class RenderInstance {
         return renderBatch.getRenderMaterial().getShaderProgram(); 
     }
 
-    public void setTextureResource(TextureResource _textureResource) {
+    public void setTextureResource(Texture _textureResource) {
         RenderingServer.getSingleton().setInstanceTexture(this, _textureResource);
     }
 
-    public TextureResource getTextureResource() {
+    public Texture getTextureResource() {
         if(!hasRenderBatch()){return null;}
         return renderBatch.getRenderMaterial().getTextureResource(); 
     }

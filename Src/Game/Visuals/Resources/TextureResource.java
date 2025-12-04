@@ -1,14 +1,14 @@
-package Game.Core;
+package Game.Visuals.Resources;
 
+import Game.Core.Resource;
 import Rendering.*;
 
-public class TextureResource2D extends Resource{
+public class TextureResource extends Resource{
 
-    private String path="";
-    private TextureResource textureResource=null;
+    private Texture textureResource=null;
 
 
-    public TextureResource2D(String _path){
+    public TextureResource(String _path){
         textureResource = RenderingServer.getSingleton().creaTextureResource(_path);
     }
 
@@ -16,13 +16,13 @@ public class TextureResource2D extends Resource{
         if (!(textureResource==null)){
             try {
                 textureResource.setTexture(_path);
-                path=_path;
             } catch (Exception e) {
                 System.err.println("Texture Path Invalid!");
             }
         }
     }
 
-    public String getPath(){return path;}
-    public TextureResource getRenderingResource(){return textureResource;}
+    public String getTexturePath(){return textureResource.getPath();}
+
+    public Texture getTexture(){return textureResource;}
 }

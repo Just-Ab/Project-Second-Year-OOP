@@ -1,4 +1,4 @@
-package Game.Nodes.Physics;
+package Game.Physics.Nodes;
 
 import org.joml.Vector3f;
 
@@ -10,9 +10,7 @@ public class StaticBody2D extends PhysicsBody2D{
     
     StaticBody bodyResource=null;
 
-    public StaticBody2D(String name){
-        super(name);
-    }
+    public StaticBody2D(String name){}
 
     public void setLocalPosition(Vector3f pos){
         super.setLocalPosition(pos);

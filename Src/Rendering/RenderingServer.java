@@ -16,7 +16,7 @@ public class RenderingServer {
 
     private Window window;
 
-    private List<TextureResource> textureResources=new ArrayList<>();
+    private List<Texture> textureResources=new ArrayList<>();
     private List<ShaderProgram> shaderPrograms=new ArrayList<>();
     
     private List<CameraRender2D> cameras=new ArrayList<>();
@@ -100,7 +100,7 @@ public class RenderingServer {
         return renderMaterials.getLast();
     }
 
-    public RenderMaterial createRenderMaterial(ShaderProgram _ShaderProgram,TextureResource _TextureResource){
+    public RenderMaterial createRenderMaterial(ShaderProgram _ShaderProgram,Texture _TextureResource){
         for (RenderMaterial renderMaterial : renderMaterials) {
             if(renderMaterial.getShaderProgram()==_ShaderProgram && renderMaterial.getTextureResource()==_TextureResource){
                 return renderMaterial;
@@ -122,7 +122,7 @@ public class RenderingServer {
     }
 
     public void setInstanceShader(RenderInstance _RenderInstance,ShaderProgram _ShaderProgram){
-        TextureResource instanceTexture = _RenderInstance.getTextureResource();
+        Texture instanceTexture = _RenderInstance.getTextureResource();
         for (RenderMaterial renderMaterial : renderMaterials) {
             if( renderMaterial.getTextureResource() != instanceTexture ||
                 renderMaterial.getShaderProgram() != _ShaderProgram){
@@ -135,7 +135,7 @@ public class RenderingServer {
         setInstanceMaterial(_RenderInstance, newMaterial);
     }
 
-    public void setInstanceTexture(RenderInstance _RenderInstance,TextureResource _textureResource){
+    public void setInstanceTexture(RenderInstance _RenderInstance,Texture _textureResource){
         ShaderProgram instanceShader = _RenderInstance.getShaderProgram();
         for (RenderMaterial renderMaterial : renderMaterials) {
             if( renderMaterial.getTextureResource() !=_textureResource ||
@@ -185,13 +185,13 @@ public class RenderingServer {
         return lineInstances.getLast();
     }
 
-    public TextureResource creaTextureResource(String path){
-        for (TextureResource texture : textureResources) {
+    public Texture creaTextureResource(String path){
+        for (Texture texture : textureResources) {
             if(texture.getPath().equals(path)){
                 return texture;
             }
         }
-        textureResources.addLast(new TextureResource(path));
+        textureResources.addLast(new Texture(path));
         return textureResources.getLast();
     }
 
@@ -213,7 +213,7 @@ public class RenderingServer {
         else if (object instanceof LineInstance){
             lineInstances.remove(object);
         }
-        else if (object instanceof TextureResource){
+        else if (object instanceof Texture){
             textureResources.remove(object);
         }
         else if (object instanceof ShaderProgram){
@@ -230,7 +230,7 @@ public class RenderingServer {
 
 
     public void beginFrame(){
-        glClearColor(0.2f, 0.4f, 0.4f, 1.0f);
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glClear(GL_COLOR_BUFFER_BIT);
@@ -246,7 +246,7 @@ public class RenderingServer {
             renderBatch.updateInstanceVBO();
             
             RenderMaterial renderMaterial = renderBatch.getRenderMaterial();
-            TextureResource textureResource = renderMaterial.getTextureResource();
+            Texture textureResource = renderMaterial.getTextureResource();
             ShaderProgram shaderProgram = renderMaterial.getShaderProgram();
 
             shaderProgram.bind();

@@ -1,49 +1,51 @@
 package Game;
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_A;
 
-import org.joml.Math;
+
 import org.joml.Vector3f;
 
+import CodeNameNeutronStar.Map;
+import Game.Cameras.Nodes.Camera2D;
 import Game.Core.Node;
-import Game.Core.Time;
-import Game.Nodes.Visuals.Sprite2D;
-import UserIO.Input;
+import Game.Visuals.Nodes.AnimatedSprite2D;
+
 
 public class NodeLoader extends Node{
     
     public NodeLoader(){
-        super("NodeLoader");
+        super();
     }
-            Sprite2D sprite3 = new Sprite2D("name");
+
+    AnimatedSprite2D unit = new AnimatedSprite2D();
+    Map map = new Map(10, 10);
+
+
     public void _ready(){
-            Sprite2D sprite = new Sprite2D("name");
-            sprite.setTexture("Assets/Textures/cat.png");
-            sprite.setLocalPosition(new Vector3f(0.0f,0.0f,0.0f));
-            sprite.setLocalRotationDegrees(90);
-            addChild(sprite);
-            Sprite2D sprite2 = new Sprite2D("name");
-            sprite2.setTexture("Assets/Textures/cat.png");
-            sprite2.setLocalPosition(new Vector3f(2.0f,0.0f,0.0f));
-            sprite2.setLocalRotationDegrees(90);
-            addChild(sprite2);
-            sprite3 = new Sprite2D("name");
-            sprite3.setTexture("Assets/Textures/socrat.jpg");
-            sprite3.setLocalPosition(new Vector3f(-1.0f,0.0f,0.0f));
-            sprite3.setLocalRotationDegrees(90);
-            addChild(sprite3);
+        Camera2D camera = new Camera2D(new Vector3f(0.0f), 10, 10);
+        camera.current();
+        unit.setFrameColumns(8);
+        unit.setFrameRows(9);
+        unit.setTexture("Assets/Textures/Anim.png");
+        unit.setStartingFrame(48);
+        unit.setEndeingFrame(48+3);
+        addChild(unit);
+
+        unit.setLocalPosition(new Vector3f(map.getCell(3, 3).position,0.0f));
+
+
     }
-    
+    float time=0;
+
     public void _update(float _delta){
-
-        sprite3.setLocalRotationRad(Math.sin(Time.getTime()));
-        if(Input.isKeyPressed(GLFW_KEY_A)){
-        sprite3.setLocalPosition(new Vector3f(0.0f));
-
+        time+=_delta;
+        if(time>=1){
+            time-=time;
+            System.out.println("Fps: "+1.0f/_delta);
         }
-        else{
-                    sprite3.setLocalPosition(new Vector3f(Time.getTime()*0.3f,0.0f,0.0f));
-        }
-
+        Vector3f destination = new Vector3f(map.getCell(1, 0).position,0.0f);
+        Vector3f direction = destination.sub(unit.getGlobalPosition()).normalize();
+        float speed = 5.0f;
+        unit.setLocalPosition(unit.getGlobalPosition().add(new Vector3f(direction).mul(speed*_delta)));
+        System.out.println(direction);
     }
 
 

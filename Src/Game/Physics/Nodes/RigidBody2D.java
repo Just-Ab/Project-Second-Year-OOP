@@ -1,4 +1,4 @@
-package Game.Nodes.Physics;
+package Game.Physics.Nodes;
 
 import org.joml.Vector3f;
 
@@ -15,8 +15,7 @@ public class RigidBody2D extends PhysicsBody2D{
     protected Vector3f velocity=new Vector3f(),acceleration=new Vector3f();
 
 
-    public RigidBody2D(String _name,float _mass){
-        super(_name);
+    public RigidBody2D(float _mass){
         mass=_mass;
     }
     

@@ -1,4 +1,4 @@
-package Game.Nodes.Cameras;
+package Game.Cameras.Nodes;
 
 import org.joml.*;
 
@@ -11,7 +11,6 @@ public class Camera2D extends Node2D{
     
     
     public Camera2D(Vector3f _position,float _width,float _height){
-        super("");
         camera = RenderingServer.getSingleton().createCamera2D(_position, _width, _height);
     }
 

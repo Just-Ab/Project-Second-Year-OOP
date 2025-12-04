@@ -1,11 +1,10 @@
-package Game.Nodes.Visuals;
+package Game.Visuals.Nodes;
 
 import org.joml.Vector4f;
 
 public class AnimatedSprite2D extends Sprite2D{
-    public AnimatedSprite2D(String _name){
-        super(_name);
-    }
+    
+    public AnimatedSprite2D(){}
 
     protected int frameRows=1;
     protected int frameColumns=1;
@@ -40,7 +39,6 @@ public class AnimatedSprite2D extends Sprite2D{
             }
             accumulatedFrameTime-=nextFrameTime;
         }
-        System.out.println(currentFrame);
     }
 
     @Override
