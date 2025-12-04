@@ -12,11 +12,13 @@ public class CameraRender2D {
         projection.ortho(-(width/2), width/2, -(height/2), height/2, -1.0f, 1.0f);
     }
 
+    public void setPosition(Vector3f _position){position.set(_position);}
     public Vector3f getPosition(){return new Vector3f(position);}
     public Matrix4f getProjection(){return new Matrix4f(projection);}
     public Matrix4f getView(){return new Matrix4f(view);}
 
-    public void update(){
-        view.lookAt(position,new Vector3f(position).add(FOR_DIR),UP_DIR);
+    public void update() {
+        view.identity();
+        view.translate(-position.x, -position.y, 0f);
     }
 }

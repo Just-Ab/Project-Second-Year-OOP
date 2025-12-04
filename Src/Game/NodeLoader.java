@@ -18,10 +18,10 @@ public class NodeLoader extends Node{
     AnimatedSprite2D unit = new AnimatedSprite2D();
     Map map = new Map(10, 10);
 
-
-    public void _ready(){
         Camera2D camera = new Camera2D(new Vector3f(0.0f), 10, 10);
+    public void _ready(){
         camera.current();
+        addChild(camera);
         unit.setFrameColumns(8);
         unit.setFrameRows(9);
         unit.setTexture("Assets/Textures/Anim.png");
@@ -45,7 +45,8 @@ public class NodeLoader extends Node{
         Vector3f direction = destination.sub(unit.getGlobalPosition()).normalize();
         float speed = 5.0f;
         unit.setLocalPosition(unit.getGlobalPosition().add(new Vector3f(direction).mul(speed*_delta)));
-        System.out.println(direction);
+        // System.out.println(direction);
+        camera.setLocalPosition(unit.getGlobalPosition());
     }
 
 
