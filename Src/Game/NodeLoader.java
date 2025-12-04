@@ -30,7 +30,7 @@ public class NodeLoader extends Node{
         addChild(unit);
 
         unit.setLocalPosition(new Vector3f(map.getCell(3, 3).position,0.0f));
-
+        camera.setZoom(0.5f,0.5f);
 
     }
     float time=0;
