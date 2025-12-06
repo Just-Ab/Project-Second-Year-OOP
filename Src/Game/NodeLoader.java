@@ -27,9 +27,15 @@ public class NodeLoader extends Node{
         unit.setFrameColumns(8);
         unit.setFrameRows(9);
         unit.setTexture("Assets/Textures/Anim.png");
-        unit.setStartingFrame(48);
-        unit.setEndingFrame(48+3);
         addChild(unit);
+
+        unit.createAnimation("walk", 48, 51);
+        unit.createAnimation("run", 40, 47);
+        unit.createAnimation("death", 8, 8+7);
+
+        unit.activateAnimation("death");
+        unit.loop();
+
         unit.play();
 
         unit.setLocalPosition(new Vector3f(0.0f,0.0f,0.0f));
@@ -44,7 +50,7 @@ public class NodeLoader extends Node{
     float time=0;
 
     public void _update(float _delta){
-        System.out.println(rigid.getBodyResource().getPosition());
+        // System.out.println(rigid.getBodyResource().getPosition());
     }
 
 

@@ -33,8 +33,6 @@ public class Player extends RigidBody2D{
         collision.setHeight(0.25f);
         sprite.setTexture("Assets/Textures/FBSH.png");
         sprite.setFrameColumns(3);
-        sprite.setStartingFrame(0);
-        sprite.setEndingFrame(2);
         sprite.play();
         // setAcceleration(new Vector3f(0.0f,-9.8f,0.0f));
 
