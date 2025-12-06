@@ -9,10 +9,12 @@ import Physics.RigidBody;
 public class RigidBody2D extends PhysicsBody2D{
 
     protected RigidBody bodyResource = null;
-
+    
     protected float mass=1.0f;
 
-    protected Vector3f velocity=new Vector3f(),acceleration=new Vector3f();
+    protected Vector3f velocity=new Vector3f(0.0f),acceleration=new Vector3f(0.0f);
+
+
 
 
     public RigidBody2D(float _mass){
@@ -21,57 +23,53 @@ public class RigidBody2D extends PhysicsBody2D{
     
 
     public float getMass(){return mass;}
-    public void setMass(float _mass){mass=_mass;}
-    
-    public void setLocalPosition(Vector3f pos){
-        super.setLocalPosition(pos);
+
+    public void setMass(float _mass){
+        mass=_mass;
         if(bodyResource!=null){
-            bodyResource.setPosition(pos);
+            bodyResource.setMass(_mass);
         }
     }
+    
 
     public Vector3f getVelocity(){
-        if(bodyResource==null){return velocity;}
-        return bodyResource.getVelocity();
+        return velocity;
     }
+
     public void setVelocity(Vector3f vel){
-        if(bodyResource==null){
-            velocity.set(vel);
-        }
-        else{
+        velocity.set(vel);
+        if(bodyResource!=null){
             bodyResource.setVelocity(vel);
         }    
     }
 
-    public Vector3f getAcceleration(){
-        if(bodyResource==null){return acceleration;}
-        return bodyResource.getAcceleration();
+    protected void setVelocityInternal(Vector3f vel){
+        velocity.set(vel);
     }
+
+
+    public Vector3f getAcceleration(){
+        return acceleration;
+    }
+
     public void setAcceleration(Vector3f acc){
-        if(bodyResource==null){
-            acceleration.set(acc);
-        }
-        else{
+        acceleration.set(acc);
+        if(bodyResource!=null){
             bodyResource.setAcceleration(acc);
         }    
     }
 
-    @Override
-    public RigidBody getBodyResource(){
-        return bodyResource;
-    }
-    @Override
-    public void setBodyResource(Body _body){
-        if(_body instanceof RigidBody _RigidBody){
-            _RigidBody.setOwner(this);
-            bodyResource = _RigidBody;
-        }
+    protected void setAccelerationInternal(Vector3f acc){
+        acceleration.set(acc);
     }
 
+
     @Override
-    public void _update(float _delta){
+    public void updateEngine(float _delta){
         if(bodyResource!=null){
-            position.set(bodyResource.getPosition());
+            setVelocityInternal(bodyResource.getVelocity());
+            setAccelerationInternal(bodyResource.getAcceleration());
+            setLocalPositionInternal(bodyResource.getPosition());
         }
     }
     
@@ -81,11 +79,24 @@ public class RigidBody2D extends PhysicsBody2D{
         if (bodyResource==null){
             setBodyResource(PhysicsServer.getSingleton().createRigidBody(mass));
             bodyResource.setOwner(this);
-            bodyResource.setAcceleration(acceleration);
-            bodyResource.setVelocity(velocity);
+            bodyResource.setAcceleration(getAcceleration());
+            bodyResource.setVelocity(getVelocity());
             bodyResource.setPosition(getGlobalPosition());
         }
     }
 
-
+    @Override
+    public RigidBody getBodyResource(){
+        return bodyResource;
+    }
+    
+    @Override
+    public void setBodyResource(Body _body){
+        if(_body instanceof RigidBody _RigidBody){
+            _RigidBody.setOwner(this);
+            bodyResource = _RigidBody;
+        }
+    }
 }
+
+

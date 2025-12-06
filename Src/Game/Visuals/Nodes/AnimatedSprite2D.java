@@ -15,35 +15,41 @@ public class AnimatedSprite2D extends Sprite2D{
     protected float accumulatedFrameTime=0.0f;
     protected int startingFrame=0;
     protected int endingFrame=0;
-
+    protected boolean isPlaying=false;  
 
     public void setFrameRows(int _count) { frameRows=_count;uvRowUnit=1.0f/frameRows; }
     public void setFrameColumns(int _count) { frameColumns=_count;uvColumnUnit=1.0f/frameColumns; }
     public void setStartingFrame(int _count) { startingFrame=_count; }
-    public void setEndeingFrame(int _count) { endingFrame=_count; }
+    public void setEndingFrame(int _count) { endingFrame=_count; }
     public void setNextFrameTime(float _time) { nextFrameTime = _time; }
 
-    public void _ready(){
-        currentFrame = startingFrame;
-    }
+    public void play(){isPlaying=true;}
+    public void stop(){isPlaying=false;}
 
     @Override
-    public void _update(float _delta){
-        super._update(_delta);
-        setUV(new Vector4f(uvColumnUnit*(currentFrame%frameColumns),uvRowUnit*(currentFrame/frameColumns),uvColumnUnit,uvRowUnit));
-        accumulatedFrameTime+=_delta;
-        if(accumulatedFrameTime>=nextFrameTime){
-            currentFrame++;
-            if(currentFrame>=frameRows*frameColumns || currentFrame>endingFrame){
-                currentFrame=startingFrame;
+    protected void updateEngine(float _delta){
+        super.updateEngine(_delta);
+        uv.set(
+            uvColumnUnit * (currentFrame % frameColumns),
+            uvRowUnit * (currentFrame / frameColumns),
+            uvColumnUnit,
+            uvRowUnit);
+        if(isPlaying){
+            accumulatedFrameTime+=_delta;
+            if(accumulatedFrameTime>=nextFrameTime){
+                currentFrame++;
+                if(currentFrame>=frameRows*frameColumns || currentFrame>endingFrame){
+                    currentFrame=startingFrame;
+                }
+                accumulatedFrameTime-=nextFrameTime;
             }
-            accumulatedFrameTime-=nextFrameTime;
         }
     }
 
     @Override
     protected void _enterTree(){
         super._enterTree();
+        currentFrame = startingFrame;
     }
 
 }

@@ -75,7 +75,7 @@ public class Raycast2D extends Node2D{
     }
 
     @Override
-    public void _update(float _delta){
+    public void updateEngine(float _delta){
         if(raycastResource!=null){
             raycastResource.setAngleRad(getGlobalRotation());
             raycastResource.setLength(length);

@@ -1,7 +1,5 @@
 package Game.Visuals.Nodes;
 
-import java.util.ArrayList;
-import java.util.List;
 
 import org.joml.Vector3f;
 
@@ -63,15 +61,6 @@ public class Tilemap2D extends Node2D {
         }    
     }
 
-    @Override
-    protected void _enterTree() {
-        super._enterTree();
-        isReady=true;
-        if (tileset != null) {
-            rebuildAll();
-        }
-    }
-
     private void rebuildAll() {
         int width = horizontalTilesCount;
         int height = verticalTilesCount;
@@ -100,4 +89,14 @@ public class Tilemap2D extends Node2D {
         instance.setTextureResource(tileset.getTextureResource().getTexture());
         instance.setUV(tileset.getTileUV(index));
     }
+
+    @Override
+    protected void _enterTree() {
+        super._enterTree();
+        isReady=true;
+        if (tileset != null) {
+            rebuildAll();
+        }
+    }
+
 }

@@ -13,7 +13,6 @@ public class ColorRect2D extends Node2D{
     boolean visiblity = true;
     RenderInstance instance=null;
 
-
     
     public ColorRect2D(){
     }
@@ -21,48 +20,38 @@ public class ColorRect2D extends Node2D{
 
     public void setColor(Vector3f _color){
         color.set(_color);
-        if(isInTree&&(instance!=null)){
-            instance.setColor(color);
-        }
-    }
-
-    public void setVisibility(boolean _visiblity){
         if(instance!=null){
-            instance.setVisibility(_visiblity);
-        }
-        else{
-            visiblity=_visiblity;
-        }
-    }
-    public boolean isVisible(){
-        if(instance!=null){
-            return instance.isVisible();
-        }
-        else{
-            return visiblity;
+            instance.setColor(_color);
         }
     }
 
     @Override
-    public void _update(float _delta){
+    public void setVisibility(boolean _visiblity){
+        super.setVisibility(_visiblity);
         if(instance!=null){
-            instance.setPosition(position);
-            instance.setScale(scale);
-            instance.setRotation(rotation);
-            instance.setVisibility(visiblity);
-            instance.setColor(color);        
+            instance.setVisibility(_visiblity);
         }
+    }
+
+    @Override
+    protected void updateEngine(float _delta){
+        super.updateEngine(_delta);
+        instance.setPosition(getGlobalPosition());
+        instance.setRotation(getGlobalRotation());
+        instance.setScale(getGlobalScale());
     }
 
     @Override
     protected void _enterTree(){
         instance=RenderingServer.getSingleton().createColorRect();
-        instance.setPosition(position);
-        instance.setScale(scale);
-        instance.setRotation(rotation);
+        instance.setPosition(getGlobalPosition());
+        instance.setScale(getGlobalScale());
+        instance.setRotation(getGlobalRotation());
         instance.setVisibility(visiblity);
         instance.setColor(color);
         
     }
+
+
 }
 

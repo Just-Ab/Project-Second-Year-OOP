@@ -15,10 +15,10 @@ public class GameEntry {
                     Time.update(window);
                 }
                 if(!Time.getIsPaused()){
-                    GameServer.getSingleton()._physicsUpdate(Time.getDeltaTime());
-                    GameServer.getSingleton()._nodesUpdate(Time.getDeltaTime());
+                    GameServer.getSingleton().physicsUpdate(Time.getDeltaTime());
+                    GameServer.getSingleton().nodesUpdate(Time.getDeltaTime());
                 } 
-                GameServer.getSingleton()._renderingUpdate();
+                GameServer.getSingleton().renderingUpdate();
             }
 
     }

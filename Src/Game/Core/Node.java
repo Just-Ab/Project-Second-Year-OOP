@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Node {
-    protected String name="";
+    protected String group="Global";
     protected Node parent=null;
     protected List<Node> children=new ArrayList<>();
 
@@ -14,10 +14,9 @@ public class Node {
     public Node(){
     }
 
-    public Node(String _name){
-        name = _name;
+    public Node(String _Group){
+        group = _Group;
     }
-
 
     protected void setParent(Node _parent){
         parent = _parent;
@@ -41,10 +40,8 @@ public class Node {
     public Node getParent(){
         return parent;
     }
-    
-    public String getName(){return name;}
+   
 
-    
     protected void enterTree(){
         if(isInTree){return;}
         isInTree=true;
@@ -59,13 +56,42 @@ public class Node {
 
     } 
 
+
+
+    public final void update(float _delta){
+        if(!isReady){
+            _ready();
+            setReady();
+        }
+
+        updateEngine(_delta);
+        _update(_delta);
+
+        for (Node child : children) {
+            child.update(_delta);
+        }
+
+    }
+
+    protected void updateEngine(float _delta){
+
+    }
+
     public void _ready(){
     }
 
     public void _update(float _delta){
     }
 
+
+    public void setGroup(String _group){group = _group;}
+
+    public String getGroup(){return group;}
+
+    public boolean isInGroup(String _group){return group.equals(_group);}
+
     public boolean getIsReady(){return isReady;}
+
     public void setReady(){isReady = true;}
 
 }

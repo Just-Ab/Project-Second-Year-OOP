@@ -34,26 +34,18 @@ public class GameServer {
         root = _node;
     }
 
-    public void _nodesUpdate(float _delta){
-        updateNodes(root,_delta);
+    public void nodesUpdate(float _delta){
+        root.update(_delta);
     }
 
-    public void _physicsUpdate(float _delta){
+    public void physicsUpdate(float _delta){
             PhysicsServer.getSingleton().update(_delta);
     }
 
-    public void _renderingUpdate(){
+    public void renderingUpdate(){
             RenderingServer.getSingleton().beginFrame();
             RenderingServer.getSingleton().drawFrame();
             RenderingServer.getSingleton().endFrame();
-    }
-
-    private void updateNodes(Node _node,float _delta){
-        if(!_node.getIsReady()){_node._ready();_node.setReady();}
-        _node._update(_delta);
-        for (Node child : _node.getChildren()) {
-            updateNodes(child, _delta);
-        }
     }
 
     public void close(){

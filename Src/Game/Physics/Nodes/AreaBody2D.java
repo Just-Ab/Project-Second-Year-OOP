@@ -43,7 +43,7 @@ public class AreaBody2D extends Body2D{
     }
 
     @Override
-    public void _update(float _delta){
+    protected void updateEngine(float _delta){
         if(areaResource!=null){
             resolveCollisions();
         }
