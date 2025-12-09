@@ -12,7 +12,7 @@ public class AreaBody extends Body{
 
 
     public AreaBody(Vector3f _position){
-        position = _position;
+        position.set(_position);
     }
 
 

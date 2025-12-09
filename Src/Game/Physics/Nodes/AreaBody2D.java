@@ -45,6 +45,7 @@ public class AreaBody2D extends Body2D{
     @Override
     protected void updateEngine(float _delta){
         if(areaResource!=null){
+            areaResource.setPosition(getGlobalPosition());
             resolveCollisions();
         }
     }

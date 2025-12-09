@@ -49,7 +49,6 @@ public class ColorRect2D extends Node2D{
         instance.setRotation(getGlobalRotation());
         instance.setVisibility(visiblity);
         instance.setColor(color);
-        
     }
 
 

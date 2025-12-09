@@ -33,6 +33,7 @@ public class AnimatedSprite2D extends Sprite2D{
     public void reset(){
         if(activeAnimation!=null){
             currentFrame = activeAnimation.getStartingFrame();
+            _animationStarted();
         }
     }
     public void oneShot(){isOneShot=true;}
@@ -61,16 +62,13 @@ public class AnimatedSprite2D extends Sprite2D{
         System.out.println("Animation does not exist!");
     }
 
-    protected void animationEnded(){
-        if(isOneShot){
-            stop();
-        }
-        else{
-            reset();
-        }
+
+    public void _animationEnded(){
     }
 
-    public void _animationEnded(){}
+    public void _animationStarted(){
+    }
+
 
     @Override
     protected void updateEngine(float _delta){
@@ -79,9 +77,14 @@ public class AnimatedSprite2D extends Sprite2D{
             accumulatedFrameTime+=_delta;
             if(accumulatedFrameTime>=nextFrameTime){
                 currentFrame++;
-
                 if(currentFrame>=activeAnimation.getEndingFrame()){
-                    animationEnded();
+                    _animationEnded();
+                    if(isOneShot){
+                        stop();
+                    }
+                    else{
+                        reset();
+                    }
                 }
                 else if(currentFrame<activeAnimation.getStartingFrame()){
                     reset();

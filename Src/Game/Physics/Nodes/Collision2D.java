@@ -8,9 +8,9 @@ import Physics.PhysicsServer;
 import Physics.RectCollider;
 
 public class Collision2D extends Node2D{
-    protected ColorRect2D colorrect = new ColorRect2D();
+    protected RectCollider collider = null;
+    protected ColorRect2D debug = new ColorRect2D();
     protected Vector3f color = new Vector3f(0.2f,0.2f,0.2f);
-    protected RectCollider rectCollider = null;
 
     protected float width=1,height=1;
 
@@ -21,55 +21,46 @@ public class Collision2D extends Node2D{
 
 
     public float getWidth(){
-        if (rectCollider==null){
-            return width;
-        }
-        else{
-            return rectCollider.getWidth();
-        }    
+        return width;
     }
     public void setWidth(float _width){
-        if (rectCollider==null){
-            width=_width;
-        }
-        else{
-            rectCollider.setWidth(_width);
-        }
+        width=_width;
+        debug.setLocalScale(new Vector3f(_width,debug.getLocalScale().y,debug.getLocalScale().z));
+        
     }
 
     public float getHeight(){
-        if (rectCollider==null){
-            return height;
-        }
-        else{
-            return rectCollider.getHeight();
-        }    
-    }
-    public void setHeight(float _height){
-        if (rectCollider==null){
-            height=_height;
-        }
-        else{
-            rectCollider.setHeight(_height);
-        }    
+        return height;
     }
 
-    public void setVisibility(boolean _visiblity){colorrect.setVisibility(_visiblity);}
+    public void setHeight(float _height){
+        height=_height;
+        debug.setLocalScale(new Vector3f(debug.getLocalScale().x,_height,debug.getLocalScale().z)); 
+    }
+
+    public void setVisibility(boolean _visiblity){
+        super.setVisibility(_visiblity);
+        debug.setVisibility(_visiblity);
+    }
 
     @Override
-    public void _update(float _delta){
+    public void updateEngine(float _delta){
+        if(collider!=null){
+            collider.setWidth(width*getGlobalScale().x);
+            collider.setHeight(height*getGlobalScale().y);
+        }
+        debug.setVisibility(isVisible());
+
     }
 
     @Override
     protected void _enterTree(){
         super._enterTree();
-        if(rectCollider==null){
-            rectCollider = PhysicsServer.getSingleton().createRectCollider(null, width, height);
-        }
-        colorrect.setVisibility(false);
-        addChild(colorrect);
+        collider = PhysicsServer.getSingleton().createRectCollider(null, width, height);
+        setVisibility(false);
+        addChild(debug);
         if(!(parent instanceof Body2D bodyParent)){return;}
-        rectCollider.setBody(bodyParent.getBodyResource());
+        collider.setBody(bodyParent.getBodyResource());
     }
     
 
