@@ -105,4 +105,10 @@ public class AnimatedSprite2D extends Sprite2D{
         reset();
     }
 
+    @Override
+    protected void _exitTree(){
+        super._exitTree();
+        animations.clear();
+    }
+    
 }

@@ -1,10 +1,8 @@
 package Game.Visuals.Nodes;
 
 
-import org.joml.Vector3f;
 import org.joml.Vector4f;
 
-import Game.Core.Node;
 import Game.Core.Node2D;
 import Game.Visuals.Resources.TextureResource;
 import Rendering.RenderInstance;
@@ -74,6 +72,12 @@ public class Sprite2D extends Node2D{
         if (texture!=null){
             instance.setTextureResource(texture.getTexture());
         }
+    }
+
+    @Override
+    protected void _exitTree(){
+        super._exitTree();
+        RenderingServer.getSingleton().remove(instance);
     }
 
 }

@@ -5,6 +5,7 @@ import java.util.List;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL31.glDrawElementsInstanced;
 import static org.lwjgl.opengl.GL33.*;
 
 import org.joml.*;
@@ -25,8 +26,11 @@ public class RenderingServer {
     private List<RenderMaterial> renderMaterials = new ArrayList<>();
     private List<RenderBatch> renderBatches = new ArrayList<>();
     private List<RenderInstance> renderInstances=new ArrayList<>();
+    private List<RenderInstance> renderInstancesDeletionQueue=new ArrayList<>();
     private List<LineResource> lineResources=new ArrayList<>();
     private List<LineInstance> lineInstances=new ArrayList<>();
+    private List<LineInstance> lineInstancesDeletionQueue=new ArrayList<>();
+
 
 
     public static RenderingServer getSingleton(){
@@ -205,28 +209,23 @@ public class RenderingServer {
         return shaderPrograms.getLast();
     }
 
-    public void remove(Object object){
-        
-        if (object instanceof RenderInstance){
-            renderInstances.remove(object);
+public void remove(Object object){
+    if (object instanceof RenderInstance renderInstance) {
+        if (!renderInstancesDeletionQueue.contains(renderInstance)) {
+            renderInstancesDeletionQueue.addLast(renderInstance);
         }
-        else if (object instanceof LineInstance){
-            lineInstances.remove(object);
-        }
-        else if (object instanceof Texture){
-            textureResources.remove(object);
-        }
-        else if (object instanceof ShaderProgram){
-            shaderPrograms.remove(object);
-        }
-        else if (object instanceof CameraRender2D){
-            cameras.remove(object);
-        }
-        else{
-            System.err.println("Type Unrecognizeable!: "+object.getClass());
-        }
-
+        return;
     }
+
+    if (object instanceof LineInstance lineInstance) {
+        if (!lineInstancesDeletionQueue.contains(lineInstance)) {
+            lineInstancesDeletionQueue.addLast(lineInstance);
+        }
+        return;
+    }
+}
+
+
 
 
     public void beginFrame(){
@@ -235,6 +234,23 @@ public class RenderingServer {
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glClear(GL_COLOR_BUFFER_BIT);
         glfwPollEvents();
+
+        for (RenderInstance renderInstance : renderInstancesDeletionQueue) {
+            RenderBatch renderBatch = renderInstance.getRenderBatch();
+            if(renderBatch==null){
+                renderInstances.remove(renderInstance);
+                continue;
+            }
+            renderBatch.removeInstance(renderInstance);
+            renderInstance.setRenderBatch(null);
+            renderInstances.remove(renderInstance);
+        }
+        for (LineInstance lineInstance : lineInstancesDeletionQueue) {
+            lineInstances.remove(lineInstance);
+        }
+        lineInstancesDeletionQueue.clear();
+        renderInstancesDeletionQueue.clear();
+
     }
 
      public void drawFrame(){

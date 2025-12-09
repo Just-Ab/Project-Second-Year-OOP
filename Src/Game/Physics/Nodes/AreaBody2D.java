@@ -61,4 +61,10 @@ public class AreaBody2D extends Body2D{
         }
     }
 
+        @Override
+    public void _exitTree(){
+        super._exitTree();
+        PhysicsServer.getSingleton().remove(areaResource);
+    }
+
 }

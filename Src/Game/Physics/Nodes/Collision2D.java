@@ -62,6 +62,12 @@ public class Collision2D extends Node2D{
         if(!(parent instanceof Body2D bodyParent)){return;}
         collider.setBody(bodyParent.getBodyResource());
     }
-    
+ 
+    @Override
+    protected void _exitTree(){
+        super._exitTree();
+        PhysicsServer.getSingleton().remove(collider);
+        debug.queueFree();
+    }
 
 }

@@ -18,6 +18,7 @@ public class PhysicsServer {
     private List<RectCollider> rectColliders = new ArrayList<>();
     private List<Raycast> raycasts = new ArrayList<>();
     private List<CollisionEvent> collisionEvents = new ArrayList<>();
+    private List<Object> removalQueue = new ArrayList<>();
 
     public static PhysicsServer getSingleton(){
         if (server == null){
@@ -55,6 +56,7 @@ public class PhysicsServer {
     }
 
     public void update(float _delta){
+        processRemovals();
         for (RigidBody RigidBody : rigidbodies) {
             Vector3f oldVelocity = RigidBody.getVelocity();
             if (RigidBody.getIsOnGround()){
@@ -162,6 +164,7 @@ public class PhysicsServer {
         Vector3f hitPoint = null;
 
         for (PhysicsBody body : getAllBodies()) {
+            if(body.getColliders().isEmpty()){continue;}
             float distance = checkAABBRaycast(raycast, body);
             if (distance > 0 && distance < closestDist) {
                 closestDist = distance;
@@ -355,6 +358,57 @@ public class PhysicsServer {
             bodies.addLast(StaticBody);
         }
         return bodies;
+    }
+
+
+
+    public void remove(Object object) {
+        if (object == null) return;
+        if (!removalQueue.contains(object)) {
+            removalQueue.add(object);
+        }
+    }
+
+    private void processRemovals() {
+        for (Object object : removalQueue) {
+            if (object instanceof RigidBody rigidBody) {
+                rigidbodies.remove(rigidBody);
+                for (RectCollider collider : rigidBody.getColliders()) {
+                    rectColliders.remove(collider);
+                }
+            }
+
+            else if (object instanceof StaticBody staticBody) {
+                staticBodies.remove(staticBody);
+                for (RectCollider collider : staticBody.getColliders()) {
+                    rectColliders.remove(collider);
+                }
+            }
+
+            else if (object instanceof AreaBody areaBody) {
+                areaBodies.remove(areaBody);
+                for (RectCollider collider : areaBody.getColliders()) {
+                    rectColliders.remove(collider);
+                }
+            }
+
+            else if (object instanceof RectCollider rectCollider) {
+                rectColliders.remove(rectCollider);
+                if (rectCollider.getBody() != null) {
+                    rectCollider.getBody().removeCollider(rectCollider);
+                }
+            }
+
+            else if (object instanceof Raycast raycast) {
+                raycasts.remove(raycast);
+            }
+
+            else if (object instanceof CollisionEvent collisionEvent) {
+                collisionEvents.remove(collisionEvent);
+            }
+        }
+
+        removalQueue.clear();
     }
 
 }

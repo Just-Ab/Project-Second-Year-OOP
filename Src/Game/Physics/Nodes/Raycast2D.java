@@ -15,7 +15,7 @@ public class Raycast2D extends Node2D{
     LineInstance lineResource=null;
     float length=0;
 
-    public Raycast2D(String _name){}
+    public Raycast2D(){}
 
 
     public void setLength(float _length){
@@ -100,5 +100,10 @@ public class Raycast2D extends Node2D{
         }
     }
 
-
+    @Override
+    public void _exitTree(){
+        super._exitTree();
+        RenderingServer.getSingleton().remove(lineResource);
+        PhysicsServer.getSingleton().remove(raycastResource);
+    }
 }

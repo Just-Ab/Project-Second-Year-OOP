@@ -99,4 +99,16 @@ public class Tilemap2D extends Node2D {
         }
     }
 
+    @Override
+    protected void _exitTree(){
+        super._exitTree();
+        for (int y = 0; y < tiles.length; y++) {
+            for (int x = 0; x < tiles[0].length; x++) {
+                if(tiles[x][y].instance!=null){
+                    RenderingServer.getSingleton().remove(tiles[x][y].instance);
+                    tiles[x][y].index=-1;
+                }
+            }
+        }
+    }
 }

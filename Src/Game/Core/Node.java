@@ -10,6 +10,7 @@ public class Node {
 
     protected boolean isInTree = false;
     protected boolean isReady = false;
+    protected boolean isQueuedFree = false;
 
     public Node(){
     }
@@ -56,6 +57,21 @@ public class Node {
 
     } 
 
+    protected void exitTree(){
+        if(!isInTree){return;}
+        for (Node child : new ArrayList<>(children)) {
+            child.exitTree();
+        }
+        _exitTree();
+        children.clear();
+        parent = null;
+        isInTree=false;
+
+    }
+
+    protected void _exitTree(){
+
+    }
 
 
     public final void update(float _delta){
@@ -93,5 +109,9 @@ public class Node {
     public boolean getIsReady(){return isReady;}
 
     public void setReady(){isReady = true;}
+
+    public void queueFree(){isQueuedFree=true;}
+
+    public boolean getIsQueueFree(){return isQueuedFree;}
 
 }

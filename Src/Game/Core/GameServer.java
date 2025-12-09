@@ -7,7 +7,7 @@ import UserIO.Input;
 
 
 public class GameServer {
-    private Node root = new Node("");
+    private static SceneTree sceneTree = null;
 
     private static GameServer server = null;
     private static Window window=null;
@@ -17,25 +17,26 @@ public class GameServer {
         if (server==null){
             server = new GameServer();
             window = RenderingServer.getSingleton().createWindow("Game Engine Debug!!!", 900, 900);
+            sceneTree = new SceneTree(new Node("_ROOT"));
             Input.initInput(window);
         }
         return server;
     }
 
     public void addChild(Node _node){
-        root.addChild(_node);
+        sceneTree.getRoot().addChild(_node);
     }
 
     public Node getRoot(){
-        return root;
+        return sceneTree.getRoot();
     }
 
     public void setRoot(Node _node){
-        root = _node;
+        sceneTree.setRoot(_node);
     }
 
     public void nodesUpdate(float _delta){
-        root.update(_delta);
+        sceneTree.update(_delta);
     }
 
     public void physicsUpdate(float _delta){

@@ -50,7 +50,12 @@ public class ColorRect2D extends Node2D{
         instance.setVisibility(visiblity);
         instance.setColor(color);
     }
-
+    
+    @Override
+    protected void _exitTree(){
+        super._exitTree();
+        RenderingServer.getSingleton().remove(instance);
+    }
 
 }
 

@@ -14,7 +14,7 @@ public class RectCollider {
        setWidth(_width);setHeight(_height);
     }
 
-    public Body getRigidBody(){
+    public Body getBody(){
         return body;
     }
     
