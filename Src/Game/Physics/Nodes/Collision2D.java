@@ -67,7 +67,6 @@ public class Collision2D extends Node2D{
     protected void _exitTree(){
         super._exitTree();
         PhysicsServer.getSingleton().remove(collider);
-        debug.queueFree();
     }
 
 }

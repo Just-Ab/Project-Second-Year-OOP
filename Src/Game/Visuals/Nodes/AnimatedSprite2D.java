@@ -3,8 +3,6 @@ package Game.Visuals.Nodes;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.joml.Vector4f;
-
 import Game.Visuals.Resources.AnimationResource;
 
 public class AnimatedSprite2D extends Sprite2D{

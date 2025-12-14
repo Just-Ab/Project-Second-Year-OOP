@@ -10,8 +10,8 @@ import Rendering.RenderingServer;
 
 public class Tilemap2D extends Node2D {
     private class Tile{public int index=0;RenderInstance instance=null;}
-    private TilesetResource tileset;
-    private Tile[][] tiles;
+    private TilesetResource tileset=null;
+    private Tile[][] tiles=null;
 
     private int horizontalTilesCount;
     private int verticalTilesCount;
@@ -24,8 +24,8 @@ public class Tilemap2D extends Node2D {
         horizontalTilesCount = _horizontalTiles;
         verticalTilesCount = _verticalTiles;
 
-        for (int x = 0; x < _verticalTiles; x++)
-            for (int y = 0; y < _horizontalTiles; y++){
+        for (int y = 0; y < _verticalTiles; y++)
+            for (int x = 0; x < _horizontalTiles; x++){
                 tiles[x][y] = new Tile();
                 tiles[x][y].index = -1;
             }

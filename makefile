@@ -28,7 +28,7 @@ UTILS = Src/Utils
 compile:
 	rm -r Bin/
 	mkdir Bin
-	javac -d Bin -cp "Libs/*" $(RENDERING)/*.java $(PHYSICS)/*.java $(USERIO)/*.java $(GAME)/*.java $(GAMECORE)/*.java $(GAMEVISUALNODES)/*.java $(GAMEPHYSICSNODES)/*.java $(GAMECAMERASNODES)/*.java  $(GAMEVISUALRES)/*.java
+	javac -d Bin -cp "Libs/*" $(RENDERING)/*.java $(PHYSICS)/*.java $(USERIO)/*.java $(GAME)/*.java $(GAMECORE)/*.java $(GAMEVISUALNODES)/*.java $(GAMEPHYSICSNODES)/*.java $(GAMECAMERASNODES)/*.java  $(GAMEVISUALRES)/*.java $(NEUTRONSTAR)/*.java
 
 
 run:

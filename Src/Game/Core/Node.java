@@ -43,7 +43,7 @@ public class Node {
     }
    
 
-    protected void enterTree(){
+    protected final void enterTree(){
         if(isInTree){return;}
         isInTree=true;
 
@@ -57,7 +57,7 @@ public class Node {
 
     } 
 
-    protected void exitTree(){
+    protected final void exitTree(){
         if(!isInTree){return;}
         for (Node child : new ArrayList<>(children)) {
             child.exitTree();

@@ -13,7 +13,7 @@ import org.lwjgl.opengl.GL;
 
 public class RenderingServer {
     
-    private static RenderingServer server;
+    private static RenderingServer server=null;
 
     private Window window;
 

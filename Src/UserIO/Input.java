@@ -2,8 +2,11 @@ package UserIO;
 
 import static org.lwjgl.glfw.GLFW.*;
 
+import java.nio.DoubleBuffer;
+
 import Rendering.Window;
 import org.joml.*;
+import org.lwjgl.BufferUtils;
 
 public class Input {
     public static Window window;
@@ -47,8 +50,16 @@ public class Input {
         return 0;
     }
 
+    public static Vector2f getMouseGlobalPosition(){
+        DoubleBuffer xbuffer=BufferUtils.createDoubleBuffer(1),ybuffer=BufferUtils.createDoubleBuffer(1);
+        glfwGetCursorPos(window.getWindow(),xbuffer, ybuffer);
+        double x = xbuffer.get(0);
+        double y = ybuffer.get(0);
+        return new Vector2f((float)x,(float)y);
+    }
+
     static float prevMousePoX=0.0f,prevMousePoY=0.0f;
-    public static Vector2f InputgetMouseOffset(float mouseX,float mouseY,float sensitivity){
+    public static Vector2f getMouseOffset(float mouseX,float mouseY,float sensitivity){
         float offsetX = mouseX - prevMousePoX;
         float offsetY = prevMousePoY - mouseY;
 
