@@ -90,6 +90,9 @@ public class Tilemap2D extends Node2D {
         instance.setUV(tileset.getTileUV(index));
     }
 
+    public int getWidth(){return horizontalTilesCount;}
+    public int getHeight(){return verticalTilesCount;}
+
     @Override
     protected void _enterTree() {
         super._enterTree();

@@ -12,11 +12,15 @@ import java.util.Random;
 
 import org.joml.Vector3f;
 
-import CodeNameNeutronStar.Map2D;
+import CodeNameNeutronStar.Terrain2D;
+import CodeNameNeutronStar.TerrainGridResource;
+import CodeNameNeutronStar.TerrainResource;
 import Game.Cameras.Nodes.Camera2D;
 import Game.Core.Node;
 
 import Game.Visuals.Nodes.AnimatedSprite2D;
+import Game.Visuals.Nodes.Sprite2D;
+import Game.Visuals.Resources.TilesetResource;
 import Rendering.RenderInstance;
 import Rendering.RenderingServer;
 import UserIO.Input;
@@ -28,34 +32,22 @@ public class NodeLoader extends Node{
         super();
     }
 
-    Map2D map = new Map2D(10, 10);
-    Camera2D camera = new Camera2D(new Vector3f(), 20, 20);
-    AnimatedSprite2D sprite = new AnimatedSprite2D();
+    Terrain2D map = null;
+    Camera2D camera = new Camera2D(new Vector3f(), 5, 5);
 
     public void _ready(){  
         addChild(camera);
         camera.current();
+        TilesetResource tilsetres = new TilesetResource("Assets/Textures/Anim.png", 8, 9);
+        TerrainGridResource terrainGrid = new TerrainGridResource(2, 2);
+        terrainGrid.setCellUVIndex(0,0 , 0);
+        terrainGrid.setCellUVIndex(0,1 , 0);
+        terrainGrid.setCellUVIndex(1,0 , 2);
+        terrainGrid.setCellUVIndex(1,1 , 1);
+
+        TerrainResource terrainResource = new TerrainResource(tilsetres,terrainGrid);
+        map = new Terrain2D(terrainResource);
         addChild(map);
-        camera.setLocalPosition(new Vector3f(5.0f,1.0f,0.0f));
-        Random rand = new Random();
-        map.setTileset("Assets/Textures/tileset.png", 12, 12);
-        for (int y = 0; y < 10; y++) {
-            for (int x = 0; x < 10; x++) {
-                map.setCellUVIndex(x,y , 12*5+5+rand.nextInt(2));
-            }
-        }
-        RenderInstance render = RenderingServer.getSingleton().createColorRect();
-        render.setColor(new Vector3f(1.0f,1.0f,1.0f));
-        
-        addChild(sprite);
-        sprite.setLocalPosition(new Vector3f(0.0f,0.0f,0.5f));
-        sprite.setTexture("Assets/Textures/Anim.png");
-        sprite.setFrameColumns(8);
-        sprite.setFrameRows(9);
-        sprite.createAnimation("Walk",8*6 ,8*6+3 );
-        sprite.activateAnimation("Walk");
-        sprite.setLocalPosition(new Vector3f(3.0f,2.0f,0.0f));
-        sprite.play();
     }
 
     boolean zoom = false;
@@ -78,7 +70,6 @@ public class NodeLoader extends Node{
             dirtyZoom = true;
             zoom = !zoom;
         }
-        System.out.println(Input.getMouseGlobalPosition());
         camera.setLocalPosition(camera.getLocalPosition().add(Input.getAxis(GLFW_KEY_A, GLFW_KEY_D)*_delta*2,Input.getAxis(GLFW_KEY_S, GLFW_KEY_W)*_delta*2,0.0f));
     }
 
