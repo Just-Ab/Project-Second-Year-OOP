@@ -25,14 +25,14 @@ public class PlacementsGridResource extends Resource{
     }
 
 
-    public void setCellBlocked(int _x,int _y,boolean _state){
+    public void blockCell(int _x,int _y){
         if(!inBounds(_x,_y)){
             return;
         }
-        blockingGrid[_x][_y] = _state;
+        blockingGrid[_x][_y] = true;
     }
 
-    public void setCellBlocked(int _x,int _y,int _w,int _h,boolean _state){
+    public void blockCell(int _x,int _y,int _w,int _h){
         int x,y;
         for (int yoffset = 0; yoffset < _h; yoffset++) {
             for (int xoffset = 0; xoffset < _w; xoffset++) {
@@ -41,11 +41,32 @@ public class PlacementsGridResource extends Resource{
                 if(!inBounds(x,y)){
                     continue;
                 }
-                blockingGrid[x][y] = _state;
+                blockingGrid[x][y] = true;
             }
         }
     }
     
+    public void freeCell(int _x,int _y){
+        if(!inBounds(_x,_y)){
+            return;
+        }
+        blockingGrid[_x][_y] = false;
+    }
+
+    public void freeCell(int _x,int _y,int _w,int _h){
+        int x,y;
+        for (int yoffset = 0; yoffset < _h; yoffset++) {
+            for (int xoffset = 0; xoffset < _w; xoffset++) {
+                x=_x+xoffset;
+                y=_y+yoffset;
+                if(!inBounds(x,y)){
+                    continue;
+                }
+                blockingGrid[x][y] = false;
+            }
+        }
+    }
+
     public int getWidth(){return width;}
     public int getHeight(){return height;}
     private boolean inBounds(int x, int y){

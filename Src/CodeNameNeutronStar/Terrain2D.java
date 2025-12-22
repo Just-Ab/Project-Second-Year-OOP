@@ -21,12 +21,13 @@ public class Terrain2D extends Tilemap2D{
                 setCell(x, y, grid.getCell(x, y).getUVIndex());
             }
         }
+        rebuildAll();
     }
 
     @Override
     protected void _enterTree() {
-        build();
         super._enterTree();
+        build();
     }
 
 }

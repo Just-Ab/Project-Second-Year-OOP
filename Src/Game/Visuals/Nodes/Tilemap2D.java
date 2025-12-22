@@ -61,7 +61,7 @@ public class Tilemap2D extends Node2D {
         }    
     }
 
-    private void rebuildAll() {
+    protected void rebuildAll() {
         int width = horizontalTilesCount;
         int height = verticalTilesCount;
 
@@ -72,7 +72,7 @@ public class Tilemap2D extends Node2D {
     }
 
 
-    private void buildCell(int _x, int _y) {
+    protected void buildCell(int _x, int _y) {
         int index = tiles[_x][_y].index;
 
         if (index < 0 || tileset == null) return;

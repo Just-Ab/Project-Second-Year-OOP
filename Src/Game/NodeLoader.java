@@ -11,10 +11,12 @@ import static org.lwjgl.glfw.GLFW.GLFW_KEY_Z;
 import java.util.Random;
 
 import org.joml.Vector3f;
+import org.joml.Vector4f;
 
 import CodeNameNeutronStar.Terrain2D;
 import CodeNameNeutronStar.TerrainGridResource;
 import CodeNameNeutronStar.TerrainResource;
+import CodeNameNeutronStar.TerrainCellResource.TerrainType;
 import Game.Cameras.Nodes.Camera2D;
 import Game.Core.Node;
 
@@ -35,19 +37,31 @@ public class NodeLoader extends Node{
     Terrain2D map = null;
     Camera2D camera = new Camera2D(new Vector3f(), 5, 5);
 
+    Sprite2D sprite = new Sprite2D();
+
     public void _ready(){  
+        sprite.setTexture("Assets/Textures/Anim.png");
+        sprite.setUV(new Vector4f(0.0f,2.0f*(1.0f/9),1.0f/8,1.0f/9));
         addChild(camera);
         camera.current();
         TilesetResource tilsetres = new TilesetResource("Assets/Textures/Anim.png", 8, 9);
         TerrainGridResource terrainGrid = new TerrainGridResource(2, 2);
+        TerrainResource terrainResource = new TerrainResource(tilsetres,terrainGrid);
         terrainGrid.setCellUVIndex(0,0 , 0);
         terrainGrid.setCellUVIndex(0,1 , 0);
         terrainGrid.setCellUVIndex(1,0 , 2);
         terrainGrid.setCellUVIndex(1,1 , 1);
+        terrainGrid.setCellType(0, 0, TerrainType.ROAD);
+        terrainGrid.setCellType(0, 1, TerrainType.ROAD);
+        terrainGrid.setCellType(1, 0, TerrainType.BLOCKED);
+        terrainGrid.setCellType(1, 1, TerrainType.ROAD);
 
-        TerrainResource terrainResource = new TerrainResource(tilsetres,terrainGrid);
         map = new Terrain2D(terrainResource);
-        addChild(map);
+        // addChild(map);
+        addChild(sprite);
+        System.out.println(terrainGrid.getCellWalkability(1, 0));
+        System.out.println(terrainGrid.getCellWalkability(1, 1));
+
     }
 
     boolean zoom = false;
