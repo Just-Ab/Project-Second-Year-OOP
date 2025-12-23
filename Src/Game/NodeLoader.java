@@ -1,93 +1,84 @@
 package Game;
 
+import static org.lwjgl.glfw.GLFW.*;
 
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_A;
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_D;
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_S;
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_SPACE;
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_W;
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_Z;
-
-import java.util.Random;
+import java.util.List;
 
 import org.joml.Vector3f;
-import org.joml.Vector4f;
 
-import CodeNameNeutronStar.Terrain2D;
-import CodeNameNeutronStar.TerrainGridResource;
-import CodeNameNeutronStar.TerrainResource;
+import CodeNameNeutronStar.*;
 import CodeNameNeutronStar.TerrainCellResource.TerrainType;
 import Game.Cameras.Nodes.Camera2D;
 import Game.Core.Node;
-
-import Game.Visuals.Nodes.AnimatedSprite2D;
-import Game.Visuals.Nodes.Sprite2D;
 import Game.Visuals.Resources.TilesetResource;
-import Rendering.RenderInstance;
-import Rendering.RenderingServer;
 import UserIO.Input;
 
+public class NodeLoader extends Node {
 
-public class NodeLoader extends Node{
-    
-    public NodeLoader(){
-        super();
-    }
+    private Camera2D camera;
+    private World2D world2D;
 
-    Terrain2D map = null;
-    Camera2D camera = new Camera2D(new Vector3f(), 5, 5);
+    private boolean zoomed = false;
+    private boolean dirtyZoom = true;
 
-    Sprite2D sprite = new Sprite2D();
-
-    public void _ready(){  
-        sprite.setTexture("Assets/Textures/Anim.png");
-        sprite.setUV(new Vector4f(0.0f,2.0f*(1.0f/9),1.0f/8,1.0f/9));
+    @Override
+    protected void _enterTree() {
+        camera = new Camera2D(new Vector3f(), 5, 5);
         addChild(camera);
         camera.current();
-        TilesetResource tilsetres = new TilesetResource("Assets/Textures/Anim.png", 8, 9);
-        TerrainGridResource terrainGrid = new TerrainGridResource(2, 2);
-        TerrainResource terrainResource = new TerrainResource(tilsetres,terrainGrid);
-        terrainGrid.setCellUVIndex(0,0 , 0);
-        terrainGrid.setCellUVIndex(0,1 , 0);
-        terrainGrid.setCellUVIndex(1,0 , 2);
-        terrainGrid.setCellUVIndex(1,1 , 1);
-        terrainGrid.setCellType(0, 0, TerrainType.ROAD);
-        terrainGrid.setCellType(0, 1, TerrainType.ROAD);
-        terrainGrid.setCellType(1, 0, TerrainType.BLOCKED);
-        terrainGrid.setCellType(1, 1, TerrainType.ROAD);
 
-        map = new Terrain2D(terrainResource);
-        // addChild(map);
-        addChild(sprite);
-        System.out.println(terrainGrid.getCellWalkability(1, 0));
-        System.out.println(terrainGrid.getCellWalkability(1, 1));
+        TilesetResource tileset = new TilesetResource(
+                "Assets/Textures/tileset.png",
+                12,
+                12
+        );
 
+        WorldResource worldResource = WorldServer.getSingleton().createWorld(10, 10,tileset);
+        
+        WorldRules worldRules = WorldServer.getSingleton().createRules();
+        worldRules.setIndices(TerrainType.OFFROAD, List.of(1,2,3,4));
+        worldRules.setIndices(TerrainType.ROAD, List.of(12*5+5,12*5+6));
+
+        WorldSystem.getSingleton().setWorld(worldResource,worldRules);
+        WorldSystem.getSingleton().fillType(TerrainType.OFFROAD);
+        for (int y = 0; y < 2; y++) {
+            for (int x = 0; x < 2; x++) {
+            WorldSystem.getSingleton().setCellType(x, y, TerrainType.ROAD);
+            }
+        }
+        WorldSystem.getSingleton().build();
+
+        world2D = new World2D(worldResource);
+        addChild(world2D);
+        System.out.println(WorldSystem.getSingleton().isWalkable(1, 1));
+        WorldSystem.getSingleton().place(0, 0, 2, 2);
+        System.out.println(WorldSystem.getSingleton().isWalkable(1, 1));
+        WorldSystem.getSingleton().removePlacement(0, 0, 2, 2);
+        System.out.println(WorldSystem.getSingleton().isWalkable(1, 1));
     }
 
-    boolean zoom = false;
-    boolean dirtyZoom = true;
+    @Override
+    public void _update(float delta) {
 
-    
-    public void _update(float _delta){
-        if(Input.isKeyJustPressed( GLFW_KEY_SPACE)){
-            map.queueFree();
-        }
-        if(!zoom&&dirtyZoom){
+        if (!zoomed && dirtyZoom) {
             camera.setZoom(1.0f, 1.0f);
-            dirtyZoom=false;
+            dirtyZoom = false;
+        } else if (zoomed && dirtyZoom) {
+            camera.setZoom(5.0f, 5.0f);
+            dirtyZoom = false;
         }
-        else if(zoom&&dirtyZoom){
-            camera.setZoom(0.5f, 0.5f);
-            dirtyZoom=false;
-        }
-        if(Input.isKeyJustPressed(GLFW_KEY_Z)){
+
+        if (Input.isKeyJustPressed(GLFW_KEY_Z)) {
+            zoomed = !zoomed;
             dirtyZoom = true;
-            zoom = !zoom;
         }
-        camera.setLocalPosition(camera.getLocalPosition().add(Input.getAxis(GLFW_KEY_A, GLFW_KEY_D)*_delta*2,Input.getAxis(GLFW_KEY_S, GLFW_KEY_W)*_delta*2,0.0f));
-    }
 
-
-    protected void _enterTree(){
+        camera.setLocalPosition(
+                camera.getLocalPosition().add(
+                        Input.getAxis(GLFW_KEY_A, GLFW_KEY_D) * delta * 4,
+                        Input.getAxis(GLFW_KEY_S, GLFW_KEY_W) * delta * 4,
+                        0.0f
+                )
+        );
     }
 }

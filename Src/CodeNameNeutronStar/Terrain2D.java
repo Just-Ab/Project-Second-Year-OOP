@@ -2,32 +2,32 @@ package CodeNameNeutronStar;
 
 import Game.Visuals.Nodes.Tilemap2D;
 
-public class Terrain2D extends Tilemap2D{
-    
-    TerrainResource terrainResource=null;
+public class Terrain2D extends Tilemap2D {
 
-    public Terrain2D(TerrainResource _TerrainResource){
-        super(_TerrainResource.getWidth(), _TerrainResource.getHeight());
-        terrainResource = _TerrainResource;
+    private final TerrainResource terrainResource;
+
+    public Terrain2D(TerrainResource terrainResource){
+        super(terrainResource.getWidth(), terrainResource.getHeight());
+        this.terrainResource = terrainResource;
     }
 
-    private void build() {
+    private void build(){
         setTileset(terrainResource.getTileset());
 
-        TerrainGridResource grid = terrainResource.getTerrainGrid();
+        TerrainGridResource terrainGrid = terrainResource.getTerrainGrid();
 
-        for (int y = 0; y < grid.getHeight(); y++) {
-            for (int x = 0; x < grid.getWidth(); x++) {
-                setCell(x, y, grid.getCell(x, y).getUVIndex());
+        for (int y = 0; y < terrainGrid.getHeight(); y++) {
+            for (int x = 0; x < terrainGrid.getWidth(); x++) {
+                setCell(x, y, terrainGrid.getCellUVIndex(x, y));
             }
         }
+
         rebuildAll();
     }
 
     @Override
-    protected void _enterTree() {
+    protected void _enterTree(){
         super._enterTree();
         build();
     }
-
 }

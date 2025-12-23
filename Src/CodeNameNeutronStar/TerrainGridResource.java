@@ -3,70 +3,101 @@ package CodeNameNeutronStar;
 import CodeNameNeutronStar.TerrainCellResource.TerrainType;
 import Game.Core.Resource;
 
-public class TerrainGridResource extends Resource{
-    
-    private TerrainCellResource[][] mapCellsResources;
-    private int width=0,height=0;
+public class TerrainGridResource extends Resource {
 
-    public TerrainGridResource(int _width,int _height){
-        mapCellsResources = new TerrainCellResource[_width][_height];
-        width = _width;height = _height;
-        for (int y = 0; y < _height; y++){
-            for (int x = 0; x < _width; x++) {
-                mapCellsResources[x][y]=new TerrainCellResource();
+    private final TerrainCellResource[][] terrainCells;
+    private final int width;
+    private final int height;
+
+    public TerrainGridResource(int width, int height){
+        this.width = width;
+        this.height = height;
+        this.terrainCells = new TerrainCellResource[width][height];
+
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                terrainCells[x][y] = new TerrainCellResource();
             }
         }
     }
 
-    public TerrainCellResource getCell(int _x,int _y){
-        if(_x<0||_y<0||_x>=width||_y>=height){
+    public boolean inBounds(int x, int y) {
+        return x >= 0 && y >= 0 && x < width && y < height;
+    }
+
+    private TerrainCellResource getInternalCell(int x, int y){
+        if (!inBounds(x, y)) {
             return null;
         }
-        return mapCellsResources[_x][_y];
+        return terrainCells[x][y];
     }
 
-    public TerrainType getCellType(int _x,int _y){
-        if(_x<0||_y<0||_x>=width||_y>=height){
+    public TerrainCellResource getCell(int x, int y){
+        return getInternalCell(x, y);
+    }
+
+    public TerrainType getCellType(int x, int y){
+        TerrainCellResource terrainCell = getInternalCell(x, y);
+        if (terrainCell == null) {
             return TerrainType.VOID;
         }
-        return mapCellsResources[_x][_y].getType();
+        return terrainCell.getType();
     }
 
-    public void setCellType(int _x,int _y,TerrainType _type){
-        if(_x<0||_y<0||_x>=width||_y>=height){
+    public void setCellType(int x, int y, TerrainType terrainType){
+        TerrainCellResource terrainCell = getInternalCell(x, y);
+        if (terrainCell == null) {
             return;
         }
-        mapCellsResources[_x][_y].setType(_type);
+        terrainCell.setType(terrainType);
     }
 
-    public int getCellUVIndex(int _x,int _y){
-        if(_x<0||_y<0||_x>=width||_y>=height){
+    public int getCellUVIndex(int x, int y){
+        TerrainCellResource terrainCell = getInternalCell(x, y);
+        if (terrainCell == null) {
             return -1;
         }
-        return mapCellsResources[_x][_y].getUVIndex();
+        return terrainCell.getUVIndex();
     }
 
-    public void setCellUVIndex(int _x,int _y,int _index){
-        if(_x<0||_y<0||_x>=width||_y>=height){
+    public void setCellUVIndex(int x, int y, int uvIndex){
+        TerrainCellResource terrainCell = getInternalCell(x, y);
+        if (terrainCell == null) {
             return;
         }
-        mapCellsResources[_x][_y].setUVIndex(_index);
+        terrainCell.setUVIndex(uvIndex);
     }
 
-    public int getCellMovementCost(int _x,int _y){
-        if(_x<0||_y<0||_x>=width||_y>=height){
+    public void fillUV(int uvIndex){
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                terrainCells[x][y].setUVIndex(uvIndex);
+            }
+        }
+    }
+
+
+    public int getCellMovementCost(int x, int y){
+        TerrainCellResource terrainCell = getInternalCell(x, y);
+        if (terrainCell == null) {
             return -1;
         }
-        return mapCellsResources[_x][_y].getMovementCost();
+        return terrainCell.getMovementCost();
     }
 
-    public boolean getCellWalkability(int _x,int _y){
-        if(_x<0||_y<0||_x>=width||_y>=height){
+    public boolean isCellWalkable(int x, int y){
+        TerrainCellResource terrainCell = getInternalCell(x, y);
+        if (terrainCell == null) {
             return false;
         }
-        return mapCellsResources[_x][_y].getWalkability();
+        return terrainCell.isWalkable();
     }
 
-    public int getWidth(){return width;}
-    public int getHeight(){return height;}
+    public int getWidth(){
+        return width;
+    }
+
+    public int getHeight(){
+        return height;
+    }
 }

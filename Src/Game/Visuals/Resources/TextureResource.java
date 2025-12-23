@@ -7,6 +7,7 @@ public class TextureResource extends Resource{
 
     private Texture textureResource=null;
 
+    public TextureResource(){}
 
     public TextureResource(String _path){
         textureResource = RenderingServer.getSingleton().creaTextureResource(_path);
@@ -17,8 +18,12 @@ public class TextureResource extends Resource{
             try {
                 textureResource.setTexture(_path);
             } catch (Exception e) {
-                System.err.println("Texture Path Invalid!");
+                System.err.println("Texture Path Invalid! "+_path);
+                throw e;
             }
+        }
+        else{
+            textureResource = RenderingServer.getSingleton().creaTextureResource(_path);
         }
     }
 

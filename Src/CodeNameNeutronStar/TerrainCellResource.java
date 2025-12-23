@@ -4,60 +4,70 @@ import Game.Core.Resource;
 
 public class TerrainCellResource extends Resource {
 
-
     public enum TerrainType {
         VOID(false, Integer.MAX_VALUE),
         ROAD(true, 1),
         OFFROAD(true, 2),
         SHALLOW_WATER(true, 3),
+        WATER(false, Integer.MAX_VALUE),
         BLOCKED(false, Integer.MAX_VALUE);
 
-        public final boolean walkable;
-        public final int movementCost;
+        private final boolean walkable;
+        private final int movementCost;
 
-        TerrainType(boolean walkable, int movementCost) {
+        TerrainType(boolean walkable, int movementCost){
             this.walkable = walkable;
             this.movementCost = movementCost;
         }
+
+        public boolean isWalkable(){
+            return walkable;
+        }
+
+        public int getMovementCost(){
+            return movementCost;
+        }
     }
 
+    private TerrainType type;
+    private int uvIndex;
 
-    private int uvIndex=-1;
-    private TerrainType type = TerrainType.OFFROAD;
-
-    public TerrainCellResource() {
+    public TerrainCellResource(){
+        this.type = TerrainType.OFFROAD;
+        this.uvIndex = -1;
     }
 
-    public TerrainCellResource(TerrainType _type) {
-        type = _type;
+    public TerrainCellResource(TerrainType type){
+        this.type = type;
+        this.uvIndex = -1;
     }
 
-    public TerrainCellResource(TerrainType _type,int _uv) {
-        type = _type;
-        uvIndex =_uv;
+    public TerrainCellResource(TerrainType type, int uvIndex){
+        this.type = type;
+        this.uvIndex = uvIndex;
     }
 
     public TerrainType getType(){
         return type;
     }
 
-    public void setType(TerrainType _Type){
-        type = _Type;
+    public void setType(TerrainType type){
+        this.type = type;
     }
 
     public int getUVIndex(){
         return uvIndex;
     }
-    public void setUVIndex(int _index){
-        uvIndex = _index; 
+
+    public void setUVIndex(int uvIndex){
+        this.uvIndex = uvIndex;
+    }
+
+    public boolean isWalkable(){
+        return type.isWalkable();
     }
 
     public int getMovementCost(){
-        return type.movementCost;
+        return type.getMovementCost();
     }
-    
-    public boolean getWalkability(){
-        return type.walkable;
-    }
-
 }

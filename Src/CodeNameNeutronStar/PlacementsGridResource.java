@@ -4,8 +4,8 @@ import Game.Core.Resource;
 
 public class PlacementsGridResource extends Resource{
     
-    private boolean[][] blockingGrid;
-    private int width=0,height=0;
+    private final boolean[][] blockingGrid;
+    private final int width,height;
 
     public PlacementsGridResource(int _width,int _height){
         blockingGrid = new boolean[_width][_height];
@@ -17,7 +17,7 @@ public class PlacementsGridResource extends Resource{
         }
     }
 
-    public boolean getCellBlocked(int _x,int _y){
+    public boolean isBlocked(int _x,int _y){
         if(!inBounds(_x,_y)){
             return false;
         }
@@ -67,8 +67,8 @@ public class PlacementsGridResource extends Resource{
         }
     }
 
-    public int getWidth(){return width;}
-    public int getHeight(){return height;}
+    public int getWidth(){ return width; }
+    public int getHeight(){ return height; }
     private boolean inBounds(int x, int y){
         return !(x < 0 || y < 0 || x >= width || y >= height);
     }

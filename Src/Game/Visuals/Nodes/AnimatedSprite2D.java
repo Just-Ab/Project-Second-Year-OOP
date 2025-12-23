@@ -3,98 +3,115 @@ package Game.Visuals.Nodes;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.joml.Vector2i;
+
 import Game.Visuals.Resources.AnimationResource;
 
-public class AnimatedSprite2D extends Sprite2D{
-    
-    public AnimatedSprite2D(){}
-
+public class AnimatedSprite2D extends Sprite2D {
 
     protected List<AnimationResource> animations = new ArrayList<>();
     protected AnimationResource activeAnimation = null;
-    protected int frameRows=1;
-    protected int frameColumns=1;
-    protected float uvRowUnit=1;
-    protected float uvColumnUnit=1;
-    protected int currentFrame=0;
-    protected float nextFrameTime=0.2f;
-    protected float accumulatedFrameTime=0.0f;
-    protected boolean isPlaying=false;  
-    protected boolean isOneShot=false;
 
-    public void setFrameRows(int _count) { frameRows=_count;uvRowUnit=1.0f/frameRows; }
-    public void setFrameColumns(int _count) { frameColumns=_count;uvColumnUnit=1.0f/frameColumns; }
-    public void setNextFrameTime(float _time) { nextFrameTime = _time; }
+    protected int currentFrame = 0;
+    protected float nextFrameTime = 0.2f;
+    protected float accumulatedFrameTime = 0.0f;
 
-    public void play(){isPlaying=true;}
-    public void stop(){isPlaying=false;}
-    public void reset(){
-        if(activeAnimation!=null){
-            currentFrame = activeAnimation.getStartingFrame();
-            _animationStarted();
-        }
+    protected boolean isPlaying = false;
+    protected boolean isOneShot = false;
+
+    public AnimatedSprite2D(){}
+
+    public void setNextFrameTime(float time){
+        nextFrameTime = time;
     }
-    public void oneShot(){isOneShot=true;}
-    public void loop(){isOneShot=false;}
 
-    
-    public void createAnimation(String _name,int _start,int _end){
-        for (AnimationResource animation : animations) {
-            if(animation.getName().equals(_name)){
-                animation.setStartingFrame(_start);
-                animation.setEndingFrame(_end);
+    public void play(){
+        isPlaying = true;
+    }
+
+    public void stop(){
+        isPlaying = false;
+    }
+
+    public void oneShot(){
+        isOneShot = true;
+    }
+
+    public void loop(){
+        isOneShot = false;
+    }
+
+    public void reset(){
+        if(activeAnimation == null) return;
+
+        currentFrame = activeAnimation.getStartingFrame();
+        accumulatedFrameTime = 0.0f;
+        applyFrame();
+        _animationStarted();
+    }
+
+    public void createAnimation(String name, int start, int end){
+        for(AnimationResource animation : animations){
+            if(animation.getName().equals(name)){
+                animation.setStartingFrame(start);
+                animation.setEndingFrame(end);
                 return;
             }
         }
-        animations.addLast(new AnimationResource(_name, _start, _end));
+        animations.add(new AnimationResource(name, start, end));
     }
 
-    public void activateAnimation(String _name){
-        for (AnimationResource animation : animations) {
-            if(animation.getName().equals(_name)){
+    public void activateAnimation(String name){
+        for(AnimationResource animation : animations){
+            if(animation.getName().equals(name)){
                 activeAnimation = animation;
                 reset();
                 return;
             }
         }
-        System.out.println("Animation does not exist!");
+        System.out.println("Animation \"" + name + "\" does not exist!");
     }
 
+    protected void applyFrame(){
+        if(atlasTexture == null) return;
 
-    public void _animationEnded(){
+        int columns = atlasTexture.getHorizontalRegionsCount();
+
+        int x = currentFrame % columns;
+        int y = currentFrame / columns;
+
+        setUV(new Vector2i(x, y));
     }
 
-    public void _animationStarted(){
-    }
-
+    public void _animationStarted(){}
+    public void _animationEnded(){}
 
     @Override
-    protected void updateEngine(float _delta){
-        super.updateEngine(_delta);
-        if(isPlaying && activeAnimation!=null){
-            accumulatedFrameTime+=_delta;
-            if(accumulatedFrameTime>=nextFrameTime){
-                currentFrame++;
-                if(currentFrame>=activeAnimation.getEndingFrame()){
-                    _animationEnded();
-                    if(isOneShot){
-                        stop();
-                    }
-                    else{
-                        reset();
-                    }
-                }
-                else if(currentFrame<activeAnimation.getStartingFrame()){
+    protected void updateEngine(float delta){
+        super.updateEngine(delta);
+
+        if(!isPlaying || activeAnimation == null) return;
+
+        accumulatedFrameTime += delta;
+
+        if(accumulatedFrameTime >= nextFrameTime){
+            currentFrame++;
+
+            if(currentFrame > activeAnimation.getEndingFrame()){
+                _animationEnded();
+
+                if(isOneShot){
+                    stop();
+                    currentFrame = activeAnimation.getEndingFrame();
+                } else {
                     reset();
+                    return;
                 }
-                accumulatedFrameTime-=nextFrameTime;
             }
+
+            applyFrame();
+            accumulatedFrameTime -= nextFrameTime;
         }
-        uv.set(
-            uvColumnUnit * (currentFrame % frameColumns),
-            uvRowUnit * (currentFrame / frameColumns),
-            uvColumnUnit,
-            uvRowUnit);
     }
 
     @Override
@@ -108,5 +125,4 @@ public class AnimatedSprite2D extends Sprite2D{
         super._exitTree();
         animations.clear();
     }
-    
 }

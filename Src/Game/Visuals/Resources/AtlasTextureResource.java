@@ -3,30 +3,28 @@ package Game.Visuals.Resources;
 import Game.Core.Resource;
 import org.joml.Vector4f;
 
-public class TilesetResource extends Resource {
+public class AtlasTextureResource extends Resource {
 
     private TextureResource texture;
     
     private int horizontalRegions;
     private int verticalRegions;
 
-
-    public TilesetResource(int _horizontalRegions, int _verticalRegions) {
+    public AtlasTextureResource(int _horizontalRegions, int _verticalRegions) {
         this.horizontalRegions  = _horizontalRegions;
         this.verticalRegions = _verticalRegions;
 
     }
 
-    public TilesetResource(String texturePath, int _horizontalRegions, int _verticalRegions) {
+    public AtlasTextureResource(String texturePath, int _horizontalRegions, int _verticalRegions) {
         this.texture = new TextureResource(texturePath);
         this.horizontalRegions  = _horizontalRegions;
         this.verticalRegions = _verticalRegions;
 
     }
 
-    public void setTextureResource(String _path, int _horizontalRegions, int _verticalRegions)
-    {
-        if(texture == null){
+    public void setTextureResource(String _path, int _horizontalRegions, int _verticalRegions) {
+        if(texture==null){
             texture = new TextureResource();
         }
         texture.loadTexture(_path);
@@ -34,35 +32,30 @@ public class TilesetResource extends Resource {
         this.verticalRegions = _verticalRegions;
     }
 
-    public TextureResource getTextureResource()
-    {
+    public TextureResource getTextureResource() {
         return texture;
     }
 
-    public int getHorizontalTilesCount()
-    {
-        return horizontalRegions;
-    }
+    public int getHorizontalRegionsCount() { return horizontalRegions; }
+    public float getHorizontalRatio() { return 1.0f/horizontalRegions; }
 
-    public int getVerticalTilesCount()
-    {
-        return verticalRegions;
-    }
+    public int getVerticalRegionsCount() { return verticalRegions; }
+    public float getVerticalRatio() { return 1.0f/verticalRegions; }
 
-    public Vector4f getTileUV(int tileIndex) {
+    public Vector4f getRegionUV(int tileIndex) {
         int tileX = tileIndex % horizontalRegions;
         int tileY = tileIndex / horizontalRegions;
 
-        float tileOriginX = (float)tileX / horizontalRegions;
+        float tileOriginX = (float)tileX  / horizontalRegions;
         float tileOriginY = (float)tileY / verticalRegions;
 
-        float tileOffsetX = 1.0f / horizontalRegions;
+        float tileOffsetX = 1.0f  / horizontalRegions;
         float tileOffsetY = 1.0f / verticalRegions;
 
         return new Vector4f(tileOriginX, tileOriginY, tileOffsetX, tileOffsetY);
     }
 
-    public int getTileCount() {
+    public int getResgionsCount() {
         return horizontalRegions * verticalRegions;
     }
 

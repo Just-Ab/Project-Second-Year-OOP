@@ -1,60 +1,83 @@
 package Game.Visuals.Nodes;
 
-
+import org.joml.Vector2i;
 import org.joml.Vector4f;
 
 import Game.Core.Node2D;
-import Game.Visuals.Resources.TextureResource;
+import Game.Visuals.Resources.AtlasTextureResource;
 import Rendering.RenderInstance;
 import Rendering.RenderingServer;
 
-public class Sprite2D extends Node2D{
-    protected TextureResource texture=null;
-    protected boolean dirtyTexture=true;
-    protected Vector4f uv=new Vector4f(0.0f,0.0f,1.0f,1.0f);
+public class Sprite2D extends Node2D {
 
-    protected RenderInstance instance=null;
-
+    protected AtlasTextureResource atlasTexture;
+    protected Vector2i uv = new Vector2i(0, 0);
+    protected RenderInstance instance;
 
     public Sprite2D(){}
 
-    public void setTexture(String _path){
-        if(texture==null){
-            texture = new TextureResource(_path);
+    public void setTexture(String path){
+        setTexture(path, 1, 1);
+    }
+
+    public void setTexture(String path, int _h, int _v){
+        if(atlasTexture == null){
+            atlasTexture = new AtlasTextureResource(path, _h, _v);
+        } else {
+            atlasTexture.setTextureResource(path, _h, _v);
         }
-        else{
-            texture.loadTexture(_path);
-        }
-        if(instance!=null){
-            instance.setTextureResource(texture.getTexture());
+
+        if(instance != null){
+            instance.setTextureResource(
+                atlasTexture.getTextureResource().getTexture()
+            );
+            applyUV();
         }
     }
 
-    
-
-    public Vector4f getUV() {
+    public Vector2i getUV(){
         return uv;
     }
 
-    public void setUV(Vector4f _uv){
+    public void setUV(Vector2i _uv){
+        if(atlasTexture == null) return;
+
+        if(_uv.x < 0 || _uv.y < 0 ||
+           _uv.x >= atlasTexture.getHorizontalRegionsCount() ||
+           _uv.y >= atlasTexture.getVerticalRegionsCount())
+            return;
+
         uv.set(_uv);
-        if(instance!=null){
-            instance.setUV(_uv);
-        }
+        applyUV();
     }
-    
+
+    private void applyUV(){
+        if(instance == null || atlasTexture == null) return;
+
+        float hr = atlasTexture.getHorizontalRatio();
+        float vr = atlasTexture.getVerticalRatio();
+
+        instance.setUV(new Vector4f(
+            hr * uv.x,
+            vr * uv.y,
+            hr,
+            vr
+        ));
+    }
+
     @Override
-    public void setVisibility(boolean _visiblity){
-        super.setVisibility(_visiblity);
-        if(instance!=null){
-            instance.setVisibility(_visiblity);
+    public void setVisibility(boolean visibility){
+        super.setVisibility(visibility);
+        if(instance != null){
+            instance.setVisibility(visibility);
         }
     }
 
-
     @Override
-    protected void updateEngine(float _delta){
-        super.updateEngine(_delta);
+    protected void updateEngine(float delta){
+        super.updateEngine(delta);
+        if(instance == null) return;
+
         instance.setPosition(getGlobalPosition());
         instance.setRotation(getGlobalRotation());
         instance.setScale(getGlobalScale());
@@ -63,22 +86,27 @@ public class Sprite2D extends Node2D{
     @Override
     protected void _enterTree(){
         super._enterTree();
-        instance=RenderingServer.getSingleton().createSprite();
+
+        instance = RenderingServer.getSingleton().createSprite();
         instance.setPosition(getGlobalPosition());
         instance.setRotation(getGlobalRotation());
         instance.setScale(getGlobalScale());
-        instance.setUV(uv);
         instance.setVisibility(visiblity);
-        if (texture!=null){
-            instance.setTextureResource(texture.getTexture());
+
+        if(atlasTexture != null){
+            instance.setTextureResource(
+                atlasTexture.getTextureResource().getTexture()
+            );
+            applyUV();
         }
     }
 
     @Override
     protected void _exitTree(){
         super._exitTree();
-        RenderingServer.getSingleton().remove(instance);
+        if(instance != null){
+            RenderingServer.getSingleton().remove(instance);
+            instance = null;
+        }
     }
-
 }
-
