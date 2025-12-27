@@ -7,6 +7,7 @@ public class CameraRender2D {
     private Matrix4f projection = new Matrix4f(),view = new Matrix4f();
     private Vector3f position = new Vector3f(0.0f);
     private float width,height;
+    private Vector2f zoom = new Vector2f();
     public CameraRender2D(Vector3f _position,float _width,float _height){
         position = _position;
         width = _width;
@@ -20,8 +21,14 @@ public class CameraRender2D {
     }
 
     public void setZoom(float _x,float _y){
+        zoom.set(_x,_y);
         projection.identity();
         projection.ortho(-(width/2)*_x, width/2*_x, -(height/2)*_y, height/2*_y, -1.0f, 1.0f);
+    }
+    
+
+    public Vector2f getZoom(){
+        return zoom;
     }
     
     public Vector3f getPosition(){return new Vector3f(position);}

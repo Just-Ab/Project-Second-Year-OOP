@@ -2,7 +2,6 @@ package Game.Physics.Nodes;
 
 import Game.Core.Node2D;
 import Physics.Body;
-import Physics.PhysicsServer;
 
 public abstract class Body2D extends Node2D{
     

@@ -1,6 +1,6 @@
-package CodeNameNeutronStar;
+package CodeNameNeutronStar.World;
 
-import CodeNameNeutronStar.TerrainCellResource.TerrainType;
+import CodeNameNeutronStar.World.TerrainCellResource.TerrainType;
 import Game.Core.Resource;
 
 public class TerrainGridResource extends Resource {

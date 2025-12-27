@@ -46,6 +46,7 @@ public class Tilemap2D extends Node2D {
     }
 
     public void setCell(int _x, int _y, int _index) {
+        if(_x>=tiles.length ||_x< 0 || _y>=tiles[0].length||_y<0){return;}
         tiles[_x][_y].index = _index;
 
         if (!isReady) { return ;}
@@ -56,9 +57,17 @@ public class Tilemap2D extends Node2D {
     @Override
     public void setLocalPosition(Vector3f _position){
         super.setLocalPosition(_position);
-       if (tileset != null) {
+       if (tileset != null && isInTree) {
             rebuildAll();
         }    
+    }
+
+    @Override
+    public void setLocalScale(Vector3f _scale) {
+        super.setLocalScale(_scale);
+        if (tileset != null && isInTree) {
+            rebuildAll();
+        }
     }
 
     protected void rebuildAll() {
@@ -74,24 +83,40 @@ public class Tilemap2D extends Node2D {
 
     protected void buildCell(int _x, int _y) {
         int index = tiles[_x][_y].index;
-
         if (index < 0 || tileset == null) return;
-        
 
         RenderInstance instance = tiles[_x][_y].instance;
 
-        if(instance==null){
+        if (instance == null) {
             tiles[_x][_y].instance = RenderingServer.getSingleton().createSprite();
             instance = tiles[_x][_y].instance;
         }
 
-        instance.setPosition(new Vector3f(getGlobalPosition().x+_x,getGlobalPosition().y-_y,getGlobalPosition().z));
-        instance.setTextureResource(tileset.getTextureResource().getTexture());
-        instance.setUV(tileset.getTileUV(index));
+        instance.setPosition(new Vector3f(
+            getGlobalPosition().x + _x * getGlobalScale().x,
+            getGlobalPosition().y - _y * getGlobalScale().y,
+            getGlobalPosition().z
+        ));
+
+        instance.setScale(new Vector3f(
+            getGlobalScale().x,
+            getGlobalScale().y,
+            1.0f
+        ));
+
+        instance.setTextureResource(
+            tileset.getTextureResource().getTexture()
+        );
+        instance.setUV(
+            tileset.getTileUV(index)
+        );
     }
+
 
     public int getWidth(){return horizontalTilesCount;}
     public int getHeight(){return verticalTilesCount;}
+
+
 
     @Override
     protected void _enterTree() {
@@ -113,5 +138,4 @@ public class Tilemap2D extends Node2D {
                 }
             }
         }
-    }
-}
+    }}

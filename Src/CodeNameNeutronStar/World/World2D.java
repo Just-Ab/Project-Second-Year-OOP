@@ -1,4 +1,4 @@
-package CodeNameNeutronStar;
+package CodeNameNeutronStar.World;
 
 import Game.Core.Node2D;
 

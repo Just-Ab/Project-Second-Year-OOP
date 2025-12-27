@@ -29,6 +29,10 @@ public class Camera2D extends Node2D{
         camera.setZoom(_zoom.x, _zoom.y);
     }
 
+    public Vector2f getZoom(){
+        return camera.getZoom();
+    }
+
     public void current(){RenderingServer.getSingleton().makeCamera2DCurrent(camera);}
     
     @Override

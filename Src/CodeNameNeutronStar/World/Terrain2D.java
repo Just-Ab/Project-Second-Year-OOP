@@ -1,4 +1,4 @@
-package CodeNameNeutronStar;
+package CodeNameNeutronStar.World;
 
 import Game.Visuals.Nodes.Tilemap2D;
 

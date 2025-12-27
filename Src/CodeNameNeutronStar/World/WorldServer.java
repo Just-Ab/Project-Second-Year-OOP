@@ -1,4 +1,4 @@
-package CodeNameNeutronStar;
+package CodeNameNeutronStar.World;
 
 import Game.Visuals.Resources.TilesetResource;
 import java.util.ArrayList;

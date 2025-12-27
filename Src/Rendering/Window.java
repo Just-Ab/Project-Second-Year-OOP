@@ -12,6 +12,7 @@ public class Window {
 
     public Window(String _name,int _width,int _height){
         name = _name;width = _width;height=_height;
+        System.out.println(width);
         boolean result = glfwInit();
         if (result==false){
             throw new IllegalStateException("GLFW failed!\n");
@@ -34,6 +35,9 @@ public class Window {
     public boolean windowShouldClose(){
         return glfwWindowShouldClose(windowId);
     }
+
+    public int getWidth() { return width; }
+    public int getHeight() { return height; }
 
     public void closeWindow(){
         glfwSetWindowShouldClose(windowId, true);

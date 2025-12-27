@@ -53,6 +53,10 @@ public class RenderingServer {
         return cameras.getLast();
     }
 
+    public CameraRender2D getCurrentCameraRender2D(){
+        return currentCamera2D;
+    }
+
     public void makeCamera2DCurrent(CameraRender2D _camera){
         currentCamera2D = _camera;
     }

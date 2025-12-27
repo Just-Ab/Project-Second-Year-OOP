@@ -1,10 +1,11 @@
-package CodeNameNeutronStar;
+package CodeNameNeutronStar.World;
 
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import CodeNameNeutronStar.TerrainCellResource.TerrainType;
+
+import CodeNameNeutronStar.World.TerrainCellResource.TerrainType;
 
 public class WorldRules {
 

@@ -1,6 +1,6 @@
-package CodeNameNeutronStar;
+package CodeNameNeutronStar.World;
 
-import CodeNameNeutronStar.TerrainCellResource.TerrainType;
+import CodeNameNeutronStar.World.TerrainCellResource.TerrainType;
 
 public class WorldSystem {
 
@@ -22,25 +22,38 @@ public class WorldSystem {
         worldRules = _worldRules;
     }
 
+    public boolean hasWorld() {
+        return worldResource != null && worldRules != null;
+    }
+
+
     public WorldResource getWorld(){
         return worldResource;
     }
 
-    public void setCellType(int x,int y,TerrainType type){
+    public void setCellType(int x, int y, TerrainType type){
+        if (!hasWorld()) return;
         worldResource.getTerrainResource().setCellType(x, y, type);
     }
 
+
     public void fillType(TerrainType type){
+        if (!hasWorld()) return;
+
         int width = worldResource.getWidth();
         int height = worldResource.getHeight();
+
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 worldResource.getTerrainResource().setCellType(x, y, type);
-            }        
+            }
         }
     }
 
+
     public void build(){
+        if (!hasWorld()) return;
+
         int width = worldResource.getWidth();
         int height = worldResource.getHeight();
 
@@ -51,6 +64,7 @@ public class WorldSystem {
             }
         }
     }
+
 
     private void paintTerrain(int x, int y, int uvIndex){
         if (worldResource == null || uvIndex < 0) return;
@@ -71,7 +85,7 @@ public class WorldSystem {
 
     public boolean canPlace(int x, int y, int width, int height){
         if (worldResource == null) return false;
-
+        if (!worldResource.getTerrainResource().getTerrainGrid().inBounds(x, y)) return false;
         PlacementsResource placements = worldResource.getPlacementsResource();
 
         for (int py = y; py < y + height; py++) {
@@ -87,6 +101,10 @@ public class WorldSystem {
     public void place(int x, int y, int width, int height){
         if (!canPlace(x, y, width, height)) return;
         worldResource.getPlacementsResource().blockCell(x, y, width, height);
+    }
+
+    public boolean isInside(int x, int y){
+        return !(x<0||x>=getWorld().getWidth()||y<0||y>=getWorld().getHeight());
     }
 
     public void removePlacement(int x, int y, int width, int height){

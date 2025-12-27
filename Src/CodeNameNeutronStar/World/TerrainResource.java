@@ -1,8 +1,8 @@
-package CodeNameNeutronStar;
+package CodeNameNeutronStar.World;
 
+import CodeNameNeutronStar.World.TerrainCellResource.TerrainType;
 import Game.Core.Resource;
 import Game.Visuals.Resources.TilesetResource;
-import CodeNameNeutronStar.TerrainCellResource.TerrainType;
 
 public class TerrainResource extends Resource {
 
