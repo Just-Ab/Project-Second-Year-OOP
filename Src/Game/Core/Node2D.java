@@ -9,6 +9,8 @@ public class Node2D extends Node{
     protected float rotation = 0.0f;
     protected boolean visiblity=true;
 
+    private Vector3f globalPosition=new Vector3f(),prevGlobalPosition= new Vector3f();
+
     public Node2D(){}
 
     
@@ -24,12 +26,9 @@ public class Node2D extends Node{
 
 
     public Vector3f getGlobalPosition(){
-        Node parentNode = getParent();
-        if (parentNode instanceof Node2D parent2D){
-            return new Vector3f(parent2D.getGlobalPosition()).add(position);
-        }
-        return new Vector3f(position);
+        return new Vector3f(globalPosition);
     }
+
 
     public Vector3f getLocalPosition(){
         return new Vector3f(position);
@@ -43,6 +42,24 @@ public class Node2D extends Node{
         position.set(_position);
     }
     
+    @Override
+    protected void updateEngine(float _delta) {
+
+        prevGlobalPosition.set(globalPosition);
+
+        Node parentNode = getParent();
+        if (parentNode instanceof Node2D parent2D) {
+            globalPosition
+                .set(parent2D.globalPosition)
+                .add(position);
+        } else {
+            globalPosition.set(position);
+        }
+
+        if (!globalPosition.equals(prevGlobalPosition)) {
+            _onGlobalPositionChanged();
+        }
+    }
 
 
     public float getGlobalRotation(){
@@ -65,7 +82,9 @@ public class Node2D extends Node{
         rotation = (_rotation*(float)Math.PI)/180;
     }
 
+    public void _onGlobalPositionChanged(){
 
+    }
 
     public Vector3f getGlobalScale(){
         Node parentNode = getParent();

@@ -116,6 +116,12 @@ public class Tilemap2D extends Node2D {
     public int getWidth(){return horizontalTilesCount;}
     public int getHeight(){return verticalTilesCount;}
 
+    @Override
+    public void _onGlobalPositionChanged() {
+        if (isReady && tileset != null) {
+            rebuildAll();
+        }
+    }
 
 
     @Override
@@ -128,14 +134,22 @@ public class Tilemap2D extends Node2D {
     }
 
     @Override
-    protected void _exitTree(){
+    protected void _exitTree() {
         super._exitTree();
-        for (int y = 0; y < tiles.length; y++) {
-            for (int x = 0; x < tiles[0].length; x++) {
-                if(tiles[x][y].instance!=null){
-                    RenderingServer.getSingleton().remove(tiles[x][y].instance);
-                    tiles[x][y].index=-1;
+
+        if (tiles == null) return;
+
+        for (int x = 0; x < tiles.length; x++) {
+            for (int y = 0; y < tiles[0].length; y++) {
+                Tile tile = tiles[x][y];
+                if (tile.instance != null) {
+                    RenderingServer.getSingleton().remove(tile.instance);
+                    tile.instance = null;
                 }
+                tile.index = -1;
             }
         }
-    }}
+    }
+
+
+}

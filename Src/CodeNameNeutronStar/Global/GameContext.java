@@ -1,9 +1,11 @@
 package CodeNameNeutronStar.Global;
 
-import org.joml.Vector2i;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_E;
+import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
 
-import CodeNameNeutronStar.Buildings.Building2D;
-import CodeNameNeutronStar.Buildings.BuildingResource;
+import org.joml.*;
+import org.joml.Math;
+
 import CodeNameNeutronStar.Buildings.BuildingRules;
 import CodeNameNeutronStar.Buildings.FoodEffect;
 import CodeNameNeutronStar.Buildings.GoldEffect;
@@ -11,24 +13,25 @@ import CodeNameNeutronStar.Buildings.MaterialEffect;
 import CodeNameNeutronStar.Buildings.PopulationEffect;
 import CodeNameNeutronStar.Buildings.Product;
 import CodeNameNeutronStar.Economy.EconomyRules;
-import CodeNameNeutronStar.Economy.EconomySystem;
 import CodeNameNeutronStar.World.World2D;
 import CodeNameNeutronStar.World.WorldResource;
 import CodeNameNeutronStar.World.WorldRules;
 import CodeNameNeutronStar.World.TerrainCellResource.TerrainType;
 import Game.Core.Node;
 import Game.Visuals.Resources.TilesetResource;
+import UserIO.Input;
 
-public class Game extends Node {
+public class GameContext extends Node {
 
     private final SystemsRegistery systems = SystemsRegistery.getSingleton();
     private final ServersRegistery servers = ServersRegistery.getSingleton();
+    private final BuildController buildController = new BuildController();
     private World2D world2D = null;
+    private BuildingPanel buildingPanel = null;
 
-    public Game(int _width, int _height, TilesetResource _tileset, WorldRules worldRules) {
+    public GameContext(int _width, int _height, TilesetResource _tileset, WorldRules worldRules) {
 
         WorldResource worldResource = servers.getWorldServer().createWorld(_width, _height, _tileset);
-
         systems.getWorldSystem().setWorld(worldResource, worldRules);
         
         systems.getWorldSystem().fillType(TerrainType.OFFROAD);
@@ -109,48 +112,49 @@ public class Game extends Node {
             new Vector2i(BuildingRules.FARM_BUILDING_ATLASX,BuildingRules.FARM_BUILDING_ATLASY),
             new Vector2i(BuildingRules.FARM_DONE_ATLASX,BuildingRules.FARM_DONE_ATLASY)
         );
- 
+
+
         systems.getBuildingSystem().setRootNode(this);
     }
 
+    public ServersRegistery getServers(){return servers;}
 
+    public SystemsRegistery getSystems(){return systems;}
 
-    public Building2D buildHouse(int _x,int _y){
-        return buildBuildingInternal(BuildingRules.HOUSE_NAME,_x,_y);
-    }
-
-    public Building2D buildGoldMine(int _x,int _y){
-        return buildBuildingInternal(BuildingRules.GOLD_MINE_NAME,_x,_y);
-    }
-
-    public Building2D buildMaterialMine(int _x,int _y){
-        return buildBuildingInternal(BuildingRules.MATERIAL_MINE_NAME,_x,_y);
-    }
-
-    public Building2D buildFarm(int _x,int _y){
-        return buildBuildingInternal(BuildingRules.FARM_NAME,_x,_y);
-    }
-
-    private Building2D buildBuildingInternal(String _name,int _x,int _y){
-        BuildingResource resource = getBuildingResource(_name);
-        return systems.getBuildingSystem().buildBuilding(resource, _x, _y);
-    }
-
-    private BuildingResource getBuildingResource(String _name){
-        for (BuildingResource resource : servers.getBuildingServer().getAll()) {
-            if(resource.getName().equals(_name)){
-                return resource;
-            }
-        }
-        return null;
-    }
+    public BuildController getBuildController(){return buildController;}
 
 
     @Override
     public void _update(float _delta){
         systems.getBuildingSystem().update(_delta);
         systems.getEconomySystem().update(_delta);
+
+        if(Input.isKeyJustReleased(GLFW_KEY_E) && buildingPanel==null){
+            buildingPanel = new BuildingPanel(this);
+            addChild(buildingPanel);
+        }
+        if (buildController.hasSelection()) {
+            if(buildingPanel!=null){
+                buildingPanel.queueFree();
+                buildingPanel=null;
+            }
+            if (Input.isMouseButtonJustPressed(GLFW_MOUSE_BUTTON_LEFT)) {
+                Vector2f mouse = Input.getMouseGlobalPosition();
+
+                int tileX = (int)Math.floor(mouse.x + 0.5f);
+                int tileY = (int)Math.floor(-mouse.y + 0.5f);
+
+                Vector2i tile = new Vector2i(tileX, tileY);
+
+
+                buildController.tryBuild(tile);
+                buildController.cancel();
+                System.out.println("Resourcs left: "+systems.getEconomySystem().getResource().getMaterial()+" "+systems.getEconomySystem().getResource().getGold());
+            }
+        }
+
     }
+
 
     @Override
     protected void _enterTree(){

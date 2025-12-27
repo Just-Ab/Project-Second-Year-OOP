@@ -35,7 +35,7 @@ public class BuildingServer {
         Vector2i buildUV,
         Vector2i doneUV
     ) {
-        if (effect == null) effect = NoEffect.INSTANCE;
+        if (effect == null) { effect = NoEffect.INSTANCE; }
 
         BuildingResource resource = new BuildingResource(
             name,
@@ -56,6 +56,15 @@ public class BuildingServer {
 
         definitions.add(resource);
         return resource;
+    }
+
+    public BuildingResource getBuildingResource(String _name){
+        for (BuildingResource resource : definitions) {
+            if(resource.getName().equals(_name)){
+                return resource;
+            }
+        }
+        return null;
     }
 
     public List<BuildingResource> getAll() {

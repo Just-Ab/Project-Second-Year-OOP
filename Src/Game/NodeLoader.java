@@ -4,19 +4,19 @@ import static org.lwjgl.glfw.GLFW.*;
 
 import java.util.List;
 
-import org.joml.Vector2f;
+import org.joml.Vector2i;
 import org.joml.Vector3f;
 
 import CodeNameNeutronStar.World.WorldRules;
 import CodeNameNeutronStar.World.WorldServer;
+import CodeNameNeutronStar.Buildings.BuildingRules;
+import CodeNameNeutronStar.Buildings.BuildingServer;
 import CodeNameNeutronStar.Economy.EconomySystem;
-import CodeNameNeutronStar.Global.Game;
+import CodeNameNeutronStar.Global.BuildController;
+import CodeNameNeutronStar.Global.GameContext;
 import CodeNameNeutronStar.World.TerrainCellResource.TerrainType;
 import Game.Cameras.Nodes.Camera2D;
 import Game.Core.Node;
-import Game.UI.Button2D;
-import Game.UI.Label2D;
-import Game.Visuals.Nodes.Sprite2D;
 import Game.Visuals.Resources.TilesetResource;
 import UserIO.Input;
 
@@ -24,7 +24,7 @@ import UserIO.Input;
 
 public class NodeLoader extends Node {
 
-    Game game;
+    GameContext gameContext;
     private Camera2D camera;
 
     private boolean zoomed = false;
@@ -49,39 +49,17 @@ public class NodeLoader extends Node {
         WorldRules worldRules = WorldServer.getSingleton().createRules();
         worldRules.setIndices(TerrainType.OFFROAD, List.of(0));
         
-        game = new Game(30, 30, tileset, worldRules);
-        addChild(game);
-        System.out.println("Before Building!");
-        System.out.println(EconomySystem.getSingleton().getResource().getGold());
-        System.out.println(EconomySystem.getSingleton().getResource().getMaterial());
-        System.out.println(EconomySystem.getSingleton().getResource().getPopulation());
-
-        // game.buildHouse(0, 0);
-        // game.buildHouse(0, 4);
-        // game.buildFarm(4, 4);
-        // game.buildGoldMine(8, 8);
-        // game.buildGoldMine(8, 4);
-        // game.buildMaterialMine(4, 6);
-
-        System.out.println("After Building!");
-        System.out.println(EconomySystem.getSingleton().getResource().getGold());
-        System.out.println(EconomySystem.getSingleton().getResource().getMaterial());
-        Sprite2D sprite = new Sprite2D();
-        sprite.setTexture("Assets/Textures/anim.png", 8, 9);
-        Button2D button = new Button2D();
-        camera.addChild(button);
-        button.addChild(sprite);
+        gameContext = new GameContext(30, 30, tileset, worldRules);
+        addChild(gameContext);
     }
 
     @Override
     public void _update(float delta) {
-        // Vector2f v = Input.getMouseGlobalPosition();
-        // System.out.printf("(%.2f, %.2f)%n", v.x, v.y);
         if (!zoomed && dirtyZoom) {
             camera.setZoom(1.0f, 1.0f);
             dirtyZoom = false;
         } else if (zoomed && dirtyZoom) {
-            camera.setZoom(5.0f, 5.0f);
+            camera.setZoom(8.0f, 8.0f);
             dirtyZoom = false;
         }
 
@@ -93,10 +71,6 @@ public class NodeLoader extends Node {
             System.out.println(EconomySystem.getSingleton().getResource().getPopulation());
             System.out.println(EconomySystem.getSingleton().getResource().getGold());
         }
-        // if (Input.isKeyJustPressed(GLFW_KEY_F)){
-        //     Building2D res = BuildingSystem.getSingleton().getRuntimeServer().getAll().get(0);
-        //     BuildingSystem.getSingleton().destroyBuilding(res);
-        // }
         camera.setLocalPosition(
                 camera.getLocalPosition().add(
                         Input.getAxis(GLFW_KEY_A, GLFW_KEY_D) * delta * 4,
