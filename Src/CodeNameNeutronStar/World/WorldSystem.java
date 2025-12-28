@@ -1,5 +1,11 @@
 package CodeNameNeutronStar.World;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.joml.Vector2i;
+
+import CodeNameNeutronStar.Buildings.Building2D;
 import CodeNameNeutronStar.World.TerrainCellResource.TerrainType;
 
 public class WorldSystem {
@@ -7,6 +13,8 @@ public class WorldSystem {
     private static WorldSystem system;
     private WorldResource worldResource;
     private WorldRules worldRules;
+    public record CellPos(int x, int y) {}
+    private Map<CellPos,Building2D> buildingByCell = new HashMap<>();
 
     private WorldSystem(){}
 
@@ -101,6 +109,35 @@ public class WorldSystem {
     public void place(int x, int y, int width, int height){
         if (!canPlace(x, y, width, height)) return;
         worldResource.getPlacementsResource().blockCell(x, y, width, height);
+    }
+
+    public void registerBuilding(Building2D building, int x, int y, int width, int height) {
+        for (int py = y; py < y + height; py++) {
+            for (int px = x; px < x + width; px++) {
+
+                buildingByCell.put(new CellPos(px, py), building);
+
+            }
+        }
+    }
+
+    public void unregisterBuilding(Building2D building) {
+
+        CellPos[] keys = buildingByCell.keySet().toArray(new CellPos[0]);
+
+        for (CellPos cell : keys) {
+            if (buildingByCell.get(cell) == building) {
+                buildingByCell.remove(cell);
+            }
+        }
+    }
+
+    public Building2D getBuildingAt(int x,int y) {
+        return buildingByCell.get(new CellPos(x,y));
+    }
+
+    public Map<CellPos,Building2D> getBuildingMap() {
+        return buildingByCell;
     }
 
     public boolean isInside(int x, int y){

@@ -57,6 +57,9 @@ public class BuildingSystem {
 
         Building2D building = new Building2D(resource);
 
+        world.registerBuilding(building, gridX, gridY, resource.getWidth(), resource.getHeight());
+
+
         building.setLocalScale(
             new Vector3f(resource.getWidth(), resource.getHeight(), 1.0f)
         );
@@ -80,15 +83,13 @@ public class BuildingSystem {
 
         BuildingResource resource = building.getResource();
 
+        WorldSystem world = WorldSystem.getSingleton();
+
         int gridX = (int) building.getLocalPosition().x;
         int gridY = (int) -building.getLocalPosition().y;
 
-        WorldSystem.getSingleton().removePlacement(
-            gridX,
-            gridY,
-            resource.getWidth(),
-            resource.getHeight()
-        );
+        world.removePlacement(gridX,gridY,resource.getWidth(),resource.getHeight());
+        world.unregisterBuilding(building);
 
         runtime.unregister(building);
         destructionQueue.add(building);

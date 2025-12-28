@@ -1,5 +1,6 @@
 package CodeNameNeutronStar.Global;
 
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_A;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_E;
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
 
@@ -10,6 +11,7 @@ import CodeNameNeutronStar.Buildings.BuildingRules;
 import CodeNameNeutronStar.Buildings.FoodEffect;
 import CodeNameNeutronStar.Buildings.GoldEffect;
 import CodeNameNeutronStar.Buildings.MaterialEffect;
+import CodeNameNeutronStar.Buildings.NoEffect;
 import CodeNameNeutronStar.Buildings.PopulationEffect;
 import CodeNameNeutronStar.Buildings.Product;
 import CodeNameNeutronStar.Economy.EconomyRules;
@@ -113,6 +115,22 @@ public class GameContext extends Node {
             new Vector2i(BuildingRules.FARM_DONE_ATLASX,BuildingRules.FARM_DONE_ATLASY)
         );
 
+        servers.getBuildingServer().register(
+            BuildingRules.WALL_NAME,
+            EconomyRules.WALL_GOLD_COST,
+            EconomyRules.WALL_MATERIAL_COST,
+            BuildingRules.WALL_BUILD_TIME,
+            BuildingRules.WALL_HEALTH,
+            BuildingRules.WALL_WIDTH,
+            BuildingRules.WALL_HEIGHT,
+            Product.NONE,
+            NoEffect.INSTANCE,
+            BuildingRules.BUILDING_TILESET_PATH,
+            BuildingRules.BUILDING_TILESET_H,
+            BuildingRules.BUILDING_TILESET_V,
+            new Vector2i(BuildingRules.WALL_BUILDING_ATLASX,BuildingRules.WALL_BUILDING_ATLASY),
+            new Vector2i(BuildingRules.WALL_DONE_ATLASX,BuildingRules.WALL_DONE_ATLASY)
+        );
 
         systems.getBuildingSystem().setRootNode(this);
     }

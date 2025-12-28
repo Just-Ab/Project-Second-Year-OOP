@@ -10,6 +10,9 @@ public final class EconomyRules {
     public static final float HOUSE_GOLD_COST = 100f;
     public static final float HOUSE_MATERIAL_COST = 8f;
 
+    public static final float WALL_GOLD_COST = 100f;
+    public static final float WALL_MATERIAL_COST = 5f;
+
     public static final float GOLD_MINE_GOLD_COST = 30f;
     public static final float GOLD_MINE_MATERIAL_COST = 10f;
     public static final float GOLD_MINE_GOLD_DELTA = 5f;
