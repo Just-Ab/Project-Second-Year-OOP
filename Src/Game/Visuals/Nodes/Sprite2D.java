@@ -1,6 +1,7 @@
 package Game.Visuals.Nodes;
 
 import org.joml.Vector2i;
+import org.joml.Vector3f;
 import org.joml.Vector4f;
 
 import Game.Core.Node2D;
@@ -11,6 +12,7 @@ import Rendering.RenderingServer;
 public class Sprite2D extends Node2D {
 
     protected AtlasTextureResource atlasTexture;
+    protected Vector3f color=new Vector3f(1.0f,1.0f,1.0f);
     protected Vector2i uv = new Vector2i(0, 0);
     protected RenderInstance instance;
 
@@ -65,6 +67,13 @@ public class Sprite2D extends Node2D {
         ));
     }
 
+    public void setColor(Vector3f _color){
+        color.set(_color);
+        if(instance!=null){
+            instance.setColor(_color);
+        }
+    }
+
     @Override
     public void setVisibility(boolean visibility){
         super.setVisibility(visibility);
@@ -92,6 +101,7 @@ public class Sprite2D extends Node2D {
         instance.setRotation(getGlobalRotation());
         instance.setScale(getGlobalScale());
         instance.setVisibility(visiblity);
+        instance.setColor(color);
 
         if(atlasTexture != null){
             instance.setTextureResource(

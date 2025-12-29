@@ -5,18 +5,20 @@ import java.util.List;
 
 import org.joml.Vector2i;
 
+import CodeNameNeutronStar.Buildings.Effects.NoEffect;
+
 public class BuildingServer {
 
-    private static BuildingServer instance;
+    private static BuildingServer server;
     private final List<BuildingResource> definitions = new ArrayList<>();
 
     private BuildingServer() {}
 
     public static BuildingServer getSingleton() {
-        if (instance == null) {
-            instance = new BuildingServer();
+        if (server == null) {
+            server = new BuildingServer();
         }
-        return instance;
+        return server;
     }
 
     public BuildingResource register(
@@ -27,15 +29,14 @@ public class BuildingServer {
         float maxHealth,
         int width,
         int height,
-        Product product,
-        BuildingEffect effect,
+        List<BuildingEffect> effects,
         String texturePath,
         int atlasH,
         int atlasV,
         Vector2i buildUV,
         Vector2i doneUV
     ) {
-        if (effect == null) { effect = NoEffect.INSTANCE; }
+        if (effects == null) { effects = List.of(NoEffect.INSTANCE); }
 
         BuildingResource resource = new BuildingResource(
             name,
@@ -45,8 +46,7 @@ public class BuildingServer {
             maxHealth,
             width,
             height,
-            product,
-            effect,
+            effects,
             texturePath,
             atlasH,
             atlasV,
@@ -66,6 +66,7 @@ public class BuildingServer {
         }
         return null;
     }
+
 
     public List<BuildingResource> getAll() {
         return definitions;

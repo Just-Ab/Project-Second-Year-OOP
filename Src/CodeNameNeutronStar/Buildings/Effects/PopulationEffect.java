@@ -1,12 +1,13 @@
-package CodeNameNeutronStar.Buildings;
+package CodeNameNeutronStar.Buildings.Effects;
 
+import CodeNameNeutronStar.Buildings.BuildingEffect;
 import CodeNameNeutronStar.Economy.EconomySystem;
 
 public class PopulationEffect implements BuildingEffect {
 
-    private final int amount;
+    private final float amount;
 
-    public PopulationEffect(int amount) {
+    public PopulationEffect(float amount) {
         this.amount = amount;
     }
 

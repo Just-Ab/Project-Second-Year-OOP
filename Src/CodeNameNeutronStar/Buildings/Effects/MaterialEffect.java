@@ -1,5 +1,6 @@
-package CodeNameNeutronStar.Buildings;
+package CodeNameNeutronStar.Buildings.Effects;
 
+import CodeNameNeutronStar.Buildings.BuildingEffect;
 import CodeNameNeutronStar.Economy.EconomySystem;
 
 public class MaterialEffect implements BuildingEffect{

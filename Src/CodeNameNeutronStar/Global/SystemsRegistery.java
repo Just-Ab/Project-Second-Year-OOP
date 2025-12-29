@@ -7,14 +7,14 @@ import CodeNameNeutronStar.World.WorldSystem;
 
 public class SystemsRegistery {
     
-    private static SystemsRegistery instance = null;
+    private static SystemsRegistery registery = null;
 
 
     public static SystemsRegistery getSingleton(){
-        if(instance == null){
-            instance = new SystemsRegistery();
+        if(registery == null){
+            registery = new SystemsRegistery();
         }
-        return instance;
+        return registery;
     }
     
 

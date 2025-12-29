@@ -1,5 +1,7 @@
 package CodeNameNeutronStar.Buildings;
 
+import java.util.List;
+
 import org.joml.Vector2i;
 
 public class BuildingResource {
@@ -11,8 +13,7 @@ public class BuildingResource {
     private final float maxHealth;
     private final int width;
     private final int height;
-    private final Product product;
-    private final BuildingEffect effect;
+    private final List<BuildingEffect> effects;
 
     private final String texturePath;
     private final int atlasH;
@@ -28,8 +29,7 @@ public class BuildingResource {
         float maxHealth,
         int width,
         int height,
-        Product product,
-        BuildingEffect effect,
+        List<BuildingEffect> effects,
         String texturePath,
         int atlasH,
         int atlasV,
@@ -43,8 +43,7 @@ public class BuildingResource {
         this.maxHealth = maxHealth;
         this.width = width;
         this.height = height;
-        this.product = product;
-        this.effect = effect;
+        this.effects = effects;
         this.texturePath = texturePath;
         this.atlasH = atlasH;
         this.atlasV = atlasV;
@@ -65,6 +64,5 @@ public class BuildingResource {
     public int getHeight() { return height; }
     public float getBuildTime() { return buildTime; }
     public float getMaxHealth() { return maxHealth; }
-    public Product getProduct() { return product; }
-    public BuildingEffect getEffect() { return effect; }
+    public List<BuildingEffect> getEffect() { return effects; }
 }

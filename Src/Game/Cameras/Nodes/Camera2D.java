@@ -2,6 +2,7 @@ package Game.Cameras.Nodes;
 
 import org.joml.*;
 
+import Game.Core.GameServer;
 import Game.Core.Node2D;
 import Rendering.CameraRender2D;
 import Rendering.RenderingServer;
@@ -33,7 +34,10 @@ public class Camera2D extends Node2D{
         return camera.getZoom();
     }
 
-    public void current(){RenderingServer.getSingleton().makeCamera2DCurrent(camera);}
+    public void current(){
+        GameServer.getSingleton().setCurrentCamera2D(this);
+        RenderingServer.getSingleton().makeCamera2DCurrent(camera);
+    }
     
     @Override
     public void _update(float _delta){

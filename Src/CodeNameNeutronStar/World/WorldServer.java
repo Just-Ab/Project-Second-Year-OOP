@@ -6,15 +6,15 @@ import java.util.List;
 
 public class WorldServer {
 
-    private static WorldServer instance;
+    private static WorldServer server;
     private final List<WorldResource> worlds = new ArrayList<>();
     private final List<WorldRules> rules = new ArrayList<>();
 
     public static WorldServer getSingleton(){
-        if (instance == null) {
-            instance = new WorldServer();
+        if (server == null) {
+            server = new WorldServer();
         }
-        return instance;
+        return server;
     }
 
     public WorldResource createWorld(int width,int height,TilesetResource tileset){

@@ -11,11 +11,17 @@ import CodeNameNeutronStar.World.WorldServer;
 import CodeNameNeutronStar.World.WorldSystem;
 import CodeNameNeutronStar.Economy.EconomySystem;
 import CodeNameNeutronStar.Global.GameContext;
+import CodeNameNeutronStar.Stats.StatsSystem;
 import CodeNameNeutronStar.World.TerrainCellResource.TerrainType;
 import CodeNameNeutronStar.World.WorldSystem.CellPos;
 import Game.Cameras.Nodes.Camera2D;
 import Game.Core.Node;
+import Game.Core.Node2D;
+import Game.Visuals.Nodes.ColorRect2D;
+import Game.Visuals.Nodes.Sprite2D;
 import Game.Visuals.Resources.TilesetResource;
+import Rendering.RenderInstance;
+import Rendering.RenderingServer;
 import UserIO.Input;
 
 
@@ -35,9 +41,6 @@ public class NodeLoader extends Node {
         addChild(camera);
         camera.current();
 
-
-
-        
         TilesetResource tileset = new TilesetResource(
             "Assets/Textures/MultiSpreadSheet.png",
             8,
@@ -47,7 +50,7 @@ public class NodeLoader extends Node {
         WorldRules worldRules = WorldServer.getSingleton().createRules();
         worldRules.setIndices(TerrainType.OFFROAD, List.of(8*7,8*7+1,8*7+2,8*7+3,8*7+4,8*7+5,8*7+6,8*7+7));
         
-        gameContext = new GameContext(30, 30, tileset, worldRules);
+        gameContext = new GameContext(100, 100, tileset, worldRules);
         addChild(gameContext);
     }
 
@@ -68,14 +71,15 @@ public class NodeLoader extends Node {
         if (Input.isKeyJustPressed(GLFW_KEY_SPACE)) {
             System.out.println(EconomySystem.getSingleton().getResource().getPopulation());
             System.out.println(EconomySystem.getSingleton().getResource().getGold());
-            System.out.println(WorldSystem.getSingleton().getBuildingAt(3,3));
+            System.out.println(StatsSystem.getSingleton().getResource().getFearFactor());
+
         }
         camera.setLocalPosition(
-                camera.getLocalPosition().add(
-                        Input.getAxis(GLFW_KEY_A, GLFW_KEY_D) * delta * 4,
-                        Input.getAxis(GLFW_KEY_S, GLFW_KEY_W) * delta * 4,
-                        0.0f
-                )
+            camera.getLocalPosition().add(
+                Input.getAxis(GLFW_KEY_A, GLFW_KEY_D) * delta * 4,
+                Input.getAxis(GLFW_KEY_S, GLFW_KEY_W) * delta * 4,
+                0.0f
+            )
         );
     }
 }

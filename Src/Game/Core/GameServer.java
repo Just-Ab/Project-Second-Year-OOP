@@ -1,5 +1,6 @@
 package Game.Core;
 
+import Game.Cameras.Nodes.Camera2D;
 import Physics.PhysicsServer;
 import Rendering.RenderingServer;
 import Rendering.Window;
@@ -12,6 +13,7 @@ public class GameServer {
     private static GameServer server = null;
     private static Window window=null;
     private static boolean gameShouldClose=false;
+    private Camera2D currentCamera2d=null;
 
     public static GameServer getSingleton(){
         if (server==null){
@@ -54,6 +56,13 @@ public class GameServer {
         window.closeWindow();
     }
 
+
+    public Camera2D getCurrentCamera2D(){
+        return currentCamera2d;
+    }
+    public void setCurrentCamera2D(Camera2D _camera2d){
+        currentCamera2d=_camera2d;
+    }
     public boolean getGameShouldClose(){
         return gameShouldClose;
     }

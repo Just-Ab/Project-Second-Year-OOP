@@ -1,4 +1,6 @@
-package CodeNameNeutronStar.Buildings;
+package CodeNameNeutronStar.Buildings.Effects;
+
+import CodeNameNeutronStar.Buildings.BuildingEffect;
 
 public final class NoEffect implements BuildingEffect {
 

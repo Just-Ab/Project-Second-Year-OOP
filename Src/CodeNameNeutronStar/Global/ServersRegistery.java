@@ -6,14 +6,14 @@ import CodeNameNeutronStar.World.WorldServer;
 
 public class ServersRegistery {
     
-    private static ServersRegistery instance = null;
+    private static ServersRegistery registery = null;
 
 
     public static ServersRegistery getSingleton(){
-        if(instance == null){
-            instance = new ServersRegistery();
+        if(registery == null){
+            registery = new ServersRegistery();
         }
-        return instance;
+        return registery;
     }
     
 

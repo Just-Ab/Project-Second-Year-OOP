@@ -9,6 +9,7 @@ import Game.Visuals.Resources.TilesetResource;
 public class Label2D extends Node2D {
 
     private Tilemap2D tilemap = null;
+    private final Vector3f color = new Vector3f(1.0f,1.0f,1.0f);
     private final TilesetResource tileset =
             new TilesetResource("Assets/Textures/ttf.png", 16, 16);
 
@@ -40,6 +41,11 @@ public class Label2D extends Node2D {
         buildTilemap();
     }
 
+    public void setColor(Vector3f _color){
+        color.set(_color);
+        if(tilemap!=null) tilemap.setColor(color);
+    }
+
     private void buildTilemap() {
         if (tilemap != null) {
             tilemap.queueFree();
@@ -47,7 +53,7 @@ public class Label2D extends Node2D {
 
         tilemap = new Tilemap2D(text.length(), 1);
         tilemap.setTileset(tileset);
-
+        tilemap.setColor(color);
         int x = 0;
         for (char c : text.toCharArray()) {
             tilemap.setCell(x, 0, charToIndex(c));
@@ -70,13 +76,6 @@ public class Label2D extends Node2D {
         return rowFromBottom * COLS + col;
     }
 
-    // @Override
-    // public void setLocalPosition(Vector3f position) {
-    //     super.setLocalPosition(position);
-    //     if (tilemap != null) {
-    //         tilemap.setLocalPosition(new Vector3f(0, 0, 0));
-    //     }
-    // }
 
     @Override
     public void setLocalScale(Vector3f scale) {

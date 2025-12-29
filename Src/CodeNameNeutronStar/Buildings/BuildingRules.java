@@ -4,9 +4,13 @@ public final class BuildingRules {
 
     private BuildingRules() {}
 
-    public static final String BUILDING_TILESET_PATH = "Assets/Textures/MultiSpreadSheet.png";
-    public static final int BUILDING_TILESET_H = 8;
-    public static final int BUILDING_TILESET_V = 8;
+    public static final String BUILDING1X1_TILESET_PATH = "Assets/Textures/MultiSpreadSheet1X1.png";
+    public static final int BUILDING1X1_TILESET_H = 8;
+    public static final int BUILDING1X1_TILESET_V = 8;
+
+    public static final String BUILDING2X2_TILESET_PATH = "Assets/Textures/MultiSpreadSheet2X2.png";
+    public static final int BUILDING2X2_TILESET_H = 5;
+    public static final int BUILDING2X2_TILESET_V = 5;
 
     public static final String HOUSE_NAME = "House";
     public static final float HOUSE_HEALTH = 50f;
@@ -58,4 +62,25 @@ public final class BuildingRules {
     public static final int WALL_BUILDING_ATLASY = 0;
     public static final int WALL_DONE_ATLASX = 4;
     public static final int WALL_DONE_ATLASY = 1;
+
+    public static final String STATUE0_NAME = "Statue Labubu";
+    public static final float STATUE0_HEALTH = 1200f;
+    public static final float STATUE0_BUILD_TIME = 0f;
+    public static final int STATUE0_WIDTH = 2;
+    public static final int STATUE0_HEIGHT = 2;
+    public static final int STATUE0_BUILDING_ATLASX = 0;
+    public static final int STATUE0_BUILDING_ATLASY = 0;
+    public static final int STATUE0_DONE_ATLASX = 0;
+    public static final int STATUE0_DONE_ATLASY = 1;
+
+    public static final String COMMAND_CENTER_NAME = "Command Center";
+    public static final float COMMAND_CENTER_HEALTH = 400f;
+    public static final float COMMAND_CENTER_BUILD_TIME = 2.5f;
+    public static final int COMMAND_CENTER_WIDTH = 2;
+    public static final int COMMAND_CENTER_HEIGHT = 2;
+    public static final int COMMAND_CENTER_BUILDING_ATLASX = 0;
+    public static final int COMMAND_CENTER_BUILDING_ATLASY = 0;
+    public static final int COMMAND_CENTER_DONE_ATLASX = 1;
+    public static final int COMMAND_CENTER_DONE_ATLASY = 1;
+
 }

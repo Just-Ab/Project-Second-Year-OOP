@@ -12,7 +12,7 @@ public class Tilemap2D extends Node2D {
     private class Tile{public int index=0;RenderInstance instance=null;}
     private TilesetResource tileset=null;
     private Tile[][] tiles=null;
-
+    private Vector3f color=new Vector3f(1.0f,1.0f,1.0f);
     private int horizontalTilesCount;
     private int verticalTilesCount;
 
@@ -54,21 +54,21 @@ public class Tilemap2D extends Node2D {
         buildCell(_x, _y);
     }
 
-    @Override
-    public void setLocalPosition(Vector3f _position){
-        super.setLocalPosition(_position);
-       if (tileset != null && isInTree) {
-            rebuildAll();
-        }    
-    }
+    // @Override
+    // public void setLocalPosition(Vector3f _position){
+    //     super.setLocalPosition(_position);
+    //    if (tileset != null && isInTree) {
+    //         rebuildAll();
+    //     }    
+    // }
 
-    @Override
-    public void setLocalScale(Vector3f _scale) {
-        super.setLocalScale(_scale);
-        if (tileset != null && isInTree) {
-            rebuildAll();
-        }
-    }
+    // @Override
+    // public void setLocalScale(Vector3f _scale) {
+    //     super.setLocalScale(_scale);
+    //     if (tileset != null && isInTree) {
+    //         rebuildAll();
+    //     }
+    // }
 
     protected void rebuildAll() {
         int width = horizontalTilesCount;
@@ -110,8 +110,19 @@ public class Tilemap2D extends Node2D {
         instance.setUV(
             tileset.getTileUV(index)
         );
+        instance.setColor(
+            color
+        );
     }
 
+    public void setColor(Vector3f _color){
+        color.set(_color);
+        for (int y = 0; y < verticalTilesCount; y++)
+            for (int x = 0; x < horizontalTilesCount; x++){
+                if(tiles[x][y].instance==null) continue;
+                tiles[x][y].instance.setColor(_color);
+            }
+    }
 
     public int getWidth(){return horizontalTilesCount;}
     public int getHeight(){return verticalTilesCount;}
@@ -123,6 +134,12 @@ public class Tilemap2D extends Node2D {
         }
     }
 
+    @Override
+    public void _onGlobalScaleChanged() {
+        if (isReady && tileset != null) {
+            rebuildAll();
+        }
+    }
 
     @Override
     protected void _enterTree() {

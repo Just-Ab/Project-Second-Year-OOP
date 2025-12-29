@@ -2,13 +2,13 @@ package CodeNameNeutronStar.Stats;
 
 public final class StatsSystem {
 
-    private static StatsSystem instance;
+    private static StatsSystem system;
 
     public static StatsSystem getSingleton() {
-        if (instance == null) {
-            instance = new StatsSystem();
+        if (system == null) {
+            system = new StatsSystem();
         }
-        return instance;
+        return system;
     }
 
     private final StatsResource resource;

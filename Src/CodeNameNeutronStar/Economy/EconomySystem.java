@@ -2,13 +2,13 @@ package CodeNameNeutronStar.Economy;
 
 public final class EconomySystem {
 
-    private static EconomySystem instance;
+    private static EconomySystem system;
 
     public static EconomySystem getSingleton() {
-        if (instance == null) {
-            instance = new EconomySystem();
+        if (system == null) {
+            system = new EconomySystem();
         }
-        return instance;
+        return system;
     }
 
     private final EconomyResource resource;

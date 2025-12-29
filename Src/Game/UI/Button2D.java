@@ -62,7 +62,6 @@ public class Button2D extends Node2D {
     }
 
     protected void _onPressed() {
-        System.out.println("Fsdg");
     }
 
     protected void _onReleased() {

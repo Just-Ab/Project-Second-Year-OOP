@@ -6,32 +6,31 @@ import java.util.List;
 import org.joml.Vector3f;
 
 import CodeNameNeutronStar.Economy.EconomySystem;
+
 import CodeNameNeutronStar.World.WorldSystem;
 import Game.Core.Node;
 
 public class BuildingSystem {
 
-    private static BuildingSystem instance;
+    private static BuildingSystem system;
 
     private Node buildingsRootNode = null;
     private final BuildingRuntimeServer runtime;
-    private final BuildingsProductionSystem production;
     private final List<Building2D> constructionQueue = new ArrayList<>();
     private final List<Building2D> destructionQueue = new ArrayList<>();
 
     private BuildingSystem() {
         runtime = new BuildingRuntimeServer();
-        production = new BuildingsProductionSystem();
     }
 
     public static BuildingSystem getSingleton() {
-        if (instance == null) {
-            instance = new BuildingSystem();
+        if (system == null) {
+            system = new BuildingSystem();
         }
-        return instance;
+        return system;
     }
 
-    public void damageBuilding(Building2D building, int damage) {
+    public void damageBuilding(Building2D building, float damage) {
         building.applyDamage(damage);
 
         if (building.getHealth() <= 0) {
@@ -39,7 +38,7 @@ public class BuildingSystem {
         }
     }
 
-    public void repairBuilding(Building2D building, int amount) {
+    public void repairBuilding(Building2D building, float amount) {
         building.applyHeal(amount);
     }
 
@@ -59,16 +58,12 @@ public class BuildingSystem {
 
         world.registerBuilding(building, gridX, gridY, resource.getWidth(), resource.getHeight());
 
+        building.setLocalScale(new Vector3f(resource.getWidth(), resource.getHeight(), 1.0f));
 
-        building.setLocalScale(
-            new Vector3f(resource.getWidth(), resource.getHeight(), 1.0f)
-        );
-
-        building.setLocalPosition(
-            new Vector3f(
-                gridX + (resource.getWidth()  - 1) * 0.5f,
+        building.setLocalPosition(new Vector3f(
+                gridX + (resource.getWidth() - 1) * 0.5f,
                -gridY - (resource.getHeight() - 1) * 0.5f,
-                0.0f
+                0.5f
             )
         );
 
@@ -96,9 +91,7 @@ public class BuildingSystem {
         building.queueFree();
     }
 
-
     public void update(float delta) {
-
         for (int i = constructionQueue.size() - 1; i >= 0; i--) {
             Building2D building = constructionQueue.get(i);
             BuildingResource resource = building.getResource();
@@ -107,9 +100,10 @@ public class BuildingSystem {
 
             if (building.getBuildProgress() >= resource.getBuildTime()) {
                 building.setOperational(true);
-                resource.getEffect().apply();
+                for(BuildingEffect effect: resource.getEffect()){
+                    effect.apply();
+                }
                 constructionQueue.remove(i);
-                production.register(building);
             }
         }
 
@@ -118,9 +112,10 @@ public class BuildingSystem {
             BuildingResource resource = building.getResource();
 
             building.setOperational(false);
-            resource.getEffect().remove();
+                for(BuildingEffect effect: resource.getEffect()){
+                    effect.remove();
+                }            
             destructionQueue.remove(i);
-            production.unRegister(building);
         }
     }
 

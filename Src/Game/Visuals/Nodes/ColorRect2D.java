@@ -9,9 +9,9 @@ import org.joml.*;
 import Game.Core.Node2D;
 
 public class ColorRect2D extends Node2D{
-    Vector3f color=new Vector3f(1.0f,0.0f,0.0f);
-    boolean visiblity = true;
-    RenderInstance instance=null;
+    protected Vector3f color=new Vector3f(1.0f,1.0f,1.0f);
+    protected boolean visiblity = true;
+    protected RenderInstance instance=null;
 
     
     public ColorRect2D(){
