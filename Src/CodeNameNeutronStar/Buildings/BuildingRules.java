@@ -83,4 +83,25 @@ public final class BuildingRules {
     public static final int COMMAND_CENTER_DONE_ATLASX = 1;
     public static final int COMMAND_CENTER_DONE_ATLASY = 1;
 
+    public static final String RECRUIT_CENTER_NAME = "Recruit Center";
+    public static final float RECRUIT_CENTER_HEALTH = 100f;
+    public static final float RECRUIT_CENTER_BUILD_TIME = 2.5f;
+    public static final int RECRUIT_CENTER_WIDTH = 2;
+    public static final int RECRUIT_CENTER_HEIGHT = 2;
+    public static final int RECRUIT_CENTER_BUILDING_ATLASX = 0;
+    public static final int RECRUIT_CENTER_BUILDING_ATLASY = 0;
+    public static final int RECRUIT_CENTER_DONE_ATLASX = 1;
+    public static final int RECRUIT_CENTER_DONE_ATLASY = 2;
+
+    public static final String ENEMY_SPAWNER_NAME = "Enemy Spawner";
+    public static final float ENEMY_SPAWNER_HEALTH = 1200f;
+    public static final float ENEMY_SPAWNER_BUILD_TIME = 0.0f;
+    public static final int ENEMY_SPAWNER_WIDTH = 2;
+    public static final int ENEMY_SPAWNER_HEIGHT = 2;
+    public static final int ENEMY_SPAWNER_BUILDING_ATLASX = 0;
+    public static final int ENEMY_SPAWNER_BUILDING_ATLASY = 0;
+    public static final int ENEMY_SPAWNER_DONE_ATLASX = 2;
+    public static final int ENEMY_SPAWNER_DONE_ATLASY = 1;
+
+
 }

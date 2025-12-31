@@ -1,8 +1,6 @@
-package CodeNameNeutronStar.Buildings.Effects;
+package CodeNameNeutronStar.Buildings.Effects.Factor;
 
 import CodeNameNeutronStar.Buildings.BuildingEffect;
-import CodeNameNeutronStar.Economy.EconomySystem;
-import CodeNameNeutronStar.Stats.StatsResource;
 import CodeNameNeutronStar.Stats.StatsSystem;
 
 public class FearFactorEffect implements BuildingEffect {
@@ -20,6 +18,6 @@ public class FearFactorEffect implements BuildingEffect {
 
     @Override
     public void remove() {
-        StatsSystem.getSingleton().getResource().addFearFactor(amount);
+        StatsSystem.getSingleton().getResource().removeFearFactor(amount);
     }
 }

@@ -1,13 +1,13 @@
-package CodeNameNeutronStar.Buildings.Effects;
+package CodeNameNeutronStar.Buildings.Effects.Production;
 
 import CodeNameNeutronStar.Buildings.BuildingEffect;
 import CodeNameNeutronStar.Economy.EconomySystem;
 
-public class FoodEffect implements BuildingEffect{
+public class FoodProductionEffect implements BuildingEffect{
     
     private final float amount;
 
-    public FoodEffect(float amount) {
+    public FoodProductionEffect(float amount) {
         this.amount = amount;
     }
 

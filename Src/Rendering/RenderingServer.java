@@ -235,7 +235,7 @@ public void remove(Object object){
         glClearColor(0.6f, 0.6f, 0.6f, 1.0f);
         glEnable(GL_BLEND);
         glEnable(GL_DEPTH_TEST);
-        glDepthFunc(GL_LESS);
+        glDepthFunc(GL_LEQUAL);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glfwPollEvents();

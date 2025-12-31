@@ -86,6 +86,10 @@ public class AnimatedSprite2D extends Sprite2D {
     public void _animationStarted(){}
     public void _animationEnded(){}
 
+    public AnimationResource getActiveAnimation(){
+        return activeAnimation;
+    }
+
     @Override
     protected void updateEngine(float delta){
         super.updateEngine(delta);

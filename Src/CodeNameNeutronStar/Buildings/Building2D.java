@@ -1,5 +1,7 @@
 package CodeNameNeutronStar.Buildings;
 
+import org.joml.Vector2i;
+
 import Game.Visuals.Nodes.Sprite2D;
 
 public class Building2D extends Sprite2D {
@@ -9,9 +11,12 @@ public class Building2D extends Sprite2D {
     private boolean operational;
     private float health;
 
-    public Building2D(BuildingResource resource) {
+    private int team=-1;
+
+    public Building2D(BuildingResource resource, int _team) {
         this.resource = resource;
         this.health = resource.getMaxHealth();
+        team = _team;
 
         setTexture(
             resource.getTexturePath(),
@@ -30,6 +35,13 @@ public class Building2D extends Sprite2D {
         return buildProgress;
     }
 
+    public Vector2i getPositionNormalized() {
+        return new Vector2i(
+                (int) Math.floor(getGlobalPosition().x + 0.5f),
+                -(int) Math.floor(getGlobalPosition().y + 0.5f)
+        );
+    }
+
     public void setOperational(boolean value) {
         operational = value;
         if (operational) {
@@ -44,8 +56,8 @@ public class Building2D extends Sprite2D {
         return operational;
     }
 
-    public void applyDamage(float damage) {
-        health -= damage;
+    public void applyDamage(float amount) {
+        health -= amount;
     }
 
     public void applyHeal(float amount) {
@@ -54,6 +66,14 @@ public class Building2D extends Sprite2D {
 
     public float getHealth() {
         return health;
+    }
+
+    public int getTeam() {
+        return team;
+    }
+
+    public void setTeam(int _team) {
+        team = _team;
     }
 
     public BuildingResource getResource() {

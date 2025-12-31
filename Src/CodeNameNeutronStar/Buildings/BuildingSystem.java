@@ -32,7 +32,7 @@ public class BuildingSystem {
 
     public void damageBuilding(Building2D building, float damage) {
         building.applyDamage(damage);
-
+        System.out.println("Health: "+building.getHealth());
         if (building.getHealth() <= 0) {
             destroyBuilding(building);
         }
@@ -42,7 +42,7 @@ public class BuildingSystem {
         building.applyHeal(amount);
     }
 
-    public Building2D buildBuilding(BuildingResource resource, int gridX, int gridY) {
+    public Building2D buildBuilding(BuildingResource resource, int _team, int gridX, int gridY) {
 
         if (buildingsRootNode == null) return null;
         
@@ -54,7 +54,7 @@ public class BuildingSystem {
 
         world.place(gridX, gridY, resource.getWidth(), resource.getHeight());
 
-        Building2D building = new Building2D(resource);
+        Building2D building = new Building2D(resource, _team);
 
         world.registerBuilding(building, gridX, gridY, resource.getWidth(), resource.getHeight());
 

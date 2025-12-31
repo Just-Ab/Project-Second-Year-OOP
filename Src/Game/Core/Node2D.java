@@ -37,6 +37,21 @@ public class Node2D extends Node {
         return new Vector3f(position);
     }
 
+public void setGlobalPosition(Vector3f _newGlobalPosition) {
+
+    Node parentNode = getParent();
+
+    if (parentNode instanceof Node2D parent2D) {
+        Vector3f local = 
+            new Vector3f(_newGlobalPosition).sub(parent2D.globalPosition).div(parent2D.globalScale);
+        setLocalPosition(local);
+    } 
+    else {
+        setLocalPosition(_newGlobalPosition);
+    }
+}
+
+
     public void setLocalPosition(Vector3f _position) {
         position.set(_position);
     }

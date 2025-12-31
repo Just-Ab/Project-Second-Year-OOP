@@ -144,6 +144,33 @@ public class WorldSystem {
         return !(x<0||x>=getWorld().getWidth()||y<0||y>=getWorld().getHeight());
     }
 
+    public Vector2i getWalkableAdjacentCell(int blockedCellX, int blockedCellY) {
+
+        Vector2i[] adjacentDirections = {
+            new Vector2i(1, 0),
+            new Vector2i(-1, 0),
+            new Vector2i(0, 1),
+            new Vector2i(0, -1)
+        };
+
+        for (Vector2i direction : adjacentDirections) {
+
+            int adjacentX = blockedCellX + direction.x;
+            int adjacentY = blockedCellY + direction.y;
+
+            if (!isInside(adjacentX, adjacentY)) {
+                continue;
+            }
+
+            if (isWalkable(adjacentX, adjacentY)) {
+                return new Vector2i(adjacentX, adjacentY);
+            }
+        }
+
+        return null;
+    }
+
+
     public void removePlacement(int x, int y, int width, int height){
         if (worldResource == null) return;
         worldResource.getPlacementsResource().freeCell(x, y, width, height);

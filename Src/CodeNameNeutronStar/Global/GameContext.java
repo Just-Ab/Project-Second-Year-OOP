@@ -7,16 +7,21 @@ import org.joml.*;
 
 
 import CodeNameNeutronStar.Buildings.BuildingRules;
-import CodeNameNeutronStar.Buildings.Effects.CommandEffect;
-import CodeNameNeutronStar.Buildings.Effects.FearFactorEffect;
-import CodeNameNeutronStar.Buildings.Effects.FoodEffect;
-import CodeNameNeutronStar.Buildings.Effects.GoldEffect;
-import CodeNameNeutronStar.Buildings.Effects.MaterialEffect;
-import CodeNameNeutronStar.Buildings.Effects.PopularityEffect;
+import CodeNameNeutronStar.Buildings.Effects.NoEffect;
 import CodeNameNeutronStar.Buildings.Effects.PopulationEffect;
+import CodeNameNeutronStar.Buildings.Effects.Factor.CommandFactorEffect;
+import CodeNameNeutronStar.Buildings.Effects.Factor.FearFactorEffect;
+import CodeNameNeutronStar.Buildings.Effects.Factor.FoodFactorEffect;
+import CodeNameNeutronStar.Buildings.Effects.Factor.ObjectiveFactorEffect;
+import CodeNameNeutronStar.Buildings.Effects.Factor.PrideFactorEffect;
+import CodeNameNeutronStar.Buildings.Effects.Production.FoodProductionEffect;
+import CodeNameNeutronStar.Buildings.Effects.Production.GoldProductionEffect;
+import CodeNameNeutronStar.Buildings.Effects.Production.MaterialProductionEffect;
 import CodeNameNeutronStar.Economy.EconomyRules;
 import CodeNameNeutronStar.Interaction.InteractionController;
 import CodeNameNeutronStar.Interaction.InteractionSystem;
+import CodeNameNeutronStar.Stats.StatsRules;
+import CodeNameNeutronStar.Units.UnitRules;
 import CodeNameNeutronStar.World.World2D;
 import CodeNameNeutronStar.World.WorldResource;
 import CodeNameNeutronStar.World.WorldRules;
@@ -36,6 +41,7 @@ public class GameContext extends Node {
     public GameContext(int _width, int _height, TilesetResource _tileset, WorldRules _worldRules) {
         initSystems(_width,_height,_tileset,_worldRules);
         registerBuildings();
+        regiserUnits();
     }
 
     public ServersRegistery getServers(){return servers;}
@@ -56,8 +62,9 @@ public class GameContext extends Node {
         systems.getEconomySystem().getResource().addFood(EconomyRules.START_FOOD);
         systems.getEconomySystem().getResource().addMaterial(EconomyRules.START_MATERIAL);
         systems.getEconomySystem().getResource().addPopulation(EconomyRules.START_POPULATION);
+        
         systems.getBuildingSystem().setRootNode(this);
-
+        systems.getUnitSystem().setRootNode(this);
     }
   
 
@@ -71,7 +78,9 @@ public class GameContext extends Node {
             BuildingRules.HOUSE_HEALTH,
             BuildingRules.HOUSE_WIDTH,
             BuildingRules.HOUSE_HEIGHT,
-            List.of(new PopulationEffect(EconomyRules.HOUSE_POPULATION_BONUS)),
+            List.of(
+                new PopulationEffect(EconomyRules.HOUSE_POPULATION_BONUS)
+            ),
             BuildingRules.BUILDING1X1_TILESET_PATH,
             BuildingRules.BUILDING1X1_TILESET_H,
             BuildingRules.BUILDING1X1_TILESET_V,
@@ -87,7 +96,9 @@ public class GameContext extends Node {
             BuildingRules.GOLD_MINE_HEALTH,
             BuildingRules.GOLD_MINE_WIDTH,
             BuildingRules.GOLD_MINE_HEIGHT,
-            List.of(new GoldEffect(EconomyRules.GOLD_MINE_GOLD_DELTA)),
+            List.of(
+                new GoldProductionEffect(EconomyRules.GOLD_MINE_GOLD_DELTA)
+            ),
             BuildingRules.BUILDING1X1_TILESET_PATH,
             BuildingRules.BUILDING1X1_TILESET_H,
             BuildingRules.BUILDING1X1_TILESET_V,
@@ -103,7 +114,7 @@ public class GameContext extends Node {
             BuildingRules.COMMAND_CENTER_HEALTH,
             BuildingRules.COMMAND_CENTER_WIDTH,
             BuildingRules.COMMAND_CENTER_HEIGHT,
-            List.of(new CommandEffect(EconomyRules.COMMAND_CENTER_COMMAND_BONUS)),
+            List.of(new CommandFactorEffect(EconomyRules.COMMAND_CENTER_COMMAND_BONUS)),
             BuildingRules.BUILDING2X2_TILESET_PATH,
             BuildingRules.BUILDING2X2_TILESET_H,
             BuildingRules.BUILDING2X2_TILESET_V,
@@ -119,7 +130,9 @@ public class GameContext extends Node {
             BuildingRules.MATERIAL_MINE_HEALTH,
             BuildingRules.MATERIAL_MINE_WIDTH,
             BuildingRules.MATERIAL_MINE_HEIGHT,
-            List.of(new MaterialEffect(EconomyRules.MATERIAL_MINE_MATERIAL_DELTA)),
+            List.of(
+                new MaterialProductionEffect(EconomyRules.MATERIAL_MINE_MATERIAL_DELTA)
+            ),
             BuildingRules.BUILDING1X1_TILESET_PATH,
             BuildingRules.BUILDING1X1_TILESET_H,
             BuildingRules.BUILDING1X1_TILESET_V,
@@ -136,7 +149,10 @@ public class GameContext extends Node {
             BuildingRules.FARM_HEALTH,
             BuildingRules.FARM_WIDTH,
             BuildingRules.FARM_HEIGHT,
-            List.of(new FoodEffect(EconomyRules.FARM_FOOD_DELTA)),
+            List.of(
+                new FoodProductionEffect(EconomyRules.FARM_FOOD_DELTA),
+                new FoodFactorEffect(StatsRules.FARM_FOOD_FACTOR)
+            ),
             BuildingRules.BUILDING1X1_TILESET_PATH,
             BuildingRules.BUILDING1X1_TILESET_H,
             BuildingRules.BUILDING1X1_TILESET_V,
@@ -152,12 +168,50 @@ public class GameContext extends Node {
             BuildingRules.WALL_HEALTH,
             BuildingRules.WALL_WIDTH,
             BuildingRules.WALL_HEIGHT,
-            List.of(new FearFactorEffect(EconomyRules.WALL_FEAR_FACTOR_BONUS),new PopularityEffect(EconomyRules.WALL_POPULARITY_DELTA)),
+            List.of(
+                new FearFactorEffect(StatsRules.WALL_FEAR_FACTOR)
+            ),
             BuildingRules.BUILDING1X1_TILESET_PATH,
             BuildingRules.BUILDING1X1_TILESET_H,
             BuildingRules.BUILDING1X1_TILESET_V,
             new Vector2i(BuildingRules.WALL_BUILDING_ATLASX,BuildingRules.WALL_BUILDING_ATLASY),
             new Vector2i(BuildingRules.WALL_DONE_ATLASX,BuildingRules.WALL_DONE_ATLASY)
+        );
+
+        servers.getBuildingServer().register(
+            BuildingRules.ENEMY_SPAWNER_NAME,
+            EconomyRules.ENEMY_SPAWNER_GOLD_COST,
+            EconomyRules.ENEMY_SPAWNER_MATERIAL_COST,
+            BuildingRules.ENEMY_SPAWNER_BUILD_TIME,
+            BuildingRules.ENEMY_SPAWNER_HEALTH,
+            BuildingRules.ENEMY_SPAWNER_WIDTH,
+            BuildingRules.ENEMY_SPAWNER_HEIGHT,
+            List.of(
+                new ObjectiveFactorEffect(EconomyRules.ENEMY_SPAWNER_OBJECTIVE_MODIFIER)
+            ),
+            BuildingRules.BUILDING2X2_TILESET_PATH,
+            BuildingRules.BUILDING2X2_TILESET_H,
+            BuildingRules.BUILDING2X2_TILESET_V,
+            new Vector2i(BuildingRules.ENEMY_SPAWNER_BUILDING_ATLASX,BuildingRules.ENEMY_SPAWNER_BUILDING_ATLASY),
+            new Vector2i(BuildingRules.ENEMY_SPAWNER_DONE_ATLASX,BuildingRules.ENEMY_SPAWNER_DONE_ATLASY)
+        );
+
+        servers.getBuildingServer().register(
+            BuildingRules.RECRUIT_CENTER_NAME,
+            EconomyRules.RECRUIT_CENTER_GOLD_COST,
+            EconomyRules.RECRUIT_CENTER_MATERIAL_COST,
+            BuildingRules.RECRUIT_CENTER_BUILD_TIME,
+            BuildingRules.RECRUIT_CENTER_HEALTH,
+            BuildingRules.RECRUIT_CENTER_WIDTH,
+            BuildingRules.RECRUIT_CENTER_HEIGHT,
+            List.of(
+                NoEffect.INSTANCE
+            ),
+            BuildingRules.BUILDING2X2_TILESET_PATH,
+            BuildingRules.BUILDING2X2_TILESET_H,
+            BuildingRules.BUILDING2X2_TILESET_V,
+            new Vector2i(BuildingRules.RECRUIT_CENTER_BUILDING_ATLASX,BuildingRules.RECRUIT_CENTER_BUILDING_ATLASY),
+            new Vector2i(BuildingRules.RECRUIT_CENTER_DONE_ATLASX,BuildingRules.RECRUIT_CENTER_DONE_ATLASY)
         );
 
         servers.getBuildingServer().register(
@@ -168,7 +222,11 @@ public class GameContext extends Node {
             BuildingRules.STATUE0_HEALTH,
             BuildingRules.STATUE0_WIDTH,
             BuildingRules.STATUE0_HEIGHT,
-            List.of(new FearFactorEffect(-15),new PopularityEffect(20)),
+            List.of(
+                new FearFactorEffect(StatsRules.BAD_STATUE_FEAR_FACTOR),
+                new PrideFactorEffect(StatsRules.BAD_STATUE_PRIDE_FACTOR)
+
+            ),
             BuildingRules.BUILDING2X2_TILESET_PATH,
             BuildingRules.BUILDING2X2_TILESET_H,
             BuildingRules.BUILDING2X2_TILESET_V,
@@ -177,10 +235,33 @@ public class GameContext extends Node {
         );
     }
 
+    private void regiserUnits(){
+
+        servers.getUnitServer().register(
+            UnitRules.RIFLEMAN_NAME,
+            UnitRules.RIFLEMAN_PRICE,
+            UnitRules.RIFLEMAN_MAX_HEALTH,
+            UnitRules.RIFLEMAN_ATTACK_RANGE,
+            UnitRules.RIFLEMAN_DETECTION_RANGE,
+            UnitRules.RIFLEMAN_DAMAGE,
+            UnitRules.RIFLEMAN_SPEED,
+            UnitRules.RIFLEMAN_COOLDOWN,
+            UnitRules.UNITS1X1_TILESET_PATH,
+            UnitRules.UNITS1X1_TILESET_H,
+            UnitRules.UNITS1X1_TILESET_V,
+            UnitRules.RIFLEMAN_IDLE,
+            UnitRules.RIFLEMAN_ATTACK,
+            UnitRules.RIFLEMAN_MOVE,
+            UnitRules.RIFLEMAN_DIE
+        );
+    }
+
     @Override
     public void _update(float _delta){
         systems.getBuildingSystem().update(_delta);
         systems.getEconomySystem().update(_delta);
+        systems.getStatsSystem().update(_delta);
+        systems.getUnitSystem().update(_delta);
         interactionSystem.update();
         interactionController.update();
 

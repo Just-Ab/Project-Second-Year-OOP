@@ -7,6 +7,7 @@ import org.joml.Vector2f;
 import org.joml.Vector2i;
 
 import CodeNameNeutronStar.Buildings.Building2D;
+import CodeNameNeutronStar.Gameplay.GameplayRules;
 import CodeNameNeutronStar.Global.SystemsRegistery;
 import CodeNameNeutronStar.UI.BuildModeControllerPannel;
 import CodeNameNeutronStar.UI.BuildingSelectorPanel;
@@ -22,7 +23,7 @@ public class BuildModeController {
     public enum BuildMode{
         NONE,BUILD,DESTRUCT
     }
-    BuildMode currentBuildMode = BuildMode.NONE;
+    private BuildMode currentBuildMode = BuildMode.NONE;
 
     private BuildingSelectorPanel selectorPanel;
     private BuildModeControllerPannel displayPanel;
@@ -86,6 +87,7 @@ public class BuildModeController {
                 Vector2i tile = getMouseTile();
                 systemsRegistery.getBuildingSystem().buildBuilding(
                     buildSelector.getSelected(),
+                    GameplayRules.PLAYER_TEAM,
                     tile.x,
                     tile.y
                 );

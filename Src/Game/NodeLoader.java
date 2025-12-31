@@ -3,15 +3,22 @@ package Game;
 import static org.lwjgl.glfw.GLFW.*;
 
 import java.util.List;
+import java.util.Random;
 
+import org.joml.Vector2i;
 import org.joml.Vector3f;
 
 import CodeNameNeutronStar.World.WorldRules;
 import CodeNameNeutronStar.World.WorldServer;
 import CodeNameNeutronStar.World.WorldSystem;
+import CodeNameNeutronStar.Buildings.Building2D;
+import CodeNameNeutronStar.Buildings.BuildingResource;
 import CodeNameNeutronStar.Economy.EconomySystem;
+import CodeNameNeutronStar.Gameplay.GameplayRules;
 import CodeNameNeutronStar.Global.GameContext;
 import CodeNameNeutronStar.Stats.StatsSystem;
+import CodeNameNeutronStar.Units.Unit2D;
+import CodeNameNeutronStar.Units.UnitResource;
 import CodeNameNeutronStar.World.TerrainCellResource.TerrainType;
 import CodeNameNeutronStar.World.WorldSystem.CellPos;
 import Game.Cameras.Nodes.Camera2D;
@@ -34,7 +41,7 @@ public class NodeLoader extends Node {
     private boolean zoomed = false;
     private boolean dirtyZoom = true;
 
-
+Unit2D unit1,unit2;
     @Override
     protected void _enterTree() {
         camera = new Camera2D(new Vector3f(), 1, 1);
@@ -42,7 +49,7 @@ public class NodeLoader extends Node {
         camera.current();
 
         TilesetResource tileset = new TilesetResource(
-            "Assets/Textures/MultiSpreadSheet.png",
+            "Assets/Textures/MultiSpreadSheet1X1.png",
             8,
             8
         );
@@ -52,7 +59,15 @@ public class NodeLoader extends Node {
         
         gameContext = new GameContext(100, 100, tileset, worldRules);
         addChild(gameContext);
+        UnitResource res = gameContext.getServers().getUnitServer().getAll().get(0);
+        BuildingResource res2 = gameContext.getServers().getBuildingServer().getAll().get(0);
+
+        unit1 = gameContext.getSystems().getUnitSystem().spawnUnit(res,GameplayRules.ENEMY_AI_TEAM_0, 8, 8);
+        unit2 = gameContext.getSystems().getUnitSystem().spawnUnit(res,GameplayRules.PLAYER_TEAM, 0, 2);
+        gameContext.getSystems().getBuildingSystem().buildBuilding(res2, 4, 4, 4);
     }
+
+    Random rand = new Random();
 
     @Override
     public void _update(float delta) {
@@ -69,11 +84,21 @@ public class NodeLoader extends Node {
             dirtyZoom = true;
         }
         if (Input.isKeyJustPressed(GLFW_KEY_SPACE)) {
-            System.out.println(EconomySystem.getSingleton().getResource().getPopulation());
-            System.out.println(EconomySystem.getSingleton().getResource().getGold());
-            System.out.println(StatsSystem.getSingleton().getResource().getFearFactor());
+            System.out.println(
+                "Population   : "+EconomySystem.getSingleton().getResource().getPopulation()+
+                "\nPopularity   : "+StatsSystem.getSingleton().getResource().getPopularity()+
+                "\nFood Factor  : "+StatsSystem.getSingleton().getResource().getFoodFactor()+
+                "\nFear Factor  : "+StatsSystem.getSingleton().getResource().getFearFactor()+
+                "\nPride Factor : "+StatsSystem.getSingleton().getResource().getPrideFactor()
+            );
+            // gameContext.getSystems().getUnitSystem().orderAttack(unit2, unit1);
+
 
         }
+
+        if(Input.isKeyJustPressed(GLFW_KEY_P)) gameContext.getSystems().getUnitSystem().orderAttack(unit1, unit2);
+
+
         camera.setLocalPosition(
             camera.getLocalPosition().add(
                 Input.getAxis(GLFW_KEY_A, GLFW_KEY_D) * delta * 4,
@@ -81,5 +106,6 @@ public class NodeLoader extends Node {
                 0.0f
             )
         );
+
     }
 }

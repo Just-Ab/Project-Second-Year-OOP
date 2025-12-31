@@ -3,6 +3,8 @@ package CodeNameNeutronStar.Global;
 
 import CodeNameNeutronStar.Buildings.BuildingSystem;
 import CodeNameNeutronStar.Economy.EconomySystem;
+import CodeNameNeutronStar.Stats.StatsSystem;
+import CodeNameNeutronStar.Units.UnitSystem;
 import CodeNameNeutronStar.World.WorldSystem;
 
 public class SystemsRegistery {
@@ -28,5 +30,13 @@ public class SystemsRegistery {
 
     public EconomySystem getEconomySystem(){
         return EconomySystem.getSingleton();
+    }
+
+    public UnitSystem getUnitSystem(){
+        return UnitSystem.getSingleton();
+    }
+
+    public StatsSystem getStatsSystem(){
+        return StatsSystem.getSingleton();
     }
 }

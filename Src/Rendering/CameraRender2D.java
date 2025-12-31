@@ -33,6 +33,7 @@ public class CameraRender2D {
     
     public Vector3f getPosition(){return new Vector3f(position);}
     public Matrix4f getProjection(){return new Matrix4f(projection);}
+
     public Matrix4f getView(){return new Matrix4f(view);}
 
 

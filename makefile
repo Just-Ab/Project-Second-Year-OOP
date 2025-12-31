@@ -1,71 +1,44 @@
+SRC = Src
+BIN = Bin
+LIBS = Libs/*
 
-RENDERING = Src/Rendering
-PHYSICS = Src/Physics
-GAME = Src/Game
-GAMECORE = Src/Game/Core
-NEUTRONSTAR = Src/CodeNameNeutronStar
+CORE = $(SRC)/Rendering \
+       $(SRC)/Physics \
+       $(SRC)/UserIO \
+       $(SRC)/Utils \
+       $(SRC)/Game \
+       $(SRC)/Game/Core \
+       $(SRC)/Game/UI \
+       $(SRC)/Game/Visuals/Nodes \
+       $(SRC)/Game/Visuals/Resources \
+       $(SRC)/Game/Physics/Nodes \
+       $(SRC)/Game/Cameras/Nodes
 
+NS = $(SRC)/CodeNameNeutronStar
 
-
-GAMEVIS = Src/Game/Visuals
-GAMEPHY = Src/Game/Physics
-GAMECAM = Src/Game/Cameras
-GAMEUI = src/Game/UI
-
-GAMEVISUALNODES = $(GAMEVIS)/Nodes
-GAMEVISUALRES = $(GAMEVIS)/Resources
-
-
-NEUTRONSTARWORLD = $(NEUTRONSTAR)/World
-NEUTRONSTARBUILDINGS = $(NEUTRONSTAR)/Buildings
-NEUTRONSTARECONOMY = $(NEUTRONSTAR)/Economy
-NEUTRONSTARGLOBAL = $(NEUTRONSTAR)/Global
-NEUTRONSTARUI = $(NEUTRONSTAR)/UI
-NEUTRONSTARINTERACTION = $(NEUTRONSTAR)/Interaction
-NEUTRONSTARSTATS = $(NEUTRONSTAR)/Stats
-
-GAMEPHYSICSNODES = $(GAMEPHY)/Nodes
-
-
-GAMECAMERASNODES = $(GAMECAM)/Nodes
-
-NEUTRONSTARBUILDINGSEFFECTS = $(NEUTRONSTARBUILDINGS)/Effects
+NS_MODULES = $(NS)/World \
+             $(NS)/Buildings \
+             $(NS)/Buildings/Effects \
+             $(NS)/Buildings/Effects/Factor \
+             $(NS)/Buildings/Effects/Production \
+             $(NS)/Economy \
+             $(NS)/Global \
+             $(NS)/UI \
+             $(NS)/Gameplay \
+             $(NS)/Interaction \
+             $(NS)/Stats    \
+             $(NS)/Units
 
 
-CORE = 	$(RENDERING)/*.java 					\
-		$(PHYSICS)/*.java 						\
-		$(USERIO)/*.java 						\
-		$(GAME)/*.java 							\
-		$(GAMECORE)/*.java 						\
-		$(GAMEVISUALNODES)/*.java 				\
-		$(GAMEPHYSICSNODES)/*.java 				\
-		$(GAMECAMERASNODES)/*.java  			\
-		$(GAMEVISUALRES)/*.java 				\
-		$(GAMEUI)/*.java
-
-GAME_FILES = 									\
-		$(NEUTRONSTARWORLD)/*.java 				\
-		$(NEUTRONSTARBUILDINGS)/*.java 			\
-		$(NEUTRONSTARECONOMY)/*.java 			\
-		$(NEUTRONSTARGLOBAL)/*.java 			\
-		$(NEUTRONSTARBUILDINGSEFFECTS)/*.java 	\
-		$(NEUTRONSTARUI)/*.java 				\
-		$(NEUTRONSTARINTERACTION)/*.java		\
-		$(NEUTRONSTARSTATS)/*.java
-
-
-USERIO = Src/UserIO
-UTILS = Src/Utils
+CORE_FILES = $(foreach d,$(CORE),$(d)/*.java)
+GAME_FILES = $(foreach d,$(NS_MODULES),$(d)/*.java)
 
 compile:
-	rm -r Bin/
-	mkdir Bin
-	javac -d Bin -cp "Libs/*" $(CORE) $(GAME_FILES)
-
+	rm -rf $(BIN)
+	mkdir $(BIN)
+	javac -d $(BIN) -cp "$(LIBS)" $(CORE_FILES) $(GAME_FILES)
 
 run:
-	java -cp "Libs/*;Bin" Game.Core.GameEntry
-
-
+	java -cp "$(LIBS);$(BIN)" Game.Core.GameEntry
 
 all: compile run

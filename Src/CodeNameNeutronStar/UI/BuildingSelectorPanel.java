@@ -3,19 +3,25 @@ package CodeNameNeutronStar.UI;
 import org.joml.Vector3f;
 
 import CodeNameNeutronStar.Buildings.BuildingResource;
+import CodeNameNeutronStar.Buildings.BuildingRules;
 import CodeNameNeutronStar.Buildings.BuildingServer;
 import CodeNameNeutronStar.Interaction.BuildSelector;
 import Game.UI.UIPanel;
 
 public class BuildingSelectorPanel extends UIPanel {
 
-    private final BuildSelector buildController;
+    private final BuildSelector buildSlector;
 
     public BuildingSelectorPanel(BuildSelector controller) {
-        this.buildController = controller;
+        this.buildSlector = controller;
         int index = 0;
         for (BuildingResource resource :
-             BuildingServer.getSingleton().getAll()) {
+            BuildingServer.getSingleton().getAll()) {
+            
+            if (
+                resource.getName() == BuildingRules.COMMAND_CENTER_NAME ||
+                resource.getName() == BuildingRules.ENEMY_SPAWNER_NAME
+            ) continue;
 
             BuildingSelectorPanelButton button = new BuildingSelectorPanelButton(resource, this);
 
@@ -28,6 +34,6 @@ public class BuildingSelectorPanel extends UIPanel {
     }
 
     public void select(BuildingResource resource) {
-        buildController.select(resource);
+        buildSlector.select(resource);
     }
 }

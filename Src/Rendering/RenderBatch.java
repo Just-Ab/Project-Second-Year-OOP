@@ -31,29 +31,6 @@ public class RenderBatch {
     public List<RenderInstance> getInstances() { return renderInstances; }
 
     public void updateInstanceVBO(){
-        // List<Float> instanceDataBuffer = new ArrayList<>();
-        // for (RenderInstance renderInstance : renderInstances) {
-        //     if(!renderInstance.isVisible()){continue;}
-        //     instanceDataBuffer.addLast(renderInstance.getPosition().x);
-        //     instanceDataBuffer.addLast(renderInstance.getPosition().y);
-        //     instanceDataBuffer.addLast(renderInstance.getPosition().z);
-        //     instanceDataBuffer.addLast(renderInstance.getScale().x);
-        //     instanceDataBuffer.addLast(renderInstance.getScale().y);
-        //     instanceDataBuffer.addLast(renderInstance.getScale().z);
-        //     instanceDataBuffer.addLast(renderInstance.getRotation());
-        //     instanceDataBuffer.addLast(renderInstance.getUV().x);
-        //     instanceDataBuffer.addLast(renderInstance.getUV().y);
-        //     instanceDataBuffer.addLast(renderInstance.getUV().z);
-        //     instanceDataBuffer.addLast(renderInstance.getUV().w);
-        //     instanceDataBuffer.addLast(renderInstance.getColor().x);
-        //     instanceDataBuffer.addLast(renderInstance.getColor().y);
-        //     instanceDataBuffer.addLast(renderInstance.getColor().z);
-        // }
-        // float[] instanceData = new float[instanceDataBuffer.size()];
-        // for (int i = 0; i < instanceDataBuffer.size(); i++) {
-        //     instanceData[i] = instanceDataBuffer.get(i);
-        // }
-
         float[] instanceData = new float[renderInstances.size() * 14];
         int index = 0;
         visibleInstances = 0;

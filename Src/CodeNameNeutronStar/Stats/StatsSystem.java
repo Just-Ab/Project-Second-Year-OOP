@@ -13,8 +13,6 @@ public final class StatsSystem {
 
     private final StatsResource resource;
 
-    private float popularityDelta;
-
     private StatsSystem() {
         resource = new StatsResource();
     }
@@ -22,20 +20,15 @@ public final class StatsSystem {
     public void update(float deltaTime) {
         if (deltaTime <= 0f) return;
 
-        resource.addPopularity(popularityDelta * deltaTime);
-    }
+        int factorsAccumulation = (int) (resource.getFoodFactor() + resource.getPrideFactor() - resource.getFearFactor());
+        float factorsRatio = (float )factorsAccumulation / (StatsRules.FACTORS_MAX_ACCUMULATION);
+        float factorsRate = 2.0f * factorsRatio;
+
+        resource.addPopularity(factorsRate * deltaTime);
+    } 
 
 
     public StatsResource getResource() {
         return resource;
     }
-
-    public void addPopularityDelta(float amountPerSecond) {
-        popularityDelta += amountPerSecond;
-    }
-
-    public void removePopularityDelta(float amountPerSecond) {
-        popularityDelta -= amountPerSecond;
-    }
-
 }
