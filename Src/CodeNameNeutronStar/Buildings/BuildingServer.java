@@ -71,4 +71,9 @@ public class BuildingServer {
     public List<BuildingResource> getAll() {
         return definitions;
     }
+
+    public void clean(){
+        server = null;
+    }
+
 }

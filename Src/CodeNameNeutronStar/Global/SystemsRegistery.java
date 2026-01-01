@@ -39,4 +39,13 @@ public class SystemsRegistery {
     public StatsSystem getStatsSystem(){
         return StatsSystem.getSingleton();
     }
+
+    public void clean(){
+        getBuildingSystem().clean();
+        getUnitSystem().clean();
+        getStatsSystem().clean();
+        getEconomySystem().clean();
+        getWorldSystem().clean();
+        registery = null;
+    }
 }

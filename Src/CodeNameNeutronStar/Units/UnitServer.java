@@ -70,4 +70,8 @@ public class UnitServer {
     public List<UnitResource> getAll() {
         return definitions;
     }
+
+    public void clean(){
+        server = null;
+    }
 }

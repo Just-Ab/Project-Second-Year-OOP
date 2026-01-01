@@ -38,4 +38,8 @@ public class InteractionSystem {
         }
     }
 
+    public void clean(){
+        system = null;
+    }
+
 }

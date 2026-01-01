@@ -11,7 +11,7 @@ public final class StatsSystem {
         return system;
     }
 
-    private final StatsResource resource;
+    private StatsResource resource;
 
     private StatsSystem() {
         resource = new StatsResource();
@@ -30,5 +30,9 @@ public final class StatsSystem {
 
     public StatsResource getResource() {
         return resource;
+    }
+
+    public void clean(){
+        system = null;
     }
 }

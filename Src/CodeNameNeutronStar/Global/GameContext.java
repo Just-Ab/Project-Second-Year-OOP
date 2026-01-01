@@ -1,10 +1,8 @@
 package CodeNameNeutronStar.Global;
 
 
-import static org.lwjgl.glfw.GLFW.nglfwGetProcAddress;
 
 import java.util.*;
-import java.util.Random;
 
 import org.joml.*;
 
@@ -252,80 +250,80 @@ public class GameContext extends Node {
     }
 
 
-private void regiserUnits(){
+    private void regiserUnits(){
 
-    servers.getUnitServer().register(
-        UnitRules.RIFLEMAN_NAME,
-        UnitRules.RIFLEMAN_PRICE,
-        UnitRules.RIFLEMAN_MAX_HEALTH,
-        UnitRules.RIFLEMAN_ATTACK_RANGE,
-        UnitRules.RIFLEMAN_DETECTION_RANGE,
-        UnitRules.RIFLEMAN_DAMAGE,
-        UnitRules.RIFLEMAN_SPEED,
-        UnitRules.RIFLEMAN_COOLDOWN,
-        UnitRules.UNITS1X1_TILESET_PATH,
-        UnitRules.UNITS1X1_TILESET_H,
-        UnitRules.UNITS1X1_TILESET_V,
-        UnitRules.RIFLEMAN_IDLE,
-        UnitRules.RIFLEMAN_ATTACK,
-        UnitRules.RIFLEMAN_MOVE,
-        UnitRules.RIFLEMAN_DIE
-    );
+        servers.getUnitServer().register(
+            UnitRules.RIFLEMAN_NAME,
+            UnitRules.RIFLEMAN_PRICE,
+            UnitRules.RIFLEMAN_MAX_HEALTH,
+            UnitRules.RIFLEMAN_ATTACK_RANGE,
+            UnitRules.RIFLEMAN_DETECTION_RANGE,
+            UnitRules.RIFLEMAN_DAMAGE,
+            UnitRules.RIFLEMAN_SPEED,
+            UnitRules.RIFLEMAN_COOLDOWN,
+            UnitRules.UNITS1X1_TILESET_PATH,
+            UnitRules.UNITS1X1_TILESET_H,
+            UnitRules.UNITS1X1_TILESET_V,
+            UnitRules.RIFLEMAN_IDLE,
+            UnitRules.RIFLEMAN_ATTACK,
+            UnitRules.RIFLEMAN_MOVE,
+            UnitRules.RIFLEMAN_DIE
+        );
 
-    servers.getUnitServer().register(
-        UnitRules.DALEK_NAME,
-        UnitRules.DALEK_PRICE,
-        UnitRules.DALEK_MAX_HEALTH,
-        UnitRules.DALEK_ATTACK_RANGE,
-        UnitRules.DALEK_DETECTION_RANGE,
-        UnitRules.DALEK_DAMAGE,
-        UnitRules.DALEK_SPEED,
-        UnitRules.DALEK_COOLDOWN,
-        UnitRules.UNITS1X1_TILESET_PATH,
-        UnitRules.UNITS1X1_TILESET_H,
-        UnitRules.UNITS1X1_TILESET_V,
-        UnitRules.DALEK_IDLE,
-        UnitRules.DALEK_ATTACK,
-        UnitRules.DALEK_MOVE,
-        UnitRules.DALEK_DIE
-    );
+        servers.getUnitServer().register(
+            UnitRules.DALEK_NAME,
+            UnitRules.DALEK_PRICE,
+            UnitRules.DALEK_MAX_HEALTH,
+            UnitRules.DALEK_ATTACK_RANGE,
+            UnitRules.DALEK_DETECTION_RANGE,
+            UnitRules.DALEK_DAMAGE,
+            UnitRules.DALEK_SPEED,
+            UnitRules.DALEK_COOLDOWN,
+            UnitRules.UNITS1X1_TILESET_PATH,
+            UnitRules.UNITS1X1_TILESET_H,
+            UnitRules.UNITS1X1_TILESET_V,
+            UnitRules.DALEK_IDLE,
+            UnitRules.DALEK_ATTACK,
+            UnitRules.DALEK_MOVE,
+            UnitRules.DALEK_DIE
+        );
 
-    servers.getUnitServer().register(
-        UnitRules.KNIFE_DUDE_NAME,
-        UnitRules.KNIFE_DUDE_PRICE,
-        UnitRules.KNIFE_DUDE_MAX_HEALTH,
-        UnitRules.KNIFE_DUDE_ATTACK_RANGE,
-        UnitRules.KNIFE_DUDE_DETECTION_RANGE,
-        UnitRules.KNIFE_DUDE_DAMAGE,
-        UnitRules.KNIFE_DUDE_SPEED,
-        UnitRules.KNIFE_DUDE_COOLDOWN,
-        UnitRules.UNITS1X1_TILESET_PATH,
-        UnitRules.UNITS1X1_TILESET_H,
-        UnitRules.UNITS1X1_TILESET_V,
-        UnitRules.KNIFE_DUDE_IDLE,
-        UnitRules.KNIFE_DUDE_ATTACK,
-        UnitRules.KNIFE_DUDE_MOVE,
-        UnitRules.KNIFE_DUDE_DIE
-    );
+        servers.getUnitServer().register(
+            UnitRules.KNIFE_DUDE_NAME,
+            UnitRules.KNIFE_DUDE_PRICE,
+            UnitRules.KNIFE_DUDE_MAX_HEALTH,
+            UnitRules.KNIFE_DUDE_ATTACK_RANGE,
+            UnitRules.KNIFE_DUDE_DETECTION_RANGE,
+            UnitRules.KNIFE_DUDE_DAMAGE,
+            UnitRules.KNIFE_DUDE_SPEED,
+            UnitRules.KNIFE_DUDE_COOLDOWN,
+            UnitRules.UNITS1X1_TILESET_PATH,
+            UnitRules.UNITS1X1_TILESET_H,
+            UnitRules.UNITS1X1_TILESET_V,
+            UnitRules.KNIFE_DUDE_IDLE,
+            UnitRules.KNIFE_DUDE_ATTACK,
+            UnitRules.KNIFE_DUDE_MOVE,
+            UnitRules.KNIFE_DUDE_DIE
+        );
 
-    servers.getUnitServer().register(
-        UnitRules.ROVER_DUDE_NAME,
-        UnitRules.ROVER_DUDE_PRICE,
-        UnitRules.ROVER_DUDE_MAX_HEALTH,
-        UnitRules.ROVER_DUDE_ATTACK_RANGE,
-        UnitRules.ROVER_DUDE_DETECTION_RANGE,
-        UnitRules.ROVER_DUDE_DAMAGE,
-        UnitRules.ROVER_DUDE_SPEED,
-        UnitRules.ROVER_DUDE_COOLDOWN,
-        UnitRules.UNITS1X1_TILESET_PATH,
-        UnitRules.UNITS1X1_TILESET_H,
-        UnitRules.UNITS1X1_TILESET_V,
-        UnitRules.ROVER_DUDE_IDLE,
-        UnitRules.ROVER_DUDE_ATTACK,
-        UnitRules.ROVER_DUDE_MOVE,
-        UnitRules.ROVER_DUDE_DIE
-    );
-}
+        servers.getUnitServer().register(
+            UnitRules.ROVER_DUDE_NAME,
+            UnitRules.ROVER_DUDE_PRICE,
+            UnitRules.ROVER_DUDE_MAX_HEALTH,
+            UnitRules.ROVER_DUDE_ATTACK_RANGE,
+            UnitRules.ROVER_DUDE_DETECTION_RANGE,
+            UnitRules.ROVER_DUDE_DAMAGE,
+            UnitRules.ROVER_DUDE_SPEED,
+            UnitRules.ROVER_DUDE_COOLDOWN,
+            UnitRules.UNITS1X1_TILESET_PATH,
+            UnitRules.UNITS1X1_TILESET_H,
+            UnitRules.UNITS1X1_TILESET_V,
+            UnitRules.ROVER_DUDE_IDLE,
+            UnitRules.ROVER_DUDE_ATTACK,
+            UnitRules.ROVER_DUDE_MOVE,
+            UnitRules.ROVER_DUDE_DIE
+        );
+    }
 
 
 
@@ -419,6 +417,15 @@ private void regiserUnits(){
     protected void _enterTree(){
         world2D = new World2D(systems.getWorldSystem().getWorld());
         addChild(world2D);
+    }
+
+    @Override
+    protected void _exitTree(){
+        systems.clean();
+        servers.clean();
+        InteractionSystem.getSingleton().clean();
+        System.out.println("ksogmsdhmpzdhnpdhn");
+
     }
 
 }

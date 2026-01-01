@@ -2,46 +2,25 @@ package Game;
 
 import static org.lwjgl.glfw.GLFW.*;
 
-import java.util.List;
-import java.util.Random;
-
-import org.joml.Vector2i;
 import org.joml.Vector3f;
 
-import CodeNameNeutronStar.World.WorldRules;
-import CodeNameNeutronStar.World.WorldServer;
-import CodeNameNeutronStar.World.WorldSystem;
-import CodeNameNeutronStar.Buildings.Building2D;
-import CodeNameNeutronStar.Buildings.BuildingResource;
-import CodeNameNeutronStar.Buildings.BuildingRules;
-import CodeNameNeutronStar.Economy.EconomySystem;
-import CodeNameNeutronStar.Gameplay.GameplayRules;
-import CodeNameNeutronStar.Global.GameContext;
-import CodeNameNeutronStar.Stats.StatsSystem;
+import CodeNameNeutronStar.Global.Game;
+import CodeNameNeutronStar.Menu.MenuInterface;
 import CodeNameNeutronStar.Units.Unit2D;
-import CodeNameNeutronStar.Units.UnitResource;
-import CodeNameNeutronStar.World.TerrainCellResource.TerrainType;
-import CodeNameNeutronStar.World.WorldSystem.CellPos;
 import Game.Cameras.Nodes.Camera2D;
+import Game.Core.GameServer;
 import Game.Core.Node;
-import Game.Core.Node2D;
-import Game.Visuals.Nodes.ColorRect2D;
-import Game.Visuals.Nodes.Sprite2D;
-import Game.Visuals.Resources.TilesetResource;
-import Rendering.RenderInstance;
-import Rendering.RenderingServer;
 import UserIO.Input;
 
 
 
 public class NodeLoader extends Node {
 
-    GameContext gameContext;
     private Camera2D camera;
 
     private boolean zoomed = false;
     private boolean dirtyZoom = true;
-
+    private boolean startNewGame = false;
 Unit2D unit1,unit2;
     @Override
     protected void _enterTree() {
@@ -49,25 +28,20 @@ Unit2D unit1,unit2;
         addChild(camera);
         camera.current();
 
-        newGame();
+        game = new Game(this);
+        game.init();
+        game.kill();
 
-        Building2D cc = gameContext.getSystems().getBuildingSystem().getRuntimeServer().getBuildingOfName(BuildingRules.COMMAND_CENTER_NAME);
-        if (cc != null)
-            camera.setGlobalPosition(new Vector3f(13,-13,0.0f));
+        addChild(new MenuInterface(this));
+
+  
+        camera.setGlobalPosition(new Vector3f(13,-13,0.0f));
     }
+    Game game;
 
-    private void newGame(){
-        TilesetResource tileset = new TilesetResource(
-            "Assets/Textures/MultiSpreadSheet1X1.png",
-            8,
-            8
-        );
+    public void newGame(){
+        startNewGame = true;
 
-        WorldRules worldRules = WorldServer.getSingleton().createRules();
-        worldRules.setIndices(TerrainType.OFFROAD, List.of(8*7,8*7+1,8*7+2,8*7+3,8*7+4,8*7+5,8*7+6,8*7+7));
-        
-        gameContext = new GameContext(50, 50, tileset, worldRules);
-        addChild(gameContext);
     }
 
     @Override
@@ -83,6 +57,16 @@ Unit2D unit1,unit2;
         if (Input.isKeyJustPressed(GLFW_KEY_Z)) {
             zoomed = !zoomed;
             dirtyZoom = true;
+        }
+
+        if (startNewGame==true){
+                    game = new Game(this);
+                    game.init();
+                    startNewGame = false;
+        }
+
+        if(Input.isKeyJustReleased(GLFW_KEY_ESCAPE)){
+            GameServer.getSingleton().close();
         }
 
         camera.setLocalPosition(

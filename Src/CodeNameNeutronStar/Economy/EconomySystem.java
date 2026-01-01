@@ -13,7 +13,7 @@ public final class EconomySystem {
         return system;
     }
 
-    private final EconomyResource resource;
+    private EconomyResource resource;
 
     private float goldDelta;
     private float materialDelta;
@@ -87,5 +87,9 @@ public final class EconomySystem {
         if (resource.getFood()<foodCost){return false;}
         resource.removeFood(foodCost);
         return true;
+    }
+
+    public void clean(){
+        system = null;
     }
 }

@@ -37,4 +37,8 @@ public class WorldServer {
         rules.addLast(new WorldRules());
         return rules.getLast();
     }
+
+    public void clear(){
+        server = null;
+    }
 }

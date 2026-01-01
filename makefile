@@ -27,7 +27,9 @@ NS_MODULES = $(NS)/World \
              $(NS)/Gameplay \
              $(NS)/Interaction \
              $(NS)/Stats    \
-             $(NS)/Units
+             $(NS)/Units    \
+             $(NS)/Menu
+
 
 
 CORE_FILES = $(foreach d,$(CORE),$(d)/*.java)

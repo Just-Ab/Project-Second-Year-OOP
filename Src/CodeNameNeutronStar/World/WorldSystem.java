@@ -175,4 +175,10 @@ public class WorldSystem {
         if (worldResource == null) return;
         worldResource.getPlacementsResource().freeCell(x, y, width, height);
     }
+
+
+    public void clean(){
+        system = null;
+    }
 }
+

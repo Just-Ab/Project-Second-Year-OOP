@@ -15,7 +15,7 @@ public class BuildingSystem {
     private static BuildingSystem system;
 
     private Node buildingsRootNode = null;
-    private final BuildingRuntimeServer runtime;
+    private BuildingRuntimeServer runtime;
     private final List<Building2D> constructionQueue = new ArrayList<>();
     private final List<Building2D> destructionQueue = new ArrayList<>();
 
@@ -126,4 +126,10 @@ public class BuildingSystem {
     public void setRootNode(Node newRoot) {
         buildingsRootNode = newRoot;
     }
+
+
+    public void clean(){
+        system = null;
+    }
+
 }

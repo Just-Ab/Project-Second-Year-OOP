@@ -3,7 +3,6 @@ package CodeNameNeutronStar.Global;
 
 import CodeNameNeutronStar.Buildings.BuildingServer;
 import CodeNameNeutronStar.Units.UnitServer;
-import CodeNameNeutronStar.Units.UnitSystem;
 import CodeNameNeutronStar.World.WorldServer;
 
 public class ServersRegistery {
@@ -29,6 +28,13 @@ public class ServersRegistery {
 
     public UnitServer getUnitServer(){
         return UnitServer.getSingleton();
+    }
+
+    public void clean(){
+        getWorldServer().clear();
+        getBuildingServer().clean();
+        getUnitServer().clean();
+        registery = null;
     }
 
 }

@@ -17,7 +17,7 @@ public class UnitSystem {
 
     private Node unitsRootNode = null;
 
-    private final UnitRunTimeServer runtime = new UnitRunTimeServer();
+    private UnitRunTimeServer runtime = new UnitRunTimeServer();
     private final MovementSystem movementSystem = new MovementSystem(runtime);
     private final CombatSystem combatSystem = new CombatSystem(runtime);
     private final UnitAnimationSystem unitAnimationSystem = new UnitAnimationSystem(runtime);
@@ -148,5 +148,10 @@ public class UnitSystem {
 
     public UnitRunTimeServer getRuntimeServer() {
         return runtime;
+    }
+
+
+    public void clean(){
+        system = null;
     }
 }
