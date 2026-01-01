@@ -333,7 +333,7 @@ private void regiserUnits(){
         int height = systems.getWorldSystem().getWorld().getHeight();
         int width  = systems.getWorldSystem().getWorld().getWidth();
 
-        int quarters = 4;
+        int quarters = 1;
         int sliceHeight = height / quarters;
 
         int x = (int)(width * 0.75f);

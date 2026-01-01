@@ -18,7 +18,7 @@ public class EnemySpawner {
     private final BuildingRuntimeServer runtime;
     private final List<UnitResource> enemyResourceList;
     private float spawnTimer = 0.0f;
-    private float spawnTime = 20.0f;
+    private float spawnTime = 5.0f;
     private Random random = new Random();
 
     public EnemySpawner(BuildingRuntimeServer _runtime,List<UnitResource> _enemyResourceList){

@@ -16,7 +16,7 @@ public class EnemyBrain {
     private final List<Squad> squads = new ArrayList<>();
 
     private float squadCreateTimer = 0.0f;
-    private final float squadCreateInterval = 50.0f;
+    private final float squadCreateInterval = 120.0f;
 
     public EnemyBrain() {
     }

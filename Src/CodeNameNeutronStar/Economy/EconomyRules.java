@@ -2,9 +2,9 @@ package CodeNameNeutronStar.Economy;
 
 public final class EconomyRules {
 
-    public static final float START_GOLD = 1500f;
-    public static final float START_MATERIAL = 500f;
-    public static final float START_FOOD = 50f;
+    public static final float START_GOLD = 500f;
+    public static final float START_MATERIAL = 200f;
+    public static final float START_FOOD = 20f;
     public static final float START_POPULATION = 8f;
 
     public static final float HOUSE_GOLD_COST = 100f;
