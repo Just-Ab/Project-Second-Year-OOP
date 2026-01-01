@@ -27,7 +27,7 @@ public class BuildingSelectorPanel extends UIPanel {
 
             addChild(button);
 
-            button.setLocalPosition(new Vector3f(-0.4f,0.2f + 0.05f*index++ , 0));
+            button.setLocalPosition(new Vector3f(-0.4f,0.15f + 0.05f*index++ , 0));
             button.setLocalScale(new Vector3f(0.05f));
 
         }
