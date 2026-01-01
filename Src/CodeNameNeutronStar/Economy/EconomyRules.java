@@ -2,8 +2,8 @@ package CodeNameNeutronStar.Economy;
 
 public final class EconomyRules {
 
-    public static final float START_GOLD = 150f;
-    public static final float START_MATERIAL = 50f;
+    public static final float START_GOLD = 1500f;
+    public static final float START_MATERIAL = 500f;
     public static final float START_FOOD = 50f;
     public static final float START_POPULATION = 8f;
 
@@ -12,8 +12,8 @@ public final class EconomyRules {
     public static final float HOUSE_POPULATION_BONUS = 8f;
 
 
-    public static final float WALL_GOLD_COST = 100f;
-    public static final float WALL_MATERIAL_COST = 5f;
+    public static final float WALL_GOLD_COST = 5f;
+    public static final float WALL_MATERIAL_COST = 10f;
     public static final float WALL_POPULARITY_DELTA = 0.5f;
 
 
@@ -35,8 +35,8 @@ public final class EconomyRules {
     public static final float STATUE0_POPULARITY_DELTA = 0.08f;
 
 
-    public static final float COMMAND_CENTER_GOLD_COST = 100f;
-    public static final float COMMAND_CENTER_MATERIAL_COST = 100f;
+    public static final float COMMAND_CENTER_GOLD_COST = 0;
+    public static final float COMMAND_CENTER_MATERIAL_COST = 0;
     public static final int COMMAND_CENTER_COMMAND_BONUS = 1;
 
     public static final float RECRUIT_CENTER_GOLD_COST = 20f;

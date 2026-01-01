@@ -32,7 +32,6 @@ public class BuildingSystem {
 
     public void damageBuilding(Building2D building, float damage) {
         building.applyDamage(damage);
-        System.out.println("Health: "+building.getHealth());
         if (building.getHealth() <= 0) {
             destroyBuilding(building);
         }
@@ -67,8 +66,6 @@ public class BuildingSystem {
             )
         );
 
-        buildingsRootNode.addChild(building);
-
         runtime.register(building);
         constructionQueue.add(building);
         return building;
@@ -95,6 +92,9 @@ public class BuildingSystem {
         for (int i = constructionQueue.size() - 1; i >= 0; i--) {
             Building2D building = constructionQueue.get(i);
             BuildingResource resource = building.getResource();
+            if (!building.isInTree()){
+                buildingsRootNode.addChild(building);
+            }
 
             building.addBuildProgress(delta);
 

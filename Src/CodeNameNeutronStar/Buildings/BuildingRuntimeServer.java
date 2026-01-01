@@ -2,7 +2,6 @@ package CodeNameNeutronStar.Buildings;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 import org.joml.Vector2i;
 
@@ -16,6 +15,14 @@ public class BuildingRuntimeServer {
 
     public void unregister(Building2D building) {
         buildings.remove(building);
+    }
+
+    public List<Building2D> getBuildingsOfName(String _name){
+        List<Building2D> buildings = new ArrayList<>();
+        for (Building2D building2d : getAll()) {
+            if (building2d.getResource().getName().equals(_name)) buildings.addLast(building2d);
+        }
+        return buildings;
     }
 
     public Building2D getBuildingOfName(String _name){

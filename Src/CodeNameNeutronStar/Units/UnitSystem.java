@@ -1,12 +1,12 @@
 package CodeNameNeutronStar.Units;
 
-import java.security.Principal;
 import java.util.*;
 
 import org.joml.Vector2i;
 import org.joml.Vector3f;
 
 import CodeNameNeutronStar.Buildings.Building2D;
+import CodeNameNeutronStar.Economy.EconomySystem;
 import CodeNameNeutronStar.Units.Unit2D.StateUnit;
 import CodeNameNeutronStar.World.WorldSystem;
 import Game.Core.Node;
@@ -42,6 +42,8 @@ public class UnitSystem {
     public Unit2D spawnUnit(UnitResource resource,int _team, int _x,int _y) {
 
         if (unitsRootNode == null) return null;
+
+        if (!(EconomySystem.getSingleton().taxResources(resource.getPrice(), 0.0f) && EconomySystem.getSingleton().taxFood(1))) return null;
 
         Unit2D unit = new Unit2D(resource,_team);
 
@@ -109,13 +111,14 @@ public class UnitSystem {
                 unit.setState(nextState);
             }
         }
-
-        combatSystem.update(delta);
         movementSystem.update(delta);
+        combatSystem.update(delta);
         unitController.update(delta);
         unitAnimationSystem.update();
 
         resolveQueues();
+        runtime.clean();
+
     }
 
 

@@ -81,7 +81,7 @@ public class StatsResource {
 
     public void addCommand(int amount) {
 
-        command = Math.min(command+amount,StatsRules.COMMAND_MAX);
+        command += amount;
     }
 
     public void addObjective(int amount) {

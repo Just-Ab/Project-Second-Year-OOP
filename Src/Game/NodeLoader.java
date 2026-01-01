@@ -13,6 +13,7 @@ import CodeNameNeutronStar.World.WorldServer;
 import CodeNameNeutronStar.World.WorldSystem;
 import CodeNameNeutronStar.Buildings.Building2D;
 import CodeNameNeutronStar.Buildings.BuildingResource;
+import CodeNameNeutronStar.Buildings.BuildingRules;
 import CodeNameNeutronStar.Economy.EconomySystem;
 import CodeNameNeutronStar.Gameplay.GameplayRules;
 import CodeNameNeutronStar.Global.GameContext;
@@ -48,6 +49,14 @@ Unit2D unit1,unit2;
         addChild(camera);
         camera.current();
 
+        newGame();
+
+        Building2D cc = gameContext.getSystems().getBuildingSystem().getRuntimeServer().getBuildingOfName(BuildingRules.COMMAND_CENTER_NAME);
+        if (cc != null)
+            camera.setGlobalPosition(new Vector3f(13,-13,0.0f));
+    }
+
+    private void newGame(){
         TilesetResource tileset = new TilesetResource(
             "Assets/Textures/MultiSpreadSheet1X1.png",
             8,
@@ -57,25 +66,17 @@ Unit2D unit1,unit2;
         WorldRules worldRules = WorldServer.getSingleton().createRules();
         worldRules.setIndices(TerrainType.OFFROAD, List.of(8*7,8*7+1,8*7+2,8*7+3,8*7+4,8*7+5,8*7+6,8*7+7));
         
-        gameContext = new GameContext(100, 100, tileset, worldRules);
+        gameContext = new GameContext(50, 50, tileset, worldRules);
         addChild(gameContext);
-        UnitResource res = gameContext.getServers().getUnitServer().getAll().get(0);
-        BuildingResource res2 = gameContext.getServers().getBuildingServer().getAll().get(0);
-
-        unit1 = gameContext.getSystems().getUnitSystem().spawnUnit(res,GameplayRules.ENEMY_AI_TEAM_0, 8, 8);
-        unit2 = gameContext.getSystems().getUnitSystem().spawnUnit(res,GameplayRules.PLAYER_TEAM, 0, 2);
-        gameContext.getSystems().getBuildingSystem().buildBuilding(res2, 4, 4, 4);
     }
-
-    Random rand = new Random();
 
     @Override
     public void _update(float delta) {
         if (!zoomed && dirtyZoom) {
-            camera.setZoom(5.0f, 5.0f);
+            camera.setZoom(10.0f, 10.0f);
             dirtyZoom = false;
         } else if (zoomed && dirtyZoom) {
-            camera.setZoom(10.0f, 10.0f);
+            camera.setZoom(20.0f, 20.0f);
             dirtyZoom = false;
         }
 
@@ -83,21 +84,6 @@ Unit2D unit1,unit2;
             zoomed = !zoomed;
             dirtyZoom = true;
         }
-        if (Input.isKeyJustPressed(GLFW_KEY_SPACE)) {
-            System.out.println(
-                "Population   : "+EconomySystem.getSingleton().getResource().getPopulation()+
-                "\nPopularity   : "+StatsSystem.getSingleton().getResource().getPopularity()+
-                "\nFood Factor  : "+StatsSystem.getSingleton().getResource().getFoodFactor()+
-                "\nFear Factor  : "+StatsSystem.getSingleton().getResource().getFearFactor()+
-                "\nPride Factor : "+StatsSystem.getSingleton().getResource().getPrideFactor()
-            );
-            // gameContext.getSystems().getUnitSystem().orderAttack(unit2, unit1);
-
-
-        }
-
-        if(Input.isKeyJustPressed(GLFW_KEY_P)) gameContext.getSystems().getUnitSystem().orderAttack(unit1, unit2);
-
 
         camera.setLocalPosition(
             camera.getLocalPosition().add(

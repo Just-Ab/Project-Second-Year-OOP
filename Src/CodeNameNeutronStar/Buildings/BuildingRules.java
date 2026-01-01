@@ -75,7 +75,7 @@ public final class BuildingRules {
 
     public static final String COMMAND_CENTER_NAME = "Command Center";
     public static final float COMMAND_CENTER_HEALTH = 400f;
-    public static final float COMMAND_CENTER_BUILD_TIME = 2.5f;
+    public static final float COMMAND_CENTER_BUILD_TIME = 0.0f;
     public static final int COMMAND_CENTER_WIDTH = 2;
     public static final int COMMAND_CENTER_HEIGHT = 2;
     public static final int COMMAND_CENTER_BUILDING_ATLASX = 0;

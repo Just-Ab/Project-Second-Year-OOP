@@ -5,9 +5,9 @@ import java.util.List;
 import org.joml.Vector2f;
 import org.joml.Vector2i;
 
+import CodeNameNeutronStar.Buildings.Building2D;
 import CodeNameNeutronStar.Global.SystemsRegistery;
 import CodeNameNeutronStar.Units.Unit2D.StateUnit;
-import CodeNameNeutronStar.World.WorldSystem;
 
 public class MovementSystem {
 
@@ -27,6 +27,8 @@ public class MovementSystem {
 
             Vector2i destination = unit.getDestination();
 
+            if (destination == null) continue;
+
             if (!SystemsRegistery.getSingleton().getWorldSystem().isWalkable(destination.x, destination.y) ) {
                 unit.setDestination(null);
                 continue;
@@ -38,7 +40,15 @@ public class MovementSystem {
             }
             Path path = pathFinder.findPath(unit);
             
-            if (path==null) continue;
+
+
+            if (path==null) {
+                unit.setDestination(null);
+                unit.setTarget((Unit2D)null);
+                unit.setTarget((Building2D)null);
+                continue;
+            }
+            
 
             if (unit.getPositionNormalized().equals(path.getCurrentPoint())) path.advance();
 

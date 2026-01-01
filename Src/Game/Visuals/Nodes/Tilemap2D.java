@@ -54,22 +54,6 @@ public class Tilemap2D extends Node2D {
         buildCell(_x, _y);
     }
 
-    // @Override
-    // public void setLocalPosition(Vector3f _position){
-    //     super.setLocalPosition(_position);
-    //    if (tileset != null && isInTree) {
-    //         rebuildAll();
-    //     }    
-    // }
-
-    // @Override
-    // public void setLocalScale(Vector3f _scale) {
-    //     super.setLocalScale(_scale);
-    //     if (tileset != null && isInTree) {
-    //         rebuildAll();
-    //     }
-    // }
-
     protected void rebuildAll() {
         int width = horizontalTilesCount;
         int height = verticalTilesCount;

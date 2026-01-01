@@ -7,6 +7,8 @@ import org.joml.Vector2f;
 import org.joml.Vector2i;
 
 import CodeNameNeutronStar.Buildings.Building2D;
+import CodeNameNeutronStar.Buildings.BuildingRules;
+import CodeNameNeutronStar.Buildings.BuildingSystem;
 import CodeNameNeutronStar.Gameplay.GameplayRules;
 import CodeNameNeutronStar.Global.SystemsRegistery;
 import CodeNameNeutronStar.UI.BuildModeControllerPannel;
@@ -75,16 +77,24 @@ public class BuildModeController {
     }  
 
     public void update() {
-        if(Input.isKeyJustPressed(InteractionRules.BUILD_MODE_KEY)){
+
+        Building2D commandCenter = BuildingSystem.getSingleton().getRuntimeServer().getBuildingOfName(BuildingRules.COMMAND_CENTER_NAME);
+
+        if ( commandCenter == null)
+            return;
+
+        if (Input.isKeyJustPressed(InteractionRules.BUILD_MODE_KEY)){
             if (currentBuildMode==BuildMode.NONE) currentBuildMode = BuildMode.BUILD;
             else if (currentBuildMode==BuildMode.BUILD) currentBuildMode = BuildMode.DESTRUCT;
             else currentBuildMode = BuildMode.BUILD;
         }
-        if(currentBuildMode == BuildMode.BUILD){
+        if (currentBuildMode == BuildMode.BUILD){
             displayPanel.setMode(BuildMode.BUILD);
             instanceBuildingList();
             if (buildSelector.hasSelection() && Input.isMouseButtonJustPressed(GLFW_MOUSE_BUTTON_LEFT)) {
                 Vector2i tile = getMouseTile();
+                Vector2f diff = new Vector2f(commandCenter.getPositionNormalized().x,commandCenter.getPositionNormalized().y).sub(tile.x,tile.y);
+                if(diff.length()>10) return;
                 systemsRegistery.getBuildingSystem().buildBuilding(
                     buildSelector.getSelected(),
                     GameplayRules.PLAYER_TEAM,

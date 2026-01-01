@@ -1,5 +1,7 @@
 package CodeNameNeutronStar.Economy;
 
+import CodeNameNeutronStar.Stats.StatsSystem;
+
 public final class EconomySystem {
 
     private static EconomySystem system;
@@ -25,10 +27,14 @@ public final class EconomySystem {
     public void update(float deltaTime) {
         if (deltaTime <= 0f) return;
 
-        resource.addGold(goldDelta * deltaTime);
-        resource.addMaterial(materialDelta * deltaTime);
-        resource.addFood(foodDelta * deltaTime);
+        float fearFactor = StatsSystem.getSingleton().getResource().getFearFactor();
+        float ratio = fearFactor/5;
+
+        resource.addGold((goldDelta + goldDelta * ratio ) * deltaTime);
+        resource.addMaterial((materialDelta + materialDelta * ratio ) * deltaTime);
+        resource.addFood((foodDelta + foodDelta * ratio) * deltaTime);
         resource.addPopulation(populationDelta * deltaTime);
+
     }
 
 
@@ -77,5 +83,9 @@ public final class EconomySystem {
         resource.removeGold(goldCost); resource.removeMaterial(materialCost);
         return true;
     }
-
+    public boolean taxFood(float foodCost) {
+        if (resource.getFood()<foodCost){return false;}
+        resource.removeFood(foodCost);
+        return true;
+    }
 }

@@ -1,11 +1,12 @@
 package CodeNameNeutronStar.Units;
 
-import Game.UI.Label2D;
 import Game.Visuals.Nodes.AnimatedSprite2D;
 import org.joml.Vector2f;
 import org.joml.Vector2i;
 import CodeNameNeutronStar.Buildings.Building2D;
 import CodeNameNeutronStar.Buildings.BuildingSystem;
+import CodeNameNeutronStar.Gameplay.GameplayRules;
+import CodeNameNeutronStar.Stats.StatsSystem;
 
 public class Unit2D extends AnimatedSprite2D {
 
@@ -19,8 +20,6 @@ public class Unit2D extends AnimatedSprite2D {
         DESTROYING
     }
 
-    private final Label2D identifierLabel = new Label2D();
-
     private final UnitResource resource;
     private StateUnit state;
     private float health;
@@ -32,6 +31,8 @@ public class Unit2D extends AnimatedSprite2D {
     private Building2D buildingTarget;
 
     private int team=-1;
+    
+    public boolean readyToQueueFree = false;
 
     public Unit2D(UnitResource resource, int _team) {
         this.resource = resource;
@@ -63,12 +64,17 @@ public class Unit2D extends AnimatedSprite2D {
         );
     }
 
+
+    @Override
+    public void _animationEnded(){
+        if (activeAnimation.getName() == UnitRules.DIE_ANIMATION_NAME){
+            readyToQueueFree = true;
+        }
+    }
+
     @Override
     protected void _enterTree() {
         super._enterTree();
-        identifierLabel.setText("-");
-        identifierLabel.setLocalPosition(getGlobalPosition().add(0.0f, 1.0f, 0.0f));
-        addChild(identifierLabel);
     }
 
     public UnitResource getResource() {
@@ -102,12 +108,14 @@ public class Unit2D extends AnimatedSprite2D {
 
     public void performAttack(){
         if (unitTarget!=null) {
-            UnitSystem.getSingleton().damageUnit(unitTarget, resource.getDamage());
+            if (getTeam()==GameplayRules.PLAYER_TEAM) UnitSystem.getSingleton().damageUnit(unitTarget, resource.getDamage() - resource.getDamage() * StatsSystem.getSingleton().getResource().getFearFactor());
+            else UnitSystem.getSingleton().damageUnit(unitTarget, resource.getDamage() );
             if (!unitTarget.isAlive()) unitTarget = null;
         }
         
         if (buildingTarget!=null) {
-            BuildingSystem.getSingleton().damageBuilding(buildingTarget, resource.getDamage());
+            if (getTeam()==GameplayRules.PLAYER_TEAM) BuildingSystem.getSingleton().damageBuilding(buildingTarget, resource.getDamage() - resource.getDamage() * StatsSystem.getSingleton().getResource().getFearFactor());
+            else BuildingSystem.getSingleton().damageBuilding(buildingTarget, resource.getDamage() );            
             if (!buildingTarget.isOperational()) buildingTarget = null;
         }
     }
@@ -218,6 +226,14 @@ public class Unit2D extends AnimatedSprite2D {
         return delta.length() <= resource.getDetectionRange();
     }
 
+    public boolean canDetectBuilding(Building2D _building) {
+        Vector2i targetPos = _building.getPositionNormalized();
+
+        Vector2i delta = new Vector2i(getPositionNormalized()).sub(targetPos);
+
+        return delta.length() <= resource.getDetectionRange();
+    }
+
     public boolean isTargetInRange() {
         Vector2i targetPos = getTargetPosition();
         if (targetPos == null)
@@ -227,7 +243,4 @@ public class Unit2D extends AnimatedSprite2D {
         return delta.length() <= resource.getaAttackRange();
     }
 
-    public Label2D getIdentifier() {
-        return identifierLabel;
-    }
 }

@@ -1,7 +1,10 @@
 package CodeNameNeutronStar.Global;
 
 
-import java.util.List;
+import static org.lwjgl.glfw.GLFW.nglfwGetProcAddress;
+
+import java.util.*;
+import java.util.Random;
 
 import org.joml.*;
 
@@ -18,6 +21,9 @@ import CodeNameNeutronStar.Buildings.Effects.Production.FoodProductionEffect;
 import CodeNameNeutronStar.Buildings.Effects.Production.GoldProductionEffect;
 import CodeNameNeutronStar.Buildings.Effects.Production.MaterialProductionEffect;
 import CodeNameNeutronStar.Economy.EconomyRules;
+import CodeNameNeutronStar.Gameplay.EnemyBrain;
+import CodeNameNeutronStar.Gameplay.EnemySpawner;
+import CodeNameNeutronStar.Gameplay.GameplayRules;
 import CodeNameNeutronStar.Interaction.InteractionController;
 import CodeNameNeutronStar.Interaction.InteractionSystem;
 import CodeNameNeutronStar.Stats.StatsRules;
@@ -35,6 +41,8 @@ public class GameContext extends Node {
     private final ServersRegistery servers = ServersRegistery.getSingleton();
     private final InteractionSystem interactionSystem = InteractionSystem.getSingleton();
     private final InteractionController interactionController = new InteractionController(this);
+    private final EnemySpawner enemySpawner;
+    private final EnemyBrain enemyBrain = new EnemyBrain();
 
     private World2D world2D = null;
 
@@ -42,6 +50,14 @@ public class GameContext extends Node {
         initSystems(_width,_height,_tileset,_worldRules);
         registerBuildings();
         regiserUnits();
+        enemySpawner = new EnemySpawner(
+            systems.getBuildingSystem().getRuntimeServer(),
+            List.of(servers.getUnitServer().getUnitResource(UnitRules.DALEK_NAME))
+        );
+        setupEnemySpawners();
+        setupPlayerBase();
+
+
     }
 
     public ServersRegistery getServers(){return servers;}
@@ -223,8 +239,8 @@ public class GameContext extends Node {
             BuildingRules.STATUE0_WIDTH,
             BuildingRules.STATUE0_HEIGHT,
             List.of(
-                new FearFactorEffect(StatsRules.BAD_STATUE_FEAR_FACTOR),
-                new PrideFactorEffect(StatsRules.BAD_STATUE_PRIDE_FACTOR)
+                new FearFactorEffect(StatsRules.GOOD_STATUE_FEAR_FACTOR),
+                new PrideFactorEffect(StatsRules.GOOD_STATUE_PRIDE_FACTOR)
 
             ),
             BuildingRules.BUILDING2X2_TILESET_PATH,
@@ -235,35 +251,166 @@ public class GameContext extends Node {
         );
     }
 
-    private void regiserUnits(){
 
-        servers.getUnitServer().register(
-            UnitRules.RIFLEMAN_NAME,
-            UnitRules.RIFLEMAN_PRICE,
-            UnitRules.RIFLEMAN_MAX_HEALTH,
-            UnitRules.RIFLEMAN_ATTACK_RANGE,
-            UnitRules.RIFLEMAN_DETECTION_RANGE,
-            UnitRules.RIFLEMAN_DAMAGE,
-            UnitRules.RIFLEMAN_SPEED,
-            UnitRules.RIFLEMAN_COOLDOWN,
-            UnitRules.UNITS1X1_TILESET_PATH,
-            UnitRules.UNITS1X1_TILESET_H,
-            UnitRules.UNITS1X1_TILESET_V,
-            UnitRules.RIFLEMAN_IDLE,
-            UnitRules.RIFLEMAN_ATTACK,
-            UnitRules.RIFLEMAN_MOVE,
-            UnitRules.RIFLEMAN_DIE
+private void regiserUnits(){
+
+    servers.getUnitServer().register(
+        UnitRules.RIFLEMAN_NAME,
+        UnitRules.RIFLEMAN_PRICE,
+        UnitRules.RIFLEMAN_MAX_HEALTH,
+        UnitRules.RIFLEMAN_ATTACK_RANGE,
+        UnitRules.RIFLEMAN_DETECTION_RANGE,
+        UnitRules.RIFLEMAN_DAMAGE,
+        UnitRules.RIFLEMAN_SPEED,
+        UnitRules.RIFLEMAN_COOLDOWN,
+        UnitRules.UNITS1X1_TILESET_PATH,
+        UnitRules.UNITS1X1_TILESET_H,
+        UnitRules.UNITS1X1_TILESET_V,
+        UnitRules.RIFLEMAN_IDLE,
+        UnitRules.RIFLEMAN_ATTACK,
+        UnitRules.RIFLEMAN_MOVE,
+        UnitRules.RIFLEMAN_DIE
+    );
+
+    servers.getUnitServer().register(
+        UnitRules.DALEK_NAME,
+        UnitRules.DALEK_PRICE,
+        UnitRules.DALEK_MAX_HEALTH,
+        UnitRules.DALEK_ATTACK_RANGE,
+        UnitRules.DALEK_DETECTION_RANGE,
+        UnitRules.DALEK_DAMAGE,
+        UnitRules.DALEK_SPEED,
+        UnitRules.DALEK_COOLDOWN,
+        UnitRules.UNITS1X1_TILESET_PATH,
+        UnitRules.UNITS1X1_TILESET_H,
+        UnitRules.UNITS1X1_TILESET_V,
+        UnitRules.DALEK_IDLE,
+        UnitRules.DALEK_ATTACK,
+        UnitRules.DALEK_MOVE,
+        UnitRules.DALEK_DIE
+    );
+
+    servers.getUnitServer().register(
+        UnitRules.KNIFE_DUDE_NAME,
+        UnitRules.KNIFE_DUDE_PRICE,
+        UnitRules.KNIFE_DUDE_MAX_HEALTH,
+        UnitRules.KNIFE_DUDE_ATTACK_RANGE,
+        UnitRules.KNIFE_DUDE_DETECTION_RANGE,
+        UnitRules.KNIFE_DUDE_DAMAGE,
+        UnitRules.KNIFE_DUDE_SPEED,
+        UnitRules.KNIFE_DUDE_COOLDOWN,
+        UnitRules.UNITS1X1_TILESET_PATH,
+        UnitRules.UNITS1X1_TILESET_H,
+        UnitRules.UNITS1X1_TILESET_V,
+        UnitRules.KNIFE_DUDE_IDLE,
+        UnitRules.KNIFE_DUDE_ATTACK,
+        UnitRules.KNIFE_DUDE_MOVE,
+        UnitRules.KNIFE_DUDE_DIE
+    );
+
+    servers.getUnitServer().register(
+        UnitRules.ROVER_DUDE_NAME,
+        UnitRules.ROVER_DUDE_PRICE,
+        UnitRules.ROVER_DUDE_MAX_HEALTH,
+        UnitRules.ROVER_DUDE_ATTACK_RANGE,
+        UnitRules.ROVER_DUDE_DETECTION_RANGE,
+        UnitRules.ROVER_DUDE_DAMAGE,
+        UnitRules.ROVER_DUDE_SPEED,
+        UnitRules.ROVER_DUDE_COOLDOWN,
+        UnitRules.UNITS1X1_TILESET_PATH,
+        UnitRules.UNITS1X1_TILESET_H,
+        UnitRules.UNITS1X1_TILESET_V,
+        UnitRules.ROVER_DUDE_IDLE,
+        UnitRules.ROVER_DUDE_ATTACK,
+        UnitRules.ROVER_DUDE_MOVE,
+        UnitRules.ROVER_DUDE_DIE
+    );
+}
+
+
+
+    private void setupEnemySpawners() {
+        int height = systems.getWorldSystem().getWorld().getHeight();
+        int width  = systems.getWorldSystem().getWorld().getWidth();
+
+        int quarters = 4;
+        int sliceHeight = height / quarters;
+
+        int x = (int)(width * 0.75f);
+
+        for (int i = 0; i < quarters; i++) {
+
+            int y = (i * sliceHeight) + (sliceHeight / 2);
+
+            systems.getBuildingSystem().buildBuilding(
+                servers.getBuildingServer().getBuildingResource(BuildingRules.ENEMY_SPAWNER_NAME),
+                GameplayRules.ENEMY_AI_TEAM_0,
+                x,
+                y
+            );
+        }
+    }
+
+    private void setupPlayerBase() {
+
+        int height = systems.getWorldSystem().getWorld().getHeight();
+        int width  = systems.getWorldSystem().getWorld().getWidth();
+
+        int x = width / 4;
+        int y = height / 4;
+
+        systems.getBuildingSystem().buildBuilding(
+            servers.getBuildingServer().getBuildingResource(
+                BuildingRules.COMMAND_CENTER_NAME
+            ),
+            GameplayRules.PLAYER_TEAM,
+            x,
+            y
         );
     }
 
+    boolean running = true;
     @Override
     public void _update(float _delta){
-        systems.getBuildingSystem().update(_delta);
-        systems.getEconomySystem().update(_delta);
-        systems.getStatsSystem().update(_delta);
-        systems.getUnitSystem().update(_delta);
-        interactionSystem.update();
-        interactionController.update();
+        if (running){
+            enemySpawner.update(_delta);
+            enemyBrain.update(_delta);
+            systems.getBuildingSystem().update(_delta);
+            systems.getEconomySystem().update(_delta);
+            systems.getStatsSystem().update(_delta);
+            systems.getUnitSystem().update(_delta);
+            interactionSystem.update();
+            interactionController.update();
+            System.out.println(
+                "---------------------------------------------------------------\n"+
+                "Gold: "+systems.getEconomySystem().getResource().getGold()+"\n "+
+                "Food: "+systems.getEconomySystem().getResource().getFood()+"\n "+
+                "Material: "+systems.getEconomySystem().getResource().getMaterial()+"\n "+
+                "Population: "+systems.getEconomySystem().getResource().getPopulation()+"\n "+
+                "Command: "+systems.getStatsSystem().getResource().getCommand()+"\n "+
+                "FearFact: "+systems.getStatsSystem().getResource().getFearFactor()+"\n "+
+                "FoodFact: "+systems.getStatsSystem().getResource().getFoodFactor()+"\n "+
+                "Objective: "+systems.getStatsSystem().getResource().getObjective()+"\n "+
+                "Pride: "+systems.getStatsSystem().getResource().getPrideFactor()+"\n "+
+                "---------------------------------------------------------------"
+            );
+
+            if (
+                systems.getStatsSystem().getResource().getCommand() == 0
+                ){
+                running = false;
+                System.out.println("Lost!");
+            }
+
+            if (
+                systems.getStatsSystem().getResource().getObjective() == 0
+                ){
+                running = false;
+                System.out.println("WIN!");
+            }
+
+        }
+
 
     }
 

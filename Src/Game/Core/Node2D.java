@@ -88,6 +88,10 @@ public void setGlobalPosition(Vector3f _newGlobalPosition) {
         scale.set(_scale);
     }
 
+    public boolean isInTree(){
+        return isInTree;
+    }
+
     @Override
     protected void updateEngine(float _delta) {
 

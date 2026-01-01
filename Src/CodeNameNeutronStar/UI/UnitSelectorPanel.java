@@ -5,6 +5,7 @@ import org.joml.Vector3f;
 import CodeNameNeutronStar.Buildings.BuildingRules;
 import CodeNameNeutronStar.Interaction.UnitSelector;
 import CodeNameNeutronStar.Units.UnitResource;
+import CodeNameNeutronStar.Units.UnitRules;
 import CodeNameNeutronStar.Units.UnitServer;
 import Game.UI.UIPanel;
 
@@ -19,8 +20,7 @@ public class UnitSelectorPanel extends UIPanel {
             UnitServer.getSingleton().getAll()) {
             
             if (
-                resource.getName() == BuildingRules.COMMAND_CENTER_NAME ||
-                resource.getName() == BuildingRules.ENEMY_SPAWNER_NAME
+                resource.getName() == UnitRules.DALEK_NAME
             ) continue;
 
             UnitSelectorPanelButton button = new UnitSelectorPanelButton(resource, this);

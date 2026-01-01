@@ -106,7 +106,7 @@ public class UnitModeController {
                 List<Unit2D> selectedUnits = systemsRegistery.getUnitSystem().getRuntimeServer().getUnitsAt(getMouseTile());
                 Unit2D selectedUnit=null;
                 for (Unit2D unit : selectedUnits) {
-                    if (unit.getState() != StateUnit.DEAD) selectedUnit = unit;
+                    if (unit.getState() != StateUnit.DEAD && unit.getTeam() == GameplayRules.PLAYER_TEAM) selectedUnit = unit;
                 }
                 if (selectedUnit != null)
                     if (selectedUnit.getState() != StateUnit.DEAD) unitOrderSelector.select(selectedUnit);
@@ -147,7 +147,7 @@ public class UnitModeController {
             
             Vector2i recruitCenterPosition = recruitCenter.getPositionNormalized();
             Vector2i spawnPoint = systemsRegistery.getWorldSystem().getWalkableAdjacentCell(recruitCenterPosition.x,recruitCenterPosition.y);
-
+            if (spawnPoint == null) return;
             systemsRegistery.getUnitSystem().spawnUnit(unitSelector.getSelected(),GameplayRules.PLAYER_TEAM, spawnPoint.x, spawnPoint.y);
             unitSelector.cancel();
         }

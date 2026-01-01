@@ -36,4 +36,13 @@ public class UnitRunTimeServer {
     public List<Unit2D> getAll() {
         return Collections.unmodifiableList(units);
     }
+
+    public void clean(){
+        for (Unit2D unit2d : units) {
+            if (unit2d.readyToQueueFree == true) {
+                UnitSystem.getSingleton().destroyUnit(unit2d);
+            }
+        }
+    }
+
 }
