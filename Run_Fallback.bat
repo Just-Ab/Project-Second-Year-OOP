@@ -1,0 +1,1 @@
+java -cp "Libs/*;Bin" Game.Core.GameEntry
